@@ -411,16 +411,247 @@ def save_report(doc, company_name, module_name, output_path="/workspace/tmp/"):
 📥 **文件下载路径**: `{output_path}`
 ```
 
+## 模块内容映射表
+
+**核心功能章节与模块对应关系**：
+
+| 模块类型 | 保留的功能章节 | 移除的功能章节 |
+|---------|---------------|---------------|
+| CMDB | IT资源管理 | 统一监控告警管理、IT服务流程管理、自动化运维、可视化管理 |
+| 监控 | 统一监控告警管理 | IT资源管理、IT服务流程管理、自动化运维、可视化管理 |
+| ITSM | IT服务流程管理 | IT资源管理、统一监控告警管理、自动化运维、可视化管理 |
+| 自动化 | 自动化运维 | IT资源管理、统一监控告警管理、IT服务流程管理、可视化管理 |
+| DevOps | 自动化运维 + IT服务流程管理 | IT资源管理、统一监控告警管理、可视化管理 |
+
+**通用章节（始终保留）**：
+- 项目建设背景
+- 项目建设目标
+- 项目建设范围
+- 平台建设路线
+- 平台总体架构设计
+- 系统创新点
+- 项目实施计划
+- 项目风险及应急预案
+- 效益分析
+
 ### 完整执行代码
 
 ```python
 from docx import Document
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from datetime import datetime
 import os
+import re
+import copy
 
 # 知识库路径
 KNOWLEDGE_BASE = "/shared/sale-kb"
 DEFAULT_TEMPLATE = "/shared/sale-kb/项目资料/一体化运维平台建设立项报告v2.0.docx"
+
+# 模块-章节映射（定义各模块需要保留的功能章节）
+MODULE_SECTION_MAP = {
+    "cmdb": {
+        "title": "CMDB配置管理",
+        "keywords": ["cmdb", "配置管理", "资产"],
+        "keep_sections": ["IT资源管理"],
+        "remove_sections": ["统一监控告警管理", "IT服务流程管理", "自动化运维", "可视化管理"],
+        # 创新点内容过滤
+        "keep_innovations": ["图数据库", "模型设计", "自动采集", "Agent能力", "API能力"],
+        "remove_innovations": ["自动化运维标准化", "可视化能力", "故障影响"]
+    },
+    "监控": {
+        "title": "监控告警管理",
+        "keywords": ["监控", "告警", "monitor"],
+        "keep_sections": ["统一监控告警管理"],
+        "remove_sections": ["IT资源管理", "IT服务流程管理", "自动化运维", "可视化管理"],
+        "keep_innovations": ["监控", "告警", "可视化", "API能力"],
+        "remove_innovations": ["图数据库", "模型设计"]
+    },
+    "itsm": {
+        "title": "IT服务管理",
+        "keywords": ["itsm", "服务管理", "流程"],
+        "keep_sections": ["IT服务流程管理"],
+        "remove_sections": ["IT资源管理", "统一监控告警管理", "自动化运维", "可视化管理"],
+        "keep_innovations": ["流程", "服务", "API能力"],
+        "remove_innovations": []
+    },
+    "自动化": {
+        "title": "自动化运维",
+        "keywords": ["自动化", "automation"],
+        "keep_sections": ["自动化运维"],
+        "remove_sections": ["IT资源管理", "统一监控告警管理", "IT服务流程管理", "可视化管理"],
+        "keep_innovations": ["自动化", "Agent能力", "API能力"],
+        "remove_innovations": ["图数据库", "模型设计", "可视化"]
+    },
+    "devops": {
+        "title": "DevOps持续交付",
+        "keywords": ["devops", "持续集成"],
+        "keep_sections": ["自动化运维", "IT服务流程管理"],
+        "remove_sections": ["IT资源管理", "统一监控告警管理", "可视化管理"],
+        "keep_innovations": ["自动化", "Agent能力", "流程", "API能力"],
+        "remove_innovations": ["图数据库"]
+    }
+}
+
+# 始终保留的通用章节
+COMMON_SECTIONS = [
+    "项目建设背景", "项目建设目标", "项目建设范围",
+    "平台建设路线", "平台总体架构设计", "系统创新点",
+    "项目实施计划", "项目风险及应急预案", "效益分析"
+]
+
+def get_module_config(module_name):
+    """根据模块名称获取配置"""
+    module_lower = module_name.lower()
+
+    for key, config in MODULE_SECTION_MAP.items():
+        if key in module_lower:
+            return config
+
+    # 默认返回CMDB配置
+    return MODULE_SECTION_MAP["cmdb"]
+
+def standardize_module_name(module_name):
+    """标准化模块名称"""
+    config = get_module_config(module_name)
+    return config["title"]
+
+def get_module_keywords(module_name):
+    """获取模块相关的搜索关键词"""
+    config = get_module_config(module_name)
+    return config["keywords"]
+
+def find_heading_index(doc, heading_text, start_idx=0):
+    """查找指定标题的段落索引"""
+    for i, para in enumerate(doc.paragraphs[start_idx:], start=start_idx):
+        if para.style.name.startswith('Heading') and heading_text in para.text:
+            return i
+    return -1
+
+def get_heading_level(para):
+    """获取标题级别"""
+    if para.style.name.startswith('Heading'):
+        try:
+            return int(para.style.name.replace('Heading ', ''))
+        except:
+            return 1
+    return 0
+
+def find_section_range(doc, section_title, start_idx=0):
+    """找到章节的开始和结束索引"""
+    start = find_heading_index(doc, section_title, start_idx)
+    if start == -1:
+        return None, None
+
+    # 获取章节标题的级别
+    section_level = get_heading_level(doc.paragraphs[start])
+
+    # 找到下一个同级或更高级标题
+    end = len(doc.paragraphs)
+    for i in range(start + 1, len(doc.paragraphs)):
+        level = get_heading_level(doc.paragraphs[i])
+        if level > 0 and level <= section_level:
+            end = i
+            break
+
+    return start, end
+
+def remove_section(doc, section_title):
+    """移除指定章节及其子内容"""
+    start, end = find_section_range(doc, section_title)
+
+    if start is None:
+        return 0
+
+    # 从后向前删除段落
+    for i in range(end - 1, start - 1, -1):
+        p = doc.paragraphs[i]._element
+        p.getparent().remove(p)
+
+    return end - start
+
+def filter_content_by_module(doc, module_name):
+    """根据模块过滤文档内容"""
+    config = get_module_config(module_name)
+    removed_count = 0
+
+    # 移除不需要的功能章节
+    for section in config["remove_sections"]:
+        count = remove_section(doc, section)
+        if count > 0:
+            print(f"   ✓ 移除章节: {section} ({count}段)")
+            removed_count += count
+
+    # 过滤系统创新点中的不相关内容
+    innovation_removed = filter_innovation_section(doc, module_name)
+    if innovation_removed > 0:
+        print(f"   ✓ 过滤创新点: 移除 {innovation_removed} 项不相关内容")
+        removed_count += innovation_removed
+
+    return removed_count
+
+def filter_innovation_section(doc, module_name):
+    """过滤系统创新点章节中与模块无关的内容"""
+    config = get_module_config(module_name)
+    remove_keywords = config.get("remove_innovations", [])
+
+    if not remove_keywords:
+        return 0
+
+    # 找到系统创新点章节范围
+    start, end = find_section_range(doc, "系统创新点")
+    if start is None:
+        return 0
+
+    removed = 0
+    # 从后向前删除不相关的子标题（Heading 2）
+    for i in range(end - 1, start, -1):
+        para = doc.paragraphs[i]
+        level = get_heading_level(para)
+
+        if level == 2:  # 只处理二级标题
+            text = para.text.strip()
+            should_remove = False
+            for kw in remove_keywords:
+                if kw in text:
+                    should_remove = True
+                    break
+
+            if should_remove:
+                p = para._element
+                p.getparent().remove(p)
+                removed += 1
+
+    return removed
+
+def update_section_content(doc, module_name):
+    """更新章节内容以适配模块"""
+    config = get_module_config(module_name)
+    module_title = config["title"]
+
+    # 如果只有一个保留章节，将其提升为"平台功能设计"
+    if len(config["keep_sections"]) == 1:
+        keep_section = config["keep_sections"][0]
+        for para in doc.paragraphs:
+            if para.style.name.startswith('Heading 2') and keep_section in para.text:
+                # 改为功能设计
+                para.clear()
+                run = para.add_run(f"{module_title}功能设计")
+                break
+
+def search_files(directory, keywords, extensions):
+    """搜索匹配的文件"""
+    if not os.path.exists(directory):
+        return []
+
+    results = []
+    for file in os.listdir(directory):
+        file_lower = file.lower()
+        if any(ext in file_lower for ext in extensions):
+            if any(kw in file_lower for kw in keywords):
+                results.append(os.path.join(directory, file))
+
+    return results
 
 def generate_project_report(company_name, module_name, output_path="/workspace/tmp/"):
     """
@@ -437,6 +668,11 @@ def generate_project_report(company_name, module_name, output_path="/workspace/t
     print(f"🚀 开始生成立项报告...")
     print(f"   企业: {company_name}")
     print(f"   模块: {module_name}")
+
+    # 获取模块配置
+    module_config = get_module_config(module_name)
+    module_title = module_config["title"]
+    print(f"   模块标准化名称: {module_title}")
 
     # 1. 搜索相关模板
     print("\n📖 搜索知识库模板...")
@@ -471,10 +707,17 @@ def generate_project_report(company_name, module_name, output_path="/workspace/t
     print(f"\n📝 使用模板: {os.path.basename(template_path)}")
     doc = Document(template_path)
 
-    # 5. 内容替换
+    # 5. 内容过滤 - 核心改进！
+    print(f"\n🔧 内容过滤 (保留{module_title}相关内容)...")
+    removed_count = filter_content_by_module(doc, module_name)
+    print(f"   共移除 {removed_count} 段非相关内容")
+
+    # 6. 更新章节标题
+    update_section_content(doc, module_name)
+
+    # 7. 内容替换
     current_date = datetime.now().strftime("%Y年%m月")
     current_year = datetime.now().strftime("%Y年")
-    module_title = standardize_module_name(module_name)
 
     replacements = {
         "优维科技（深圳）有限公司": company_name,
@@ -482,17 +725,22 @@ def generate_project_report(company_name, module_name, output_path="/workspace/t
         "2025年6月": current_date,
         "2025年": current_year,
         "2024年": current_year,
+        "2023年": current_year,
         "一体化运维": module_title,
+        "运维平台": f"{module_title}平台",
     }
 
-    # 执行替换
+    replace_count = 0
+    # 替换段落
     for para in doc.paragraphs:
         for old, new in replacements.items():
             if old in para.text:
                 for run in para.runs:
                     if old in run.text:
                         run.text = run.text.replace(old, new)
+                        replace_count += 1
 
+    # 替换表格
     for table in doc.tables:
         for row in table.rows:
             for cell in row.cells:
@@ -503,68 +751,35 @@ def generate_project_report(company_name, module_name, output_path="/workspace/t
                                 if old in run.text:
                                     run.text = run.text.replace(old, new)
 
-    # 6. 保存文档
+    print(f"   内容替换: {replace_count} 处")
+
+    # 8. 保存文档
     os.makedirs(output_path, exist_ok=True)
     date_str = datetime.now().strftime("%Y%m%d")
     filename = f"{company_name}-{module_title}立项报告-{date_str}.docx"
     full_path = os.path.join(output_path, filename)
     doc.save(full_path)
 
+    file_size = os.path.getsize(full_path) / 1024
     print(f"\n✅ 报告生成成功!")
-    print(f"   文件: {full_path}")
+    print(f"   文件名: {filename}")
+    print(f"   文件路径: {full_path}")
+    print(f"   文件大小: {file_size:.1f} KB")
 
     return full_path, templates, solutions, cases
 
-def get_module_keywords(module_name):
-    """获取模块相关的搜索关键词"""
-    keyword_map = {
-        "cmdb": ["cmdb", "配置", "资产", "资源"],
-        "itsm": ["itsm", "服务", "流程", "工单"],
-        "自动化": ["自动化", "automation", "auto"],
-        "监控": ["监控", "monitor", "告警", "observ"],
-        "devops": ["devops", "持续", "ci/cd"],
-        "日志": ["日志", "log", "log"],
-    }
+def main():
+    """主函数 - 用于测试"""
+    import sys
 
-    module_lower = module_name.lower()
-    for key, keywords in keyword_map.items():
-        if key in module_lower:
-            return keywords
+    # 从命令行参数或使用默认值
+    company = sys.argv[1] if len(sys.argv) > 1 else "测试企业"
+    module = sys.argv[2] if len(sys.argv) > 2 else "CMDB"
 
-    return [module_name]
+    generate_project_report(company, module)
 
-def standardize_module_name(module_name):
-    """标准化模块名称"""
-    name_map = {
-        "cmdb": "CMDB配置管理",
-        "itsm": "IT服务管理",
-        "自动化": "自动化运维",
-        "监控": "监控告警",
-        "devops": "DevOps",
-    }
-
-    module_lower = module_name.lower()
-    for key, value in name_map.items():
-        if key in module_lower:
-            return value
-
-    return module_name
-
-def search_files(directory, keywords, extensions):
-    """搜索匹配的文件"""
-    import os
-
-    if not os.path.exists(directory):
-        return []
-
-    results = []
-    for file in os.listdir(directory):
-        file_lower = file.lower()
-        if any(ext in file_lower for ext in extensions):
-            if any(kw in file_lower for kw in keywords):
-                results.append(os.path.join(directory, file))
-
-    return results
+if __name__ == "__main__":
+    main()
 ```
 
 ## Output Format
