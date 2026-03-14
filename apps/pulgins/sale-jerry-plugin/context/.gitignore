@@ -1,0 +1,29 @@
+# Context 目录 Git 忽略规则
+
+# 忽略所有活跃会话（包含临时数据）
+sessions/active_session.json
+
+# 忽略所有公司调研缓存（可能包含敏感信息）
+companies/*/
+
+# 忽略所有案例匹配缓存（自动生成）
+cases/*.json
+!cases/index.json
+
+# 忽略所有销售话术缓存（可能包含定制内容）
+scripts/*
+!scripts/templates/
+!scripts/.gitkeep
+
+# 保留目录结构
+!**/.gitkeep
+
+# 忽略临时文件
+*.tmp
+*.bak
+*.log
+
+# 说明：
+# Context 目录主要用于运行时缓存和协作，不应提交到版本控制
+# 只保留 README.md 和目录结构
+# 实际缓存数据应在本地生成和使用

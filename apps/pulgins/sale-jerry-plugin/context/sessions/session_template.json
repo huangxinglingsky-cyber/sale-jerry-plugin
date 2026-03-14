@@ -1,0 +1,22 @@
+{
+  "session_id": "template",
+  "created_at": null,
+  "last_updated": null,
+  "agent_type": "",
+  "status": "pending",
+  "context": {
+    "company_name": "",
+    "module": "",
+    "year_filter": null,
+    "completed_steps": [],
+    "next_step": "",
+    "intermediate_results": {},
+    "user_inputs": [],
+    "agent_outputs": []
+  },
+  "metadata": {
+    "user_id": null,
+    "session_duration_seconds": 0,
+    "total_steps": 0
+  }
+}

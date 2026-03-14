@@ -1,0 +1,7 @@
+{
+  "indexes": [],
+  "total_cached": 0,
+  "cache_hit_rate": 0,
+  "last_updated": "2026-01-06T00:00:00Z",
+  "description": "案例匹配结果缓存索引，用于快速查找和命中率统计"
+}
