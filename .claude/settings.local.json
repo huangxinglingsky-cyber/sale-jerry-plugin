@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(mkdir:*)",
+      "Bash(tree:*)",
+      "Bash(npm run build:*)",
+      "Bash(test:*)",
+      "Bash(export ANTHROPIC_API_KEY=\"sk-IQWw4sjss36sBVhfeHsmAljTXd3krGAQa9LJlIJ2mbxaAkdH\")",
+      "Bash(ls:*)",
+      "Bash(npm install:*)",
+      "Bash(cat:*)",
+      "Bash(Web Search:*)",
+      "Bash(dir:*)",
+      "Bash(python scripts/convert_cases.py:*)",
+      "Bash(python3:*)",
+      "Bash(where:*)",
+      "Bash(winget:*)",
+      "Bash(refreshenv)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)",
+      "Bash(if not exist \"knowledge\" mkdir \"knowledge\")",
+      "Bash(powershell.exe:*)",
+      "Bash(if not exist \"d:\\\\workspace\\\\pulgins\\\\sale-1.0.0\\\\knowledge\\\\河南人行\" mkdir \"d:\\\\workspace\\\\pulgins\\\\sale-1.0.0\\\\knowledge\\\\河南人行\")",
+      "Bash(grep:*)",
+      "Bash(package_libs.bat)",
+      "Bash(cmd.exe /c \"cd /d d:\\\\workspace\\\\pulgins\\\\sale-1.0.0\\\\skills\\\\document-processor && package_libs.bat\")",
+      "Bash(python -m pip install:*)",
+      "Bash(find . -name \"SKILL.md\" -exec sh -c 'echo \"\"=== {} ===\"\"; head -5 \"\"$1\"\" | grep -E \"\"^name:|^description:\"\"' _ {} ;)",
+      "Bash(for agent in agents/*.md)",
+      "Bash(do [ -f \"$agent\" ])",
+      "Bash(echo:*)",
+      "Bash(done)"
+    ]
+  }
+}

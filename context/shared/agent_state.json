@@ -1,0 +1,23 @@
+{
+  "sales-prep": {
+    "last_execution": null,
+    "total_executions": 0,
+    "success_count": 0,
+    "failure_count": 0,
+    "success_rate": 0,
+    "avg_duration_seconds": 0
+  },
+  "company-research": {
+    "cached_companies": 0,
+    "last_update": null,
+    "total_researches": 0
+  },
+  "sales-script": {
+    "generated_scripts": 0,
+    "last_generation": null
+  },
+  "system": {
+    "initialized_at": "2026-01-06T00:00:00Z",
+    "version": "1.0"
+  }
+}

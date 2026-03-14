@@ -1,0 +1,13 @@
+{
+  "name": "sale-jerry-plugin",
+  "version": "1.0.1",
+  "description": "sale",
+  "author": {
+    "name": "UwinTech-销售经理",
+    "email": "jerryhuang@easyops.cn"
+  },
+  "license": "MIT",
+  "keywords": ["sale"],
+  "agents": ["./agents/sales-master.md"],
+  "skills": "./skills/"
+}
