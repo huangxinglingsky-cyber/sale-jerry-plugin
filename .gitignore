@@ -1,3 +1,4 @@
 # Local settings with sensitive data
 **/.claude/settings.local.json
 **/settings.local.json
+**/sale-kb/*
