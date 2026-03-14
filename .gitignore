@@ -5,3 +5,5 @@
 # 知识库目录（本地存储，不提交）
 sale-kb/
 **/sale-kb/
+tmp/
+**/sale-kb/
