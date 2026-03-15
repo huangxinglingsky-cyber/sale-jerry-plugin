@@ -112,6 +112,8 @@ priority: critical
 | focus_area | string | ❌ | all | 审计聚焦区域：all / hallucination / rag |
 | output_refactored | boolean | ❌ | true | 是否输出重构后的 Prompt（批量审计时建议设为 false） |
 | audit_mode | string | ❌ | auto | 审计模式：single（单个）/ batch（批量）/ auto（自动判断） |
+| save_report | boolean | ❌ | true | **是否保存审计报告到文件** |
+| report_dir | string | ❌ | 自动 | 审计报告保存目录（默认为 skill-logic-auditor/reports/） |
 
 ## Instructions
 
@@ -351,7 +353,81 @@ fi
 
 按照标准格式输出《Skill 逻辑审计与优化报告》。
 
+#### 步骤 6: 保存审计报告
+
+**⚠️ 重要：审计报告必须保存到文件**
+
+**6.1 确定保存路径**
+
+```bash
+# 报告保存目录（默认在 skill-logic-auditor/reports/ 下）
+REPORT_DIR="/workspace/apps/pulgins/sale-jerry-plugin/skills/skill-logic-auditor/reports"
+
+# 创建目录（如果不存在）
+mkdir -p $REPORT_DIR
+
+# 生成文件名
+# 批量审计: audit-report-{YYYY-MM-DD}.md
+# 单 Skill 审计: audit-{skill_name}-{YYYY-MM-DD}.md
+```
+
+**6.2 保存规则**
+
+| 审计模式 | 文件命名规则 | 示例 |
+|---------|-------------|------|
+| 批量审计 | `audit-report-{YYYY-MM-DD}.md` | `audit-report-2026-03-15.md` |
+| 单 Skill | `audit-{skill_name}-{YYYY-MM-DD}.md` | `audit-spin-analysis-2026-03-15.md` |
+| 聚焦审计 | `audit-{skill_name}-{focus}-{YYYY-MM-DD}.md` | `audit-case-matching-rag-2026-03-15.md` |
+
+**6.3 执行保存**
+
+```python
+# 使用 Write 工具保存报告
+Write(
+  file_path=f"{REPORT_DIR}/{filename}",
+  content=audit_report_content
+)
+```
+
+**6.4 输出保存确认**
+
+保存成功后，在对话中明确告知用户：
+
+```markdown
+✅ 审计报告已保存到：
+{REPORT_DIR}/{filename}
+
+📊 报告摘要：
+- 审计 Skill 数量：{count}
+- 发现问题总数：{issue_count}
+- P0 严重问题：{p0_count} 个
+- P1 中等问题：{p1_count} 个
+- P2 轻微问题：{p2_count} 个
+```
+
+**6.5 历史报告管理**
+
+```bash
+# 查看历史审计报告
+ls -la $REPORT_DIR/*.md
+
+# 报告保留策略：保留最近 30 天的报告
+# 超过 30 天的报告可手动清理
+find $REPORT_DIR -name "*.md" -mtime +30 -exec rm {} \;
+```
+
 ## Output Format
+
+### 报告保存位置
+
+**⚠️ 审计完成后，报告必须保存到以下位置：**
+
+```
+/workspace/apps/pulgins/sale-jerry-plugin/skills/skill-logic-auditor/reports/
+├── audit-report-2026-03-15.md          # 批量审计报告
+├── audit-spin-analysis-2026-03-15.md   # 单 Skill 审计报告
+└── audit-case-matching-rag-2026-03-15.md  # 聚焦审计报告
+```
 
 ### 标准审计报告结构
 
@@ -476,11 +552,13 @@ fi
 
 ## Notes
 
-1. **只审计不修改**: 审计报告仅供参考，不自动修改原文件
-2. **保持业务语义**: 优化时不能改变 Skill 的核心业务目标
-3. **兼容性检查**: 确保 RAG 集成不破坏现有工作流
-4. **人工复核**: 建议对 P0 级优化进行人工确认
-5. **版本记录**: 保留优化前后的版本对比
+1. **审计报告必须保存**: 每次审计完成后，必须将报告保存到 `reports/` 目录
+2. **只审计不修改**: 审计报告仅供参考，不自动修改原文件
+3. **保持业务语义**: 优化时不能改变 Skill 的核心业务目标
+4. **兼容性检查**: 确保 RAG 集成不破坏现有工作流
+5. **人工复核**: 建议对 P0 级优化进行人工确认
+6. **版本记录**: 保留优化前后的版本对比
+7. **历史追溯**: 报告按日期命名，便于追溯历史审计记录
 
 ## Examples
 
@@ -728,7 +806,20 @@ fi
 
 ---
 
-**版本**: 1.1
+**版本**: 1.2
 **最后更新**: 2026-03-15
+**更新内容**:
+- **v1.2 (2026-03-15) - 添加审计报告保存功能**:
+  - ✅ 新增 `save_report` 和 `report_dir` 参数
+  - ✅ 新增步骤 6: 保存审计报告
+  - ✅ 定义报告文件命名规则
+  - ✅ 创建 reports/ 目录用于存放审计报告
+  - ✅ 强调审计完成后必须保存报告
+- **v1.1 (2026-03-15)**:
+  - 初始版本，支持单 Skill 和批量审计
+  - 定义两大审计原则：信息补齐防幻觉、知识库优先
+- **v1.0 (2026-03-15)**:
+  - 基础框架设计
+
 **作者**: AI Solutions Expert Team
 **依赖**: 无
