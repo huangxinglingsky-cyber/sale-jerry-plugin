@@ -361,7 +361,7 @@ fi
 
 ```bash
 # 报告保存目录（默认在 skill-logic-auditor/reports/ 下）
-REPORT_DIR="/workspace/apps/pulgins/sale-jerry-plugin/skills/skill-logic-auditor/reports"
+REPORT_DIR="/workspace/apps/skill-logic-reports"
 
 # 创建目录（如果不存在）
 mkdir -p $REPORT_DIR
