@@ -138,6 +138,91 @@ priority: high
 
 ---
 
+### 步骤 0: 输入完整性校验（必须执行）
+
+**⚠️ 重要：在进行招标分析前，必须先校验输入有效性**
+
+**0.1 检查必需参数**
+
+| 参数 | 检查项 | 处理方式 |
+|------|-------|---------|
+| scoring_table | 不能为空 | 为空则返回错误，要求提供评分表数据 |
+| case_library_path | 文件存在 | 不存在则返回错误，要求提供有效路径 |
+| qualification_list_path | 文件存在 | 不存在则返回错误，要求提供有效路径 |
+
+**0.2 可选参数补全提示**
+
+如果缺少以下可选参数，应提示用户补充以提高分析准确性：
+
+| 参数 | 缺失影响 | 追问建议 |
+|------|---------|---------|
+| target_industry | 案例匹配可能不准确 | "请提供目标行业信息，如'金融-银行'，以提高案例匹配精准度" |
+| analysis_mode | 默认使用full模式 | 如需快速分析，可设置为"quick" |
+
+**0.3 校验结果处理**
+
+```json
+// 校验通过
+{
+  "status": "validated",
+  "checks": {
+    "scoring_table": "✅ 已提供",
+    "case_library_path": "✅ 文件存在",
+    "qualification_list_path": "✅ 文件存在"
+  }
+}
+
+// 校验警告 - 可选参数缺失
+{
+  "status": "warning",
+  "message": "部分可选参数未提供，分析结果可能不够精准",
+  "missing_params": ["target_industry"],
+  "suggestion": "建议提供目标行业信息以提高案例匹配准确性"
+}
+
+// 校验失败 - 必需参数缺失
+{
+  "status": "error",
+  "error_type": "missing_required_param",
+  "message": "缺少必需参数: scoring_table",
+  "suggestion": "请提供评分表数据（scoring_table 参数）"
+}
+
+// 校验失败 - 文件不存在
+{
+  "status": "error",
+  "error_type": "file_not_found",
+  "message": "案例库文件不存在: {case_library_path}",
+  "suggestion": "请检查文件路径是否正确，或使用 Bash 工具动态查找文件位置"
+}
+```
+
+**0.4 参数缺失追问话术**
+
+```json
+// 缺少 scoring_table
+{
+  "status": "error",
+  "error_type": "missing_scoring_table",
+  "message": "请提供招标评分表数据",
+  "suggestion": "请提供评分表的结构化数据，包含门槛条件和评分项",
+  "example": {
+    "threshold_conditions": [{"item": "注册资金", "requirement": "≥1000万"}],
+    "scoring_items": [{"category": "案例业绩", "item": "同行业案例", "full_score": 15}]
+  }
+}
+
+// 缺少 target_industry
+{
+  "status": "prompt",
+  "message": "请提供目标行业信息以提高分析准确性",
+  "options": ["金融-银行", "金融-证券", "制造-汽车", "制造-电子", "互联网", "政府", "其他"],
+  "suggestion": "目标行业将用于匹配同行业案例，提高得分预估准确性"
+}
+```
+
+---
+
 ### 步骤 1: 门槛硬性审查
 
 **执行逻辑**:
@@ -529,10 +614,17 @@ bid-analysis (招标分析) → sales-script (话术生成)
 
 ## Version
 
-**版本**: 1.0
-**最后更新**: 2026-01-23
+**版本**: 1.1
+**最后更新**: 2026-03-15
 **更新内容**:
-- 初始版本，从 bid-strategist Agent 抽取招标分析逻辑
+- **v1.1 (2026-03-15) - 添加输入校验防幻觉**:
+  - ✅ 新增步骤 0: 输入完整性校验（必须执行）
+  - ✅ 添加必需参数检查（scoring_table、case_library_path、qualification_list_path）
+  - ✅ 添加可选参数补全提示（target_industry）
+  - ✅ 定义校验结果处理流程
+  - ✅ 添加参数缺失追问话术
+- **v1.0 (2026-01-23)**:
+  - 初始版本，从 bid-strategist Agent 抽取招标分析逻辑
 - 门槛硬性审查功能
 - 智能算分与差异分析
 - 防御性和进攻性控标建议生成

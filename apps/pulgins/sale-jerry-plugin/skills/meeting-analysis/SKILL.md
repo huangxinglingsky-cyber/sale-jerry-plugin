@@ -125,9 +125,43 @@ priority: high
 - 禁止虚构：不编造任何不存在的信息
 - 完整流程：必须完成所有步骤，不得中途停止
 
-### 执行步骤
+---
 
-#### 步骤 1: 项目验证
+### 步骤 0: 输入完整性校验（必须执行）
+
+**⚠️ 重要：在开始会议分析前，必须先校验输入有效性**
+
+**0.1 检查必需参数**
+
+| 参数 | 检查项 | 处理方式 |
+|------|-------|---------|
+| project_name | 不能为空 | 为空则返回错误，要求提供项目名称 |
+| project_name | 项目目录存在 | 不存在则提示先初始化项目 |
+| file_path | 文件存在 | 不存在则扫描06会议纪要目录或返回错误 |
+
+**0.2 校验结果处理**
+
+```json
+// 校验失败 - project_name 为空
+{
+  "status": "error",
+  "error_type": "missing_project_name",
+  "message": "请提供项目名称（project_name 参数）",
+  "suggestion": "项目名称格式：客户名称-项目名称，如 'XX银行-CMDB项目'"
+}
+
+// 校验失败 - 项目目录不存在
+{
+  "status": "error",
+  "error_type": "project_not_found",
+  "message": "项目目录不存在: {project_name}",
+  "suggestion": "请先使用 project-init skill 初始化项目目录"
+}
+```
+
+---
+
+### 步骤 1: 项目验证
 
 检查项目目录是否存在：
 ```bash
@@ -425,7 +459,15 @@ Skill(
 
 ---
 
-**版本**: 1.0
-**最后更新**: 2026-02-15
+**版本**: 1.1
+**最后更新**: 2026-03-15
+**更新内容**:
+- **v1.1 (2026-03-15) - 添加输入校验防幻觉**:
+  - ✅ 新增步骤 0: 输入完整性校验（必须执行）
+  - ✅ 添加必需参数检查（project_name、file_path）
+  - ✅ 添加校验失败错误输出格式
+  - ✅ 定义校验结果处理流程
+- **v1.0 (2026-02-15)**:
+  - 初始版本，基于SPIN销售法分析会议纪要
 **作者**: AI Solutions Expert Team
 **依赖**: document-processor, spin-analysis, sales-script, project-status-updater

@@ -120,6 +120,61 @@ def validate_params(company_name, module_name):
 示例：请为"招商银行"生成"CMDB"模块的立项报告
 ```
 
+**1.2 参数质量检查**
+
+| 参数 | 检查项 | 处理方式 |
+|------|-------|---------|
+| company_name | 长度 ≥ 2 字符 | 过短则追问用户提供完整企业名称 |
+| company_name | 不能是通用词 | 如"公司"、"企业"等，追问确认 |
+| module_name | 必须是支持的模块 | 不支持则提示可用模块列表 |
+| module_name | 长度 ≥ 2 字符 | 过短则追问用户提供具体模块名称 |
+
+**支持的模块列表**:
+- CMDB（配置管理数据库）
+- ITSM（IT服务管理）
+- 自动化运维 / 自动化
+- 监控 / 监控告警
+- DevOps / 持续集成
+- 日志分析 / 日志
+- IT资产管理
+- 流程管理
+
+**1.3 参数校验结果处理**
+
+```json
+// 校验通过
+{
+  "status": "validated",
+  "company_name": "招商银行",
+  "module_name": "CMDB",
+  "module_matched": "CMDB（配置管理数据库）"
+}
+
+// 校验警告 - 模块可能不匹配
+{
+  "status": "warning",
+  "message": "模块名称'{module_name}'可能不匹配已知模块",
+  "suggestion": "请确认模块名称，支持的模块包括：CMDB、ITSM、自动化运维、监控、DevOps、日志分析等"
+}
+
+// 校验失败 - 企业名称无效
+{
+  "status": "error",
+  "error_type": "invalid_company_name",
+  "message": "企业名称过短或无效",
+  "suggestion": "请提供完整的企业名称，如'招商银行'、'某某证券'等"
+}
+
+// 校验失败 - 模块名称缺失
+{
+  "status": "error",
+  "error_type": "missing_module_name",
+  "message": "请提供模块名称",
+  "supported_modules": ["CMDB", "ITSM", "自动化运维", "监控", "DevOps", "日志分析"],
+  "suggestion": "请指定需要生成报告的模块，如：CMDB、ITSM、自动化运维等"
+}
+```
+
 #### 步骤 2: 知识库资料检索
 
 **2.1 搜索相关模板**
@@ -990,7 +1045,17 @@ if __name__ == "__main__":
 
 ---
 
-**版本**: 1.0
-**最后更新**: 2026-03-14
+**版本**: 1.1
+**最后更新**: 2026-03-15
+**更新内容**:
+- **v1.1 (2026-03-15) - 增强参数质量检查**:
+  - ✅ 新增参数质量检查（长度、有效性）
+  - ✅ 添加支持的模块列表
+  - ✅ 添加校验结果处理格式
+  - ✅ 添加模块匹配提示
+- **v1.0 (2026-03-14)**:
+  - 初始版本，立项报告生成功能
+  - 智能知识库检索
+  - Word文档生成
 **作者**: AI Solutions Expert Team
 **依赖**: python-docx

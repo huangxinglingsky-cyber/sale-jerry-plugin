@@ -157,6 +157,27 @@ test -d "{project_name}" && echo "EXISTS" || echo "NOT_EXISTS"
 find . -name "caseLibrary.md" -path "*/*sales*/*" -print -quit
 ```
 
+**⚠️ 知识库未命中降级策略**:
+
+如果案例库或资质清单文件无法找到：
+```
+1. 停止当前分析，不要使用预训练知识进行计算
+2. 返回明确的错误信息：
+
+{
+  "status": "error",
+  "error_type": "knowledge_base_unavailable",
+  "message": "无法读取案例库或资质清单文件，无法进行准确的招标分析",
+  "missing_files": ["caseLibrary.md", "qualificationList.md"],
+  "suggestion": "请检查文件路径，或联系管理员确认知识库文件是否存在"
+}
+
+3. 禁止行为：
+   🚫 禁止使用预训练知识中的案例数据
+   🚫 禁止编造或推测案例信息
+   🚫 禁止在无知识库的情况下继续算分
+```
+
 **2.2 加载资质清单**：
 ```bash
 # 查找资质清单文件
@@ -432,7 +453,14 @@ Skill(
 
 ---
 
-**版本**: 1.0
-**最后更新**: 2026-02-15
+**版本**: 1.1
+**最后更新**: 2026-03-15
+**更新内容**:
+- **v1.1 (2026-03-15) - 添加KB未命中降级策略**:
+  - ✅ 新增知识库未命中降级策略
+  - ✅ 明确禁止在无知识库时使用预训练知识
+  - ✅ 添加明确的错误输出格式
+- **v1.0 (2026-02-15)**:
+  - 初始版本，商务控标分析功能
 **作者**: AI Solutions Expert Team
 **依赖**: document-processor, bid-analysis, project-status-updater
