@@ -6,7 +6,7 @@
 
 ## v1.1.0 (2026-03-16)
 
-### 新增功能 (Features)
+### 优化功能 (Features)
 - `skill-developer` - 新增 Release Note 自动记录功能，每次创建或优化 Skill 后自动更新版本变更日志
 - `bid-strategist` (~) 添加知识库无结果时的降级策略
 - `meeting-analysis` (~) 添加会议纪要最小输入长度校验；集成 SPIN 方法论知识库检索
