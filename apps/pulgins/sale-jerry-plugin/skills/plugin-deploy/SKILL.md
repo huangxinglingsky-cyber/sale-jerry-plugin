@@ -238,7 +238,78 @@ fi
 # echo "临时文件已清理"
 ```
 
-#### 步骤 5: 输出执行结果
+#### 步骤 5: 发布通知到钉钉群
+
+**5.1 读取最新版本特性**
+
+从 Release Note 中获取最新版本的特性内容：
+
+```bash
+# 读取 Release Note 文件
+RELEASE_NOTE="/workspace/doc/release_note.md"
+
+if [ ! -f "$RELEASE_NOTE" ]; then
+  echo "⚠️ Release Note 文件不存在，跳过通知"
+else
+  # 提取最新版本内容（第一个版本块）
+  LATEST_VERSION=$(sed -n '/^## v/,/^---$/p' "$RELEASE_NOTE" | head -n -1 | head -30)
+  echo "最新版本特性已获取"
+fi
+```
+
+**5.2 发送钉钉通知**
+
+通过 Webhook 发送 Markdown 消息到钉钉群：
+
+```bash
+# 读取钉钉 Webhook 配置
+DINGTALK_CONFIG=~/.dingtalk-skills/config
+WEBHOOK_URL=$(grep '^DINGTALK_WEBHOOK_URL=' "$DINGTALK_CONFIG" 2>/dev/null | cut -d= -f2-)
+
+if [ -z "$WEBHOOK_URL" ]; then
+  echo "⚠️ 钉钉 Webhook 未配置，跳过通知"
+  echo "如需启用通知，请配置 DINGTALK_WEBHOOK_URL"
+else
+  # 发送 Markdown 消息
+  curl -s -X POST "$WEBHOOK_URL" \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "msgtype": "markdown",
+      "markdown": {
+        "title": "JavisSales Release Note",
+        "text": "# JavisSales Release Note\n\n'"$(echo "$LATEST_VERSION" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')"'"\n"
+      }
+    }'
+
+  echo "✅ 钉钉通知已发送"
+fi
+```
+
+**5.3 通知内容格式**
+
+发送的消息格式为：
+
+```markdown
+# JavisSales Release Note
+
+## v1.1.0 (2026-03-16)
+
+### 新增功能
+- `skill-developer` (+) 功能描述
+- ...
+
+### 优化改进
+- `bid-strategist` (~) 优化描述
+- ...
+```
+
+**5.4 错误处理**
+
+- 如果 Release Note 文件不存在，跳过通知步骤
+- 如果钉钉 Webhook 未配置，跳过通知步骤
+- 通知失败不影响部署结果
+
+#### 步骤 6: 输出执行结果
 
 向用户输出完整的执行结果：
 
@@ -254,6 +325,9 @@ fi
 - Plugin ID: {plugin_id}
 - API 地址: {api_url}
 - 上传状态: 成功
+
+## 发布通知
+- 钉钉通知: 已发送/已跳过
 
 ## 后续操作
 - 前往管理后台查看 Plugin 状态
@@ -275,6 +349,9 @@ fi
 - Plugin ID: cmk3oovu1002m4prviw8mqq21
 - API 地址: http://localhost:8000/api/v1/plugins/cmk3oovu1002m4prviw8mqq21/reupload
 - 上传状态: 成功
+
+## 发布通知
+- 钉钉通知: ✅ 已发送
 ```
 
 **失败输出**（目录不存在）:
@@ -348,6 +425,8 @@ fi
 3. **压缩格式**: 使用 zip 格式，兼容性好
 4. **排除规则**: 自动排除 `.git`、`__pycache__` 等
 5. **stripFirstLevel**: 参数为 true 时，去除压缩包根目录层级
+6. **钉钉通知**: 部署成功后自动发送 Release Note 到钉钉群，需配置 `DINGTALK_WEBHOOK_URL`
+7. **通知跳过**: 如钉钉 Webhook 未配置，不影响部署，仅跳过通知步骤
 
 ## Examples
 
@@ -378,6 +457,9 @@ Skill(
 ## 上传信息
 - Plugin ID: cmk3oovu1002m4prviw8mqq21
 - 上传状态: 成功
+
+## 发布通知
+- 钉钉通知: ✅ 已发送
 ```
 
 ### 示例 2: 指定 Plugin ID
@@ -442,7 +524,10 @@ Skill(
 
 ---
 
-**版本**: 1.0
-**最后更新**: 2026-03-14
+**版本**: 1.1
+**最后更新**: 2026-03-16
 **作者**: AI Solutions Expert Team
 **依赖**: Python 3, curl
+**变更记录**:
+- v1.1 (2026-03-16): 新增发布后自动通知钉钉群功能
+- v1.0 (2026-03-14): 初始版本

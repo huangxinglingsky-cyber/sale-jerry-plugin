@@ -317,9 +317,69 @@ Read(file_path="apps/pulgins/sale-jerry-plugin/skills/{skill_name}/SKILL.md")
 - 确认：保存修改，输出成功信息
 - 取消：放弃修改，保持原文件不变
 
-#### 步骤 4: 验证与输出
+#### 步骤 4: 更新 Release Note
 
-**4.1 验证 Skill 文件**
+**4.1 记录版本变更**
+
+每次创建新 Skill 或优化现有 Skill 后，必须更新 Release Note：
+
+```bash
+# Release Note 文件路径
+RELEASE_NOTE="/workspace/doc/release_note.md"
+
+# 读取当前 Release Note
+Read(file_path="/workspace/doc/release_note.md")
+```
+
+**4.2 变更记录格式**
+
+根据操作类型添加相应的记录：
+
+**新开发 Skill**：
+```markdown
+### 新增功能 (Features)
+- `{skill_name}` - {功能描述}
+```
+
+**优化 Skill**：
+```markdown
+### 优化改进 (Improvements)
+- `{skill_name}` - {优化内容描述}
+```
+
+**4.3 更新步骤**
+
+1. 读取 `/workspace/doc/release_note.md`
+2. 在最新版本（或新建版本）下添加变更记录
+3. 记录格式遵循模板：
+   - 新增功能使用 `+` 标识
+   - 优化改进使用 `~` 标识
+   - 问题修复使用 `!` 标识
+4. 更新「最后更新」日期
+
+**4.4 示例**
+
+在 v1.1.0 版本中新增 `lead-qualifier` Skill：
+
+```markdown
+## v1.1.0 (2026-03-17)
+
+### 新增功能 (Features)
+- `lead-qualifier` - 销售线索资格评估，自动判断线索质量等级
+```
+
+在 v1.1.1 版本中优化 `company-research` Skill：
+
+```markdown
+## v1.1.1 (2026-03-18)
+
+### 优化改进 (Improvements)
+- `company-research` - 增加行业分析维度，优化信息提取准确率
+```
+
+#### 步骤 5: 验证与输出
+
+**5.1 验证 Skill 文件**
 
 ```bash
 # 检查文件是否存在
@@ -329,7 +389,14 @@ test -f "apps/pulgins/sale-jerry-plugin/skills/{skill_name}/SKILL.md"
 head -10 "apps/pulgins/sale-jerry-plugin/skills/{skill_name}/SKILL.md"
 ```
 
-**4.2 输出最终结果**
+**5.2 验证 Release Note 更新**
+
+```bash
+# 确认变更已记录
+grep "{skill_name}" /workspace/doc/release_note.md
+```
+
+**5.3 输出最终结果**
 
 根据操作类型输出相应结果。
 
@@ -430,6 +497,7 @@ apps/pulgins/sale-jerry-plugin/skills/{skill_name}/
 3. **格式统一**：参照现有 Skill 格式，保持一致性
 4. **安全修改**：不直接覆盖，先展示变更再确认
 5. **完整文档**：确保 Skill 文档包含所有必要章节
+6. **记录变更**：每次创建或优化 Skill 后，必须更新 `/workspace/doc/release_note.md`
 
 ## Examples
 
@@ -465,6 +533,9 @@ apps/pulgins/sale-jerry-plugin/skills/{skill_name}/
 - 关键信息提取（业务场景、技术要求、约束条件）
 - 产品功能匹配（计算匹配度）
 - 定制化需求识别
+
+## Release Note 已更新
+已在 /workspace/doc/release_note.md 中记录新增 `requirement-analyzer` Skill
 ```
 
 ### 示例 2: 优化指定 Skill
@@ -515,6 +586,9 @@ apps/pulgins/sale-jerry-plugin/skills/{skill_name}/
 ```
 
 请确认是否应用这些修改？
+
+## Release Note 变更记录（待确认后更新）
+- `plugin-deploy` ~ 增加上传失败后的重试机制
 ```
 
 ### 示例 3: 优化未指定 Skill
@@ -545,7 +619,10 @@ apps/pulgins/sale-jerry-plugin/skills/{skill_name}/
 
 ---
 
-**版本**: 1.0
-**最后更新**: 2026-03-14
+**版本**: 1.1
+**最后更新**: 2026-03-16
 **作者**: AI Solutions Expert Team
 **依赖**: 无
+**变更记录**:
+- v1.1 (2026-03-16): 新增 Release Note 自动记录功能
+- v1.0 (2026-03-14): 初始版本
