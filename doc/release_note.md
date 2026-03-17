@@ -4,16 +4,15 @@
 
 ---
 
-## v1.1.0 (2026-03-16)
+## v1.1.0 (2026-03-17)
 
 ### 新增功能 (Features)
 - `skill-developer` (+) Skill 开发助手，智能识别是新开发 Skill 还是优化现有 Skill，支持参照现有格式创建新 Skill、智能修改优化 Skill，并提供变更对比确认
 - `skill-logic-auditor` (+) 技能逻辑审查官，审计 Plugin 中其他 Skill 的定义与逻辑，诊断"信息缺失时强行输出结论"或"未充分利用知识库"的问题，输出审查报告与优化方案
+
 ### 优化功能 (Features)
+- `project-status-updater` (~) **v2.1 修复版**：修复"某些场景只更新内容未记录历史"问题，新增步骤3.5强制记录历史、增强豁免章节匹配逻辑、验证阶段自动补充缺失历史
 - `plugin-deploy` (~) 新增发布后自动通知钉钉群功能，部署成功后自动获取最新 Release Note 并发送到钉钉群
-- `bid-strategist` (~) 添加知识库无结果时的降级策略
-- `meeting-analysis` (~) 添加会议纪要最小输入长度校验；集成 SPIN 方法论知识库检索
-- `requirement-matching` (~) 添加知识库未命中时的降级策略
 ---
 
 ## v1.0.1 (2026-03-15)
