@@ -259,31 +259,23 @@ fi
 
 **5.2 发送钉钉通知**
 
-通过 Webhook 发送 Markdown 消息到钉钉群：
+通过环境变量 `$DDWEBHOOK` 获取加签密钥，调用钉钉消息技能发送通知：
 
 ```bash
-# 读取钉钉 Webhook 配置
-DINGTALK_CONFIG=~/.dingtalk-skills/config
-WEBHOOK_URL=$(grep '^DINGTALK_WEBHOOK_URL=' "$DINGTALK_CONFIG" 2>/dev/null | cut -d= -f2-)
-
-if [ -z "$WEBHOOK_URL" ]; then
-  echo "⚠️ 钉钉 Webhook 未配置，跳过通知"
-  echo "如需启用通知，请配置 DINGTALK_WEBHOOK_URL"
+# 从环境变量获取钉钉加签密钥
+if [ -z "$DDWEBHOOK" ]; then
+  echo "⚠️ 钉钉 Webhook 未配置（环境变量 DDWEBHOOK 为空），跳过通知"
+  echo "如需启用通知，请设置环境变量 DDWEBHOOK"
 else
-  # 发送 Markdown 消息
-  curl -s -X POST "$WEBHOOK_URL" \
-    -H 'Content-Type: application/json' \
-    -d '{
-      "msgtype": "markdown",
-      "markdown": {
-        "title": "JavisSales Release Note",
-        "text": "# JavisSales Release Note\n\n'"$(echo "$LATEST_VERSION" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')"'"\n"
-      }
-    }'
-
+  # 调用钉钉消息技能发送 Markdown 通知
+  # 使用 dingtalk-message skill 发送群 Webhook 机器人消息
+  # 传入参数：markdown 格式的 Release Note 内容
+  Skill(skill="dingtalk-message", args="发送群Webhook机器人消息，markdown格式，标题为 JavisSales Release Note，内容为最新的版本更新日志")
   echo "✅ 钉钉通知已发送"
 fi
 ```
+
+> **说明**：钉钉 Webhook 使用环境变量 `$DDWEBHOOK` 存储加签密钥，由 `dingtalk-message` 技能负责实际的消息发送、加签计算和 API 调用。本技能只需准备好通知内容，委托 `dingtalk-message` 完成发送。
 
 **5.3 通知内容格式**
 
@@ -306,7 +298,7 @@ fi
 **5.4 错误处理**
 
 - 如果 Release Note 文件不存在，跳过通知步骤
-- 如果钉钉 Webhook 未配置，跳过通知步骤
+- 如果环境变量 `DDWEBHOOK` 未设置，跳过通知步骤
 - 通知失败不影响部署结果
 
 #### 步骤 6: 输出执行结果
@@ -425,8 +417,8 @@ fi
 3. **压缩格式**: 使用 zip 格式，兼容性好
 4. **排除规则**: 自动排除 `.git`、`__pycache__` 等
 5. **stripFirstLevel**: 参数为 true 时，去除压缩包根目录层级
-6. **钉钉通知**: 部署成功后自动发送 Release Note 到钉钉群，需配置 `DINGTALK_WEBHOOK_URL`
-7. **通知跳过**: 如钉钉 Webhook 未配置，不影响部署，仅跳过通知步骤
+6. **钉钉通知**: 部署成功后自动发送 Release Note 到钉钉群，需设置环境变量 `$DDWEBHOOK`（加签密钥）
+7. **通知跳过**: 如 `DDWEBHOOK` 环境变量未设置，不影响部署，仅跳过通知步骤
 
 ## Examples
 
@@ -524,10 +516,11 @@ Skill(
 
 ---
 
-**版本**: 1.1
-**最后更新**: 2026-03-16
+**版本**: 1.2
+**最后更新**: 2026-03-18
 **作者**: AI Solutions Expert Team
-**依赖**: Python 3, curl
+**依赖**: Python 3, curl, dingtalk-message skill
 **变更记录**:
+- v1.2 (2026-03-18): 钉钉通知 Webhook 配置改为从环境变量 `$DDWEBHOOK` 获取，委托 `dingtalk-message` 技能发送
 - v1.1 (2026-03-16): 新增发布后自动通知钉钉群功能
 - v1.0 (2026-03-14): 初始版本
