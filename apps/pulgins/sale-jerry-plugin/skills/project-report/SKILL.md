@@ -303,7 +303,7 @@ def generate_report(company_name, module_name, templates, solutions, cases):
     if templates:
         template_path = templates[0]
     else:
-        template_path = "/shared/sale-kb/项目资料/一体化运维平台建设立项报告v2.0.docx"
+        template_path = "/shared/通用知识/项目资料/一体化运维平台建设立项报告v2.0.docx"
 
     print(f"📖 使用模板: {template_path}")
 
@@ -501,7 +501,7 @@ import copy
 
 # 知识库路径
 KNOWLEDGE_BASE = "/shared/sale-kb"
-DEFAULT_TEMPLATE = "/shared/sale-kb/项目资料/一体化运维平台建设立项报告v2.0.docx"
+DEFAULT_TEMPLATE = "/shared/通用知识/项目资料/一体化运维平台建设立项报告v2.0.docx"
 
 # 模块-章节映射（定义各模块需要保留的功能章节）
 MODULE_SECTION_MAP = {

@@ -91,7 +91,7 @@ priority: high
 |------|------|------|--------|------|
 | scoring_table | object | ✅ | - | 评分表数据（已解析的结构化数据） |
 | case_library_path | string | ✅ | 通用知识/行业案例/公司案例库（持续更新）.md | 案例库文件路径（知识库统一维护，推荐直接使用默认值） |
-| qualification_list_path | string | ✅ | - | 资质清单文件路径 |
+| qualification_list_path | string | ✅ | 通用知识/资质相关/资质清单.md | 资质清单文件路径（知识库统一维护，推荐直接使用默认值） |
 | target_industry | string | ❌ | - | 目标行业（用于案例匹配） |
 | analysis_mode | string | ❌ | full | 分析模式（quick/full） |
 
@@ -124,11 +124,11 @@ priority: high
 **推荐的调用方式**:
 - **方式 1**：使用 Read 工具读取（推荐）：
   - 案例库：`通用知识/行业案例/公司案例库（持续更新）.md`（知识库统一维护）
-  - 资质清单：`/plugins/*sales*/skills/company-research/resource/data/qualificationList.md`
+  - 资质清单：`通用知识/资质相关/资质清单.md`（知识库统一维护）
 - **方式 2**：使用 Bash 动态查找（备用）：
   ```bash
   find . -name "公司案例库*" -path "*/行业案例/*" -print -quit
-  find /plugins -name "qualificationList.md" -path "*/*sales*/*" -print -quit
+  find . -name "资质清单*" -path "*/资质相关/*" -print -quit
   ```
 
 **路径支持**:
@@ -378,7 +378,7 @@ priority: high
 ## ⚔️ 进攻性控标建议
 
 ### 建议1: 增加CMMI5评分项
-- **我司优势**: 具备CMMI5认证（qualificationList.md第15行）
+- **我司优势**: 具备CMMI5认证（资质清单.md第15行）
 - **建议增加**: CMMI5认证加10分，CMMI3加5分
 - **排挤效果**: 预计淘汰80%竞品（多数仅有CMMI3）
 - **可行性**: ⭐⭐⭐⭐⭐（非常高，行业认可度高）
@@ -479,7 +479,7 @@ priority: high
     ]
   },
   "case_library_path": "通用知识/行业案例/公司案例库（持续更新）.md",
-  "qualification_list_path": "qualificationList.md",
+  "qualification_list_path": "通用知识/资质相关/资质清单.md",
   "target_industry": "金融-银行"
 }
 ```
@@ -622,8 +622,9 @@ bid-analysis (招标分析) → sales-script (话术生成)
 **更新内容**:
 - **v1.2 (2026-03-25) - 数据源迁移至知识库**:
   - ✅ 案例库数据源从 `caseLibrary.md` 迁移至知识库 `通用知识/行业案例/公司案例库（持续更新）.md`
+  - ✅ 资质清单数据源从 `qualificationList.md` 迁移至知识库 `通用知识/资质相关/资质清单.md`
   - ✅ 新增案例库格式说明（6列格式、模块提取规则、金额/日期转换）
-  - ✅ 更新 case_library_path 默认值为知识库路径
+  - ✅ 更新 case_library_path 和 qualification_list_path 默认值为知识库路径
 - **v1.1 (2026-03-15) - 添加输入校验防幻觉**:
   - ✅ 新增步骤 0: 输入完整性校验（必须执行）
   - ✅ 添加必需参数检查（scoring_table、case_library_path、qualification_list_path）

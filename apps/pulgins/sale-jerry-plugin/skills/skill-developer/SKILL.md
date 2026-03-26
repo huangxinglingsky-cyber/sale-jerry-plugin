@@ -435,7 +435,7 @@ Read(file_path="/workspace/doc/release_note.md")
 ## v2.0 (2026-03-18)
 
 ### 优化改进 (Improvements)
-- `case-matching` (~) 数据源从 caseLibrary.md 迁移至 sale-kb/行业案例库（持续更新）.md；适配新列格式（6列→6列映射）；新增行业分组映射表；模块信息改为从"销售机会"和"合同名称"字段提取；金额单位从万元改为元÷10000；日期格式从"YYYY年MM月"改为"YYYY/MM/DD"
+- `case-matching` (~) 数据源从 caseLibrary.md 迁移至 通用知识/行业案例/公司案例库（持续更新）.md；适配新列格式（6列→6列映射）；新增行业分组映射表；模块信息改为从"销售机会"和"合同名称"字段提取；金额单位从万元改为元÷10000；日期格式从"YYYY年MM月"改为"YYYY/MM/DD"
 ```
 
 **✅ 销售版（推荐）**：

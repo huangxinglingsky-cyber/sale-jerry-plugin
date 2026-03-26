@@ -92,7 +92,7 @@ priority: medium
 | 参数 | 类型 | 必须 | 默认值 | 描述 |
 |------|------|------|--------|------|
 | requirements | array | ✅ | - | 客户需求列表 |
-| feature_list_path | string | ✅ | - | 产品功能清单文件路径（推荐使用：`/plugins/*sales*/skills/company-research/resource/data/featureList.md` 或使用 Bash 动态查找：`find /plugins -name "featureList.md" -path "*/*sales*/*" -print -quit`） |
+| feature_list_path | string | ✅ | 通用知识/功能清单/EasyOps功能清单.md | 产品功能清单文件路径（知识库统一维护，推荐直接使用默认值） |
 | match_threshold | number | ❌ | 70 | 匹配度阈值（0-100） |
 | customization_tolerance | string | ❌ | medium | 定制化容忍度（low/medium/high） |
 
@@ -203,8 +203,8 @@ priority: medium
 **执行逻辑**:
 ```
 1. 使用 Read 工具读取 feature_list_path 指定的功能清单文件
-   - 推荐路径：/plugins/*sales*/skills/company-research/resource/data/featureList.md
-   - 或使用 Bash 动态查找：find /plugins -name "featureList.md" -path "*/*sales*/*" -print -quit
+   - 推荐路径：通用知识/功能清单/EasyOps功能清单.md（知识库统一维护）
+   - 或使用 Bash 动态查找：find . -name "EasyOps功能清单*" -path "*/功能清单/*" -print -quit
 2. ⚠️ 必须每次真实读取，严禁使用缓存或基于记忆的功能清单
 3. 解析功能清单结构（模块、功能、子功能）
 4. 建立功能索引（便于快速搜索）
@@ -515,7 +515,7 @@ Skill(
       "matched_feature": "CMDB-基础设施-主机管理",
       "match_rate": 100,
       "match_level": "标准功能",
-      "feature_reference": "featureList.md 第120行",
+      "feature_reference": "EasyOps功能清单.md 第120行",
       "customization_needed": false,
       "estimated_effort": "0人天"
     },
@@ -526,7 +526,7 @@ Skill(
       "matched_feature": "CMDB-报表管理（部分匹配）",
       "match_rate": 75,
       "match_level": "小改",
-      "feature_reference": "featureList.md 第245行",
+      "feature_reference": "EasyOps功能清单.md 第245行",
       "customization_needed": true,
       "gap": "不支持自定义模板，需要开发",
       "estimated_effort": "3人天",
@@ -578,7 +578,7 @@ Skill(
     {"id": "REQ-001", "description": "支持主机资源管理"},
     {"id": "REQ-002", "description": "支持自动发现网络设备"}
   ],
-  "feature_list_path": "skills/company-research/resource/data/featureList.md"
+  "feature_list_path": "通用知识/功能清单/EasyOps功能清单.md"
 }
 ```
 
@@ -635,7 +635,7 @@ Skill(
     {"id": "REQ-002", "description": "支持与SAP系统集成"},
     {"id": "REQ-003", "description": "支持区块链存证"}
   ],
-  "feature_list_path": "featureList.md"
+  "feature_list_path": "通用知识/功能清单/EasyOps功能清单.md"
 }
 ```
 
@@ -693,7 +693,7 @@ document-processor file="客户需求.xlsx" parser="requirement"
 # 步骤 2: 需求匹配分析
 requirement-analysis \
   requirements=[解析后的需求列表] \
-  feature_list="featureList.md"
+  feature_list="通用知识/功能清单/EasyOps功能清单.md"
 
 # 步骤 3: 生成匹配报告和话术
 sales-script scenario="需求讨论" context="[匹配结果]"
@@ -818,9 +818,12 @@ sales-script scenario="需求讨论" context="[匹配结果]"
 
 ## Version
 
-**版本**: 1.1
-**最后更新**: 2026-03-15
+**版本**: 1.2
+**最后更新**: 2026-03-25
 **更新内容**:
+- **v1.2 (2026-03-25) - 数据源迁移至知识库**:
+  - ✅ 功能清单数据源从 `featureList.md` 迁移至知识库 `通用知识/功能清单/EasyOps功能清单.md`
+  - ✅ 更新 feature_list_path 默认值为知识库路径
 - **v1.1 (2026-03-15) - 添加KB未命中降级策略**:
   - ✅ 新增功能清单读取失败时的降级策略
   - ✅ 明确禁止在无功能清单时使用预训练知识
