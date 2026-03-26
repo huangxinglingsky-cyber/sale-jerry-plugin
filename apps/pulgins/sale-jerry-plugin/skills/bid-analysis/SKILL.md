@@ -90,7 +90,7 @@ priority: high
 | 参数 | 类型 | 必须 | 默认值 | 描述 |
 |------|------|------|--------|------|
 | scoring_table | object | ✅ | - | 评分表数据（已解析的结构化数据） |
-| case_library_path | string | ✅ | - | 案例库文件路径 |
+| case_library_path | string | ✅ | 通用知识/行业案例/公司案例库（持续更新）.md | 案例库文件路径（知识库统一维护，推荐直接使用默认值） |
 | qualification_list_path | string | ✅ | - | 资质清单文件路径 |
 | target_industry | string | ❌ | - | 目标行业（用于案例匹配） |
 | analysis_mode | string | ❌ | full | 分析模式（quick/full） |
@@ -122,12 +122,12 @@ priority: high
 - **qualification_list_path**: 资质清单文件路径
 
 **推荐的调用方式**:
-- **方式 1**：使用 Read 工具读取：
-  - 案例库：`/plugins/*sales*/skills/company-research/resource/data/caseLibrary.md`
+- **方式 1**：使用 Read 工具读取（推荐）：
+  - 案例库：`通用知识/行业案例/公司案例库（持续更新）.md`（知识库统一维护）
   - 资质清单：`/plugins/*sales*/skills/company-research/resource/data/qualificationList.md`
-- **方式 2**：使用 Bash 动态查找：
+- **方式 2**：使用 Bash 动态查找（备用）：
   ```bash
-  find /plugins -name "caseLibrary.md" -path "*/*sales*/*" -print -quit
+  find . -name "公司案例库*" -path "*/行业案例/*" -print -quit
   find /plugins -name "qualificationList.md" -path "*/*sales*/*" -print -quit
   ```
 
@@ -268,6 +268,9 @@ priority: high
 **执行逻辑**:
 
 #### 2.1 案例业绩评分
+
+**⚠️ 案例库格式说明**:
+知识库案例库为6列格式（签约日期/客户名称/销售机会/合同名称/行业/合同金额），模块信息需从"销售机会"和"合同名称"字段提取，金额单位为元（需÷10000转万元），日期格式为 YYYY/MM/DD。详见 case-matching v2.0 的列映射表和模块提取规则。
 
 ```
 1. 读取案例库文件 (case_library_path)
@@ -475,7 +478,7 @@ priority: high
       {"category": "案例业绩", "item": "同行业案例", "full_score": 15, "rule": "每个5分，最多15分"}
     ]
   },
-  "case_library_path": "caseLibrary.md",
+  "case_library_path": "通用知识/行业案例/公司案例库（持续更新）.md",
   "qualification_list_path": "qualificationList.md",
   "target_industry": "金融-银行"
 }
@@ -614,9 +617,13 @@ bid-analysis (招标分析) → sales-script (话术生成)
 
 ## Version
 
-**版本**: 1.1
-**最后更新**: 2026-03-15
+**版本**: 1.2
+**最后更新**: 2026-03-25
 **更新内容**:
+- **v1.2 (2026-03-25) - 数据源迁移至知识库**:
+  - ✅ 案例库数据源从 `caseLibrary.md` 迁移至知识库 `通用知识/行业案例/公司案例库（持续更新）.md`
+  - ✅ 新增案例库格式说明（6列格式、模块提取规则、金额/日期转换）
+  - ✅ 更新 case_library_path 默认值为知识库路径
 - **v1.1 (2026-03-15) - 添加输入校验防幻觉**:
   - ✅ 新增步骤 0: 输入完整性校验（必须执行）
   - ✅ 添加必需参数检查（scoring_table、case_library_path、qualification_list_path）

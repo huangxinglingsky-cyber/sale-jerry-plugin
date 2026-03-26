@@ -119,7 +119,7 @@ priority: high
 |------|------|------|--------|------|
 | project_name | string | ✅ | - | 完整的项目名称，格式：`客户名称-项目名称` |
 | file_path | string | ❌ | auto | 评分表文件路径，不指定则扫描04报价文件目录 |
-| case_library_path | string | ❌ | auto | 案例库路径，默认自动查找 |
+| case_library_path | string | ❌ | 通用知识/行业案例/公司案例库（持续更新）.md | 案例库路径（知识库统一维护，推荐直接使用默认值） |
 | qualification_path | string | ❌ | auto | 资质清单路径，默认自动查找 |
 
 ## Instructions
@@ -153,8 +153,11 @@ test -d "{project_name}" && echo "EXISTS" || echo "NOT_EXISTS"
 
 **2.1 加载案例库**：
 ```bash
-# 查找案例库文件
-find . -name "caseLibrary.md" -path "*/*sales*/*" -print -quit
+# 方式1：直接读取知识库（推荐）
+# 通用知识/行业案例/公司案例库（持续更新）.md
+
+# 方式2：动态查找（备用）
+find . -name "公司案例库*" -path "*/行业案例/*" -print -quit
 ```
 
 **⚠️ 知识库未命中降级策略**:
@@ -168,7 +171,7 @@ find . -name "caseLibrary.md" -path "*/*sales*/*" -print -quit
   "status": "error",
   "error_type": "knowledge_base_unavailable",
   "message": "无法读取案例库或资质清单文件，无法进行准确的招标分析",
-  "missing_files": ["caseLibrary.md", "qualificationList.md"],
+  "missing_files": ["公司案例库（持续更新）.md", "qualificationList.md"],
   "suggestion": "请检查文件路径，或联系管理员确认知识库文件是否存在"
 }
 
@@ -453,9 +456,12 @@ Skill(
 
 ---
 
-**版本**: 1.1
-**最后更新**: 2026-03-15
+**版本**: 1.2
+**最后更新**: 2026-03-25
 **更新内容**:
+- **v1.2 (2026-03-25) - 数据源迁移至知识库**:
+  - ✅ 案例库数据源从 `caseLibrary.md` 迁移至知识库 `通用知识/行业案例/公司案例库（持续更新）.md`
+  - ✅ 更新 case_library_path 默认值为知识库路径
 - **v1.1 (2026-03-15) - 添加KB未命中降级策略**:
   - ✅ 新增知识库未命中降级策略
   - ✅ 明确禁止在无知识库时使用预训练知识

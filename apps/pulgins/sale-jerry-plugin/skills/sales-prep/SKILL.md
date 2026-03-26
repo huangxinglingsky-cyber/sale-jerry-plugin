@@ -197,7 +197,7 @@ const matchedModules = keywords.filter(k => projectDesc.includes(k));
 Skill(
   skill: "case-matching",
   args: {
-    "case_library_path": "{动态获取案例库路径}",
+    "case_library_path": "通用知识/行业案例/公司案例库（持续更新）.md",
     "target_industry": "{从步骤2获取的行业细分}",
     "target_modules": "{从步骤3识别的模块列表}",
     "time_range": "{time_range参数或auto}",
@@ -206,14 +206,9 @@ Skill(
 )
 ```
 
-**案例库路径获取**：
-```bash
-# 方式1：直接读取
-/plugins/*sales*/skills/company-research/resource/data/caseLibrary.md
-
-# 方式2：动态查找
-find /plugins -name "caseLibrary.md" -path "*/*sales*/*" -print -quit
-```
+**案例库路径**：
+知识库统一维护，路径为 `通用知识/行业案例/公司案例库（持续更新）.md`。
+case-matching Skill 的 `case_library_path` 参数已有默认值，无需手动指定。
 
 **获取匹配结果**：
 - matched_cases：匹配的案例列表
@@ -571,7 +566,10 @@ Skill(
 
 ---
 
-**版本**: 1.0
-**最后更新**: 2026-02-15
+**版本**: 1.1
+**最后更新**: 2026-03-25
 **作者**: AI Solutions Expert Team
 **依赖**: company-research, case-matching, sales-script, project-status-updater
+**变更记录**:
+- v1.1 (2026-03-25): 案例库数据源迁移至知识库 `通用知识/行业案例/公司案例库（持续更新）.md`，移除旧的 caseLibrary.md 路径
+- v1.0 (2026-02-15): 初始版本
