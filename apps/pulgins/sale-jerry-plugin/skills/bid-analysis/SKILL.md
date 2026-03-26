@@ -501,7 +501,7 @@ priority: high
 
 ```javascript
 // 构建会话轨迹摘要
-const sessionSummary = `招标分析：门槛审查${threshold_check.risk_level}，预估得分${scoring.total_score}/${scoring.full_score}分（${scoring.score_rate}%），识别${defense_tactics.length}个防御策略和${attack_tactics.length}个进攻策略`;
+const sessionSummary = `招标分析：门槛审查${threshold_check.risk_level}，预估得分${scoring.total_score}/${scoring.full_score}分（${scoring.score_rate}%），识别${defensive_suggestions.length}个防御策略和${offensive_suggestions.length}个进攻策略`;
 
 // 调用 project-status-updater 记录轨迹
 Skill(

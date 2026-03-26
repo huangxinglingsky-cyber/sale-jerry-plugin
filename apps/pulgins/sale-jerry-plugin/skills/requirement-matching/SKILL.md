@@ -95,6 +95,7 @@ priority: medium
 | feature_list_path | string | ✅ | 通用知识/功能清单/EasyOps功能清单.md | 产品功能清单文件路径（知识库统一维护，推荐直接使用默认值） |
 | match_threshold | number | ❌ | 70 | 匹配度阈值（0-100） |
 | customization_tolerance | string | ❌ | medium | 定制化容忍度（low/medium/high） |
+| project_name | string | ❌ | - | 项目名称（用于更新项目状态，由调用方 Agent 传入） |
 
 **requirements 数据结构**:
 ```json
@@ -557,7 +558,7 @@ Skill(
 
 **调用方使用说明**:
 
-当 Agent 调用 requirement-analysis skill 时：
+当 Agent 调用 requirement-matching skill 时：
 1. 解析返回的 JSON 结果
 2. 根据 status 判断匹配是否成功
 3. 使用 summary 了解整体匹配情况
@@ -681,8 +682,8 @@ Skill(
 ### 与其他 Skills 协作
 
 ```
-document-processor (文档处理) → requirement-analysis (需求匹配) → sales-script (话术生成)
-requirement-analysis (需求匹配) → case-matching (案例匹配)
+document-processor (文档处理) → requirement-matching (需求匹配) → sales-script (话术生成)
+requirement-matching (需求匹配) → case-matching (案例匹配)
 ```
 
 **工作流程示例**:
@@ -691,7 +692,7 @@ requirement-analysis (需求匹配) → case-matching (案例匹配)
 document-processor file="客户需求.xlsx" parser="requirement"
 
 # 步骤 2: 需求匹配分析
-requirement-analysis \
+requirement-matching \
   requirements=[解析后的需求列表] \
   feature_list="通用知识/功能清单/EasyOps功能清单.md"
 
@@ -835,5 +836,5 @@ sales-script scenario="需求讨论" context="[匹配结果]"
 - 匹配建议生成
 - 完整的Examples、Error Handling、Best Practices
 **作者**: AI Solutions Expert Team
-**抽取自**: requirement-analysis Agent
+**抽取自**: requirement-matching Agent
 **依赖**: Read 工具（读取功能清单文件）

@@ -182,7 +182,7 @@ def validate_params(company_name, module_name):
 根据模块名称搜索知识库中的立项报告模板：
 
 ```python
-KNOWLEDGE_BASE_PATH = "/shared/sale-kb"
+KNOWLEDGE_BASE_PATH = "/shared/通用知识"
 
 def search_templates(module_name):
     """搜索相关立项报告模板"""
@@ -500,7 +500,7 @@ import re
 import copy
 
 # 知识库路径
-KNOWLEDGE_BASE = "/shared/sale-kb"
+KNOWLEDGE_BASE = "/shared/通用知识"
 DEFAULT_TEMPLATE = "/shared/通用知识/项目资料/一体化运维平台建设立项报告v2.0.docx"
 
 # 模块-章节映射（定义各模块需要保留的功能章节）

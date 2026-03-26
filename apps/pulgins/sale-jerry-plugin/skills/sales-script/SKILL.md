@@ -81,6 +81,7 @@ priority: high
 | scenario | string | ✅ | - | 销售场景描述（如"运维部门初访"、"技术异议处理"等） |
 | customer_info | string | ❌ | - | 客户背景信息（运维团队规模、技术栈、痛点等） |
 | context | string | ❌ | - | 补充上下文信息（如特定疑虑、竞争情况等） |
+| project_name | string | ❌ | - | 项目名称（用于更新项目状态，由调用方 Agent 传入） |
 
 **参数说明**:
 - 所有参数均接受字符串类型
@@ -705,7 +706,7 @@ context: "竞品A价格更低，但运维团队担心稳定性和后续服务"
 
 ```javascript
 // 构建会话轨迹摘要
-const sessionSummary = `话术生成：完成${scenario}场景销售话术（${customer_info ? '结合客户背景' : '通用版本'}）${cases_provided ? '，引用' + case_count + '个成功案例' : ''}`;
+const sessionSummary = `话术生成：完成${scenario}场景销售话术（${customer_info ? '结合客户背景' : '通用版本'}）`;
 
 // 调用 project-status-updater 记录轨迹
 Skill(

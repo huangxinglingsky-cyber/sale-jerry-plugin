@@ -213,9 +213,8 @@ Skill(
   skill: "bid-analysis",
   args: {
     "scoring_table": "{评分表内容}",
-    "case_library": "{案例库内容}",
-    "qualification_list": "{资质清单内容}",
-    "customer_name": "{客户名称}"
+    "case_library_path": "通用知识/行业案例/公司案例库（持续更新）.md",
+    "qualification_list_path": "通用知识/资质相关/资质清单.md"
   }
 )
 ```

@@ -275,7 +275,7 @@ Skill(
   skill: "project-status-updater",
   args: {
     "project_name": "{project_name}",
-    "section": "当前状态",
+    "section": "当前阶段",
     "content": "{销售阶段}",
     "operation": "replace"
   }
