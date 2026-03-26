@@ -213,6 +213,8 @@ def search_templates(module_name):
         keywords = [module_name]
 
     # 搜索匹配的模板文件
+    if not os.path.exists(project_path):
+        return []
     for file in os.listdir(project_path):
         file_lower = file.lower()
         if any(kw in file_lower for kw in keywords) and (file.endswith(".doc") or file.endswith(".docx")):
@@ -235,6 +237,8 @@ def search_solutions(module_name):
     # 搜索关键词
     keywords = get_module_keywords(module_name)
 
+    if not os.path.exists(solution_path):
+        return []
     for file in os.listdir(solution_path):
         file_lower = file.lower()
         if any(kw in file_lower for kw in keywords):
@@ -255,6 +259,8 @@ def search_cases(module_name, industry=None):
 
     keywords = get_module_keywords(module_name)
 
+    if not os.path.exists(case_path):
+        return []
     for file in os.listdir(case_path):
         file_lower = file.lower()
         if any(kw in file_lower for kw in keywords):

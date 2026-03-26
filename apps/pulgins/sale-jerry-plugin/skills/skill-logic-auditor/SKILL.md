@@ -234,7 +234,11 @@ SKILLS_DIR="/workspace/apps/pulgins/sale-jerry-plugin/skills"
 # 获取所有 Skill 名称
 ls -d $SKILLS_DIR/*/ | xargs -n1 basename
 
-# 排除自身（skill-logic-auditor）
+# 排除以下 Skill（不参与审计）
+# - skill-logic-auditor：审计官自身
+# - plugin-deploy：工具平台类，仅负责打包部署
+# - document-processor：工具平台类，仅负责文档处理
+# - skill-developer：元工具类，仅负责创建/修改其他 Skill
 # 对每个 Skill 执行快速审计
 ```
 

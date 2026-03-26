@@ -309,7 +309,7 @@ EOF
 
 使用 Bash 验证目录结构是否创建成功:
 ```bash
-ls -la "{base_path}/{project_name}"
+ls -la "{base_path}/{FINAL_PROJECT_NAME}"
 ```
 
 #### 步骤 7: 输出执行结果
