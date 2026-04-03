@@ -1,0 +1,19 @@
+{
+  "name": "sale-dev-plugin",
+  "version": "1.0.1",
+  "description": "sale",
+  "author": {
+    "name": "销售Agent开发plugin",
+    "email": "jerryhuang@easyops.cn"
+  },
+  "license": "MIT",
+  "keywords": ["sale-dev"],
+  "agents": [
+    "./agents/team-lead.md",
+    "./agents/requirements-agent.md",
+    "./agents/dev-agent.md",
+    "./agents/test-agent.md",
+    "./agents/docs-agent.md"
+  ],
+  "skills": "./skills/"
+}

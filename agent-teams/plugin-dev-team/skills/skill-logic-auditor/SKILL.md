@@ -449,7 +449,7 @@ find $REPORT_DIR -name "*.md" -mtime +30 -exec rm {} \;
 **⚠️ 审计完成后，报告必须保存到以下位置：**
 
 ```
-/workspace/apps/pulgins/sale-jerry-plugin/skills/skill-logic-auditor/reports/
+agent-teams/plugin-dev-team/skills/skill-logic-auditor/reports/
 ├── audit-report-2026-03-15.md          # 批量审计报告
 ├── audit-spin-analysis-2026-03-15.md   # 单 Skill 审计报告
 └── audit-case-matching-rag-2026-03-15.md  # 聚焦审计报告

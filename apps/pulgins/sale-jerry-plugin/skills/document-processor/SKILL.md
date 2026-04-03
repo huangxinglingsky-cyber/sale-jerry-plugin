@@ -54,13 +54,13 @@ priority: high
 - 提取图片和超链接
 - 保留格式信息（粗体、斜体、颜色等）
 
-### 3. 图片文字识别（OCR）
-- 支持PNG、JPG、JPEG、BMP等格式
-- 中英文混合识别
-- 表格识别
-- 手写文字识别
+### 3. 图片内容识别（大模型原生视觉）
+- 支持PNG、JPG、JPEG、BMP、GIF、WEBP等格式
+- 大模型原生视觉能力，无需安装OCR引擎
+- 中英文混合识别，理解图片语义内容
+- 自动识别表格、图表、手写文字、截图等
 - 批量图片处理
-- 指定识别区域
+- 提取结构化信息，直接返回结构化文本
 
 ### 4. PDF文件处理
 - 提取文本内容（支持.pdf格式）
@@ -77,11 +77,11 @@ priority: high
 - 转换为HTML或纯文本
 - 提取链接和图片
 
-### 6. 文本文件处理
+### 6. 文本文件处理（大模型原生理解）
 - 读取TXT、CSV、JSON等格式
 - 自动编码检测（UTF-8、GBK等）
-- 按行/段落分割
-- 提取特定模式的内容（正则表达式）
+- 将文本内容直接传递给大模型进行语义理解和信息提取
+- 无需复杂正则，模型自动识别结构和关键信息
 - 批量文本处理
 
 ### 6. 文档格式转换
@@ -323,54 +323,69 @@ for rel in doc.part.rels.values():
 
 ---
 
-### 图片文字识别（OCR）
+### 图片内容识别（大模型原生视觉）
 
-#### 基础OCR识别
+#### 基础图片识别
 
 ```python
-import pytesseract
-from PIL import Image
+import anthropic
+import base64
+from pathlib import Path
 
-# 读取图片并识别
-image = Image.open("需求截图.png")
-text = pytesseract.image_to_string(image, lang='chi_sim+eng')
+client = anthropic.Anthropic()
+
+def recognize_image(image_path: str, prompt: str = "请识别并提取图片中的所有文字内容，保持原有格式结构。") -> str:
+    """使用大模型原生视觉能力识别图片内容"""
+    # 根据扩展名确定 media_type
+    ext = Path(image_path).suffix.lower()
+    media_type_map = {
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".bmp": "image/bmp",
+        ".gif": "image/gif",
+        ".webp": "image/webp",
+    }
+    media_type = media_type_map.get(ext, "image/png")
+
+    with open(image_path, "rb") as f:
+        image_data = base64.standard_b64encode(f.read()).decode("utf-8")
+
+    message = client.messages.create(
+        model="claude-opus-4-6",
+        max_tokens=4096,
+        messages=[{
+            "role": "user",
+            "content": [
+                {
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": media_type,
+                        "data": image_data,
+                    },
+                },
+                {"type": "text", "text": prompt}
+            ],
+        }],
+    )
+    return message.content[0].text
+
+# 基础文字提取
+text = recognize_image("需求截图.png")
 print("识别结果:")
 print(text)
-
-# 保存识别结果
-with open("识别结果.txt", "w", encoding="utf-8") as f:
-    f.write(text)
 ```
 
-#### 表格识别
+#### 表格图片识别
 
 ```python
-# 表格识别（使用table-transformer或paddleocr）
-from paddleocr import PaddleOCR
-
-ocr = PaddleOCR(use_angle_cls=True, lang='ch', use_gpu=False)
-result = ocr.ocr("表格图片.png", cls=True)
-
-# 提取文字和位置
-for line in result[0]:
-    box = line[0]  # 坐标
-    text = line[1][0]  # 文字
-    confidence = line[1][1]  # 置信度
-    print(f"[{confidence:.2f}] {text}")
-```
-
-#### 指定区域识别
-
-```python
-from PIL import Image
-
-# 裁剪指定区域
-image = Image.open("全图.png")
-cropped = image.crop((100, 100, 500, 300))  # (left, top, right, bottom)
-
-# 识别裁剪区域
-text = pytesseract.image_to_string(cropped, lang='chi_sim')
-print(f"识别结果: {text}")
+# 专门针对表格图片，要求模型以结构化格式输出
+text = recognize_image(
+    "表格图片.png",
+    prompt="请识别图片中的表格内容，以Markdown表格格式输出，保留所有行列数据。"
+)
+print(text)
 ```
 
 #### 批量图片处理
@@ -378,13 +393,12 @@ print(f"识别结果: {text}")
 ```python
 import os
 
-image_files = [f for f in os.listdir(".") if f.endswith(('.png', '.jpg', '.jpeg'))]
+image_files = [f for f in os.listdir(".") if f.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif', '.webp'))]
 
 results = {}
 for image_file in image_files:
     try:
-        image = Image.open(image_file)
-        text = pytesseract.image_to_string(image, lang='chi_sim+eng')
+        text = recognize_image(image_file)
         results[image_file] = text
         print(f"✅ {image_file}: 识别完成")
     except Exception as e:
@@ -396,6 +410,18 @@ with open("批量识别结果.txt", "w", encoding="utf-8") as f:
         f.write(f"=== {filename} ===\n")
         f.write(text)
         f.write("\n\n")
+```
+
+#### 语义提取（超越纯OCR）
+
+```python
+# 大模型可以理解图片语义，直接提取结构化信息
+result = recognize_image(
+    "需求截图.png",
+    prompt="请分析图片内容，以JSON格式提取所有需求项，包含需求编号、描述、优先级字段。"
+)
+import json
+requirements = json.loads(result)
 ```
 
 ---
@@ -621,66 +647,54 @@ print("✅ PDF表格已转换为Excel")
 
 ---
 
-### 文本文件处理
-for language, code in code_blocks:
-    print(f"\n=== {language or '未指定语言'} ===")
-    print(code.strip())
-```
+### 文本文件处理（大模型原生理解）
 
----
-
-### 文本文件处理
-
-#### 智能编码检测
+#### 基础读取并交由大模型处理
 
 ```python
+import anthropic
 import chardet
 
-# 检测文件编码
-with open("文档.txt", "rb") as f:
-    raw_data = f.read()
+client = anthropic.Anthropic()
+
+def read_text_file(file_path: str) -> str:
+    """自动检测编码并读取文本文件"""
+    with open(file_path, "rb") as f:
+        raw_data = f.read()
     result = chardet.detect(raw_data)
-    encoding = result['encoding']
-    confidence = result['confidence']
-    print(f"检测到编码: {encoding} (置信度: {confidence:.2%})")
+    encoding = result['encoding'] or 'utf-8'
+    return raw_data.decode(encoding)
 
-# 使用检测到的编码读取
-with open("文档.txt", "r", encoding=encoding) as f:
-    content = f.read()
-    print(content)
+def analyze_text_with_llm(file_path: str, prompt: str) -> str:
+    """读取文本文件并使用大模型进行语义分析"""
+    content = read_text_file(file_path)
+    message = client.messages.create(
+        model="claude-opus-4-6",
+        max_tokens=4096,
+        messages=[{
+            "role": "user",
+            "content": f"{prompt}\n\n文件内容：\n{content}"
+        }],
+    )
+    return message.content[0].text
+
+# 提取文本文件中的需求信息
+result = analyze_text_with_llm(
+    "需求列表.txt",
+    "请从以下文档中提取所有需求项，以JSON格式输出，包含需求编号、描述、优先级字段。"
+)
+print(result)
 ```
 
-#### 按行处理
+#### Markdown文档语义理解
 
 ```python
-# 逐行读取和处理
-with open("需求列表.txt", "r", encoding="utf-8") as f:
-    for i, line in enumerate(f, 1):
-        line = line.strip()
-        if line:  # 跳过空行
-            print(f"第 {i} 行: {line}")
-```
-
-#### 正则表达式提取
-
-```python
-import re
-
-# 提取特定模式的内容
-with open("文档.txt", "r", encoding="utf-8") as f:
-    content = f.read()
-
-# 提取所有邮箱地址
-emails = re.findall(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', content)
-print(f"找到 {len(emails)} 个邮箱: {emails}")
-
-# 提取所有手机号
-phones = re.findall(r'1[3-9]\d{9}', content)
-print(f"找到 {len(phones)} 个手机号: {phones}")
-
-# 提取需求编号（如 REQ-001）
-req_ids = re.findall(r'REQ-\d{3,}', content)
-print(f"找到 {len(req_ids)} 个需求编号: {req_ids}")
+# 大模型原生理解Markdown结构，无需手动解析
+result = analyze_text_with_llm(
+    "README.md",
+    "请分析这个Markdown文档的结构，提取所有标题层级和对应内容摘要，以JSON格式输出。"
+)
+print(result)
 ```
 
 #### CSV文件处理
@@ -688,15 +702,22 @@ print(f"找到 {len(req_ids)} 个需求编号: {req_ids}")
 ```python
 import csv
 
-# 读取CSV文件
-with open("需求.csv", "r", encoding="utf-8") as f:
-    reader = csv.DictReader(f)
-    for row in reader:
-        print(row)
-
-# 使用pandas读取（更强大）
+# 读取CSV文件（结构化数据直接用pandas，无需LLM）
+import pandas as pd
 df = pd.read_csv("需求.csv", encoding="utf-8")
 print(df.head())
+
+# 若需语义理解CSV内容，再传给大模型
+content = df.to_csv(index=False)
+message = client.messages.create(
+    model="claude-opus-4-6",
+    max_tokens=4096,
+    messages=[{
+        "role": "user",
+        "content": f"请分析以下CSV数据，识别数据规律并总结关键信息：\n\n{content}"
+    }],
+)
+print(message.content[0].text)
 ```
 
 ---
@@ -735,23 +756,41 @@ with open("需求说明.md", "w", encoding="utf-8") as f:
     f.write("\n".join(md_lines))
 ```
 
-### 图片 → 文本（OCR）
+### 图片 → 文本（大模型原生视觉）
 
 ```python
-from PIL import Image
-import pytesseract
+import anthropic
+import base64
+from pathlib import Path
+
+client = anthropic.Anthropic()
 
 # 批量转换图片为文本
 image_files = ["截图1.png", "截图2.jpg", "截图3.jpeg"]
 
 for image_file in image_files:
-    image = Image.open(image_file)
-    text = pytesseract.image_to_string(image, lang='chi_sim+eng')
+    ext = Path(image_file).suffix.lower()
+    media_type_map = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
+    media_type = media_type_map.get(ext, "image/png")
 
-    # 保存为txt
-    output_file = image_file.rsplit('.', 1)[0] + '.txt'
+    with open(image_file, "rb") as f:
+        image_data = base64.standard_b64encode(f.read()).decode("utf-8")
+
+    message = client.messages.create(
+        model="claude-opus-4-6",
+        max_tokens=4096,
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": image_data}},
+                {"type": "text", "text": "请识别并提取图片中的所有文字内容，保持原有格式结构。"}
+            ],
+        }],
+    )
+
+    output_file = Path(image_file).stem + '.txt'
     with open(output_file, "w", encoding="utf-8") as f:
-        f.write(text)
+        f.write(message.content[0].text)
     print(f"✅ {image_file} → {output_file}")
 ```
 
@@ -761,14 +800,19 @@ for image_file in image_files:
 
 ```python
 import os
+import base64
+import anthropic
 import pandas as pd
 from docx import Document
-from PIL import Image
-import pytesseract
+
+client = anthropic.Anthropic()
 
 def process_document(file_path):
     """
-    智能处理文档，根据文件类型自动选择处理方式
+    智能处理文档，根据文件类型自动选择处理方式：
+    - Excel/Word/PDF：使用对应解析库
+    - 图片：使用大模型原生视觉能力
+    - TXT/Markdown：使用大模型原生语言理解能力
     """
     _, ext = os.path.splitext(file_path)
     ext = ext.lower()
@@ -783,28 +827,25 @@ def process_document(file_path):
 
     try:
         if ext in ['.xlsx', '.xls']:
-            # Excel文件
+            # Excel文件 - 使用 pandas 解析
             df = pd.read_excel(file_path)
             result["content"] = df.to_dict('records')
             result["tables"].append(df)
 
-            # 提取需求列表
             if "需求描述" in df.columns or "需求" in df.columns:
                 req_col = "需求描述" if "需求描述" in df.columns else "需求"
                 result["requirements"] = df[req_col].tolist()
 
         elif ext in ['.docx', '.doc']:
-            # Word文件
+            # Word文件 - 使用 python-docx 解析
             doc = Document(file_path)
 
-            # 提取文本
             text_content = []
             for para in doc.paragraphs:
                 if para.text.strip():
                     text_content.append(para.text)
             result["content"] = "\n".join(text_content)
 
-            # 提取表格
             for table in doc.tables:
                 table_data = []
                 for row in table.rows:
@@ -813,16 +854,47 @@ def process_document(file_path):
                     df = pd.DataFrame(table_data[1:], columns=table_data[0])
                     result["tables"].append(df)
 
-        elif ext in ['.png', '.jpg', '.jpeg', '.bmp']:
-            # 图片文件（OCR）
-            image = Image.open(file_path)
-            text = pytesseract.image_to_string(image, lang='chi_sim+eng')
-            result["content"] = text
+        elif ext in ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.webp']:
+            # 图片文件 - 使用大模型原生视觉能力
+            media_type_map = {
+                ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+                ".bmp": "image/bmp", ".gif": "image/gif", ".webp": "image/webp",
+            }
+            media_type = media_type_map.get(ext, "image/png")
+
+            with open(file_path, "rb") as f:
+                image_data = base64.standard_b64encode(f.read()).decode("utf-8")
+
+            message = client.messages.create(
+                model="claude-opus-4-6",
+                max_tokens=4096,
+                messages=[{
+                    "role": "user",
+                    "content": [
+                        {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": image_data}},
+                        {"type": "text", "text": "请识别并提取图片中的所有文字内容，保持原有格式结构。"}
+                    ],
+                }],
+            )
+            result["content"] = message.content[0].text
 
         elif ext in ['.txt', '.md']:
-            # 文本文件
-            with open(file_path, 'r', encoding='utf-8') as f:
-                result["content"] = f.read()
+            # 文本/Markdown文件 - 读取后交由大模型理解
+            with open(file_path, 'rb') as f:
+                raw = f.read()
+            import chardet
+            encoding = chardet.detect(raw)['encoding'] or 'utf-8'
+            content = raw.decode(encoding)
+
+            message = client.messages.create(
+                model="claude-opus-4-6",
+                max_tokens=4096,
+                messages=[{
+                    "role": "user",
+                    "content": f"请分析以下文档内容，提取关键信息并结构化输出：\n\n{content}"
+                }],
+            )
+            result["content"] = message.content[0].text
 
         result["status"] = "success"
 
@@ -877,23 +949,30 @@ else:
     print(f"✅ 读取到 {len(df)} 行数据")
 ```
 
-### 3. OCR识别率低
+### 3. 图片识别效果不理想
 
 ```python
-from PIL import Image, ImageEnhance
-
-# 图像预处理提高识别率
-image = Image.open("模糊图片.png")
-
-# 转换为灰度图
-image = image.convert('L')
-
-# 增强对比度
-enhancer = ImageEnhance.Contrast(image)
-image = enhancer.enhance(2.0)
-
-# 识别
-text = pytesseract.image_to_string(image, lang='chi_sim')
+# 使用更明确的提示词引导大模型输出期望格式
+message = client.messages.create(
+    model="claude-opus-4-6",
+    max_tokens=4096,
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "image", "source": {"type": "base64", "media_type": "image/png", "data": image_data}},
+            {
+                "type": "text",
+                "text": (
+                    "请仔细识别图片中的文字内容，注意：\n"
+                    "1. 保留原始行列结构\n"
+                    "2. 表格内容以Markdown表格输出\n"
+                    "3. 如有模糊部分，标注[不清晰]\n"
+                    "4. 不要遗漏任何文字"
+                )
+            }
+        ],
+    }],
+)
 ```
 
 ---
@@ -1348,9 +1427,9 @@ print(f"行动项: {len(result['action_items'])} 个")
 | Excel (.xlsx/.xls) | pandas, openpyxl | 表格数据提取、数据分析 |
 | Word (.docx) | python-docx | 文档内容提取、表格提取 |
 | PDF (.pdf) | pdfplumber, pypdf | PDF文本提取、表格提取 |
-| 图片 (.png/.jpg) | pytesseract, paddleocr | OCR文字识别 |
-| Markdown (.md) | markdown, regex | 结构化内容提取 |
-| 文本 (.txt) | chardet, regex | 文本解析、模式匹配 |
+| 图片 (.png/.jpg 等) | 大模型原生视觉（Claude Vision API） | 图片内容理解、文字识别、表格识别 |
+| Markdown (.md) | 大模型原生语言理解 | 结构化内容提取、语义分析 |
+| 文本 (.txt) | 大模型原生语言理解 | 文本解析、信息提取 |
 | CSV | pandas | 结构化数据处理 |
 
 ## 专用解析器使用场景
@@ -1364,21 +1443,13 @@ print(f"行动项: {len(result['action_items'])} 个")
 
 ## Version
 
-**版本**: 1.5
-**最后更新**: 2026-02-02
+**版本**: 1.6
+**最后更新**: 2026-04-03
 **更新内容**:
-- **v1.5 (2026-02-02) - 去除安装说明**:
-  - ✅ 移除 Installation 章节，默认认为依赖已具备
-  - ✅ 移除 Dependencies 章节
-  - ✅ 简化文档结构，聚焦功能使用
-- **v1.4 (2026-02-02) - 简化安装**:
-  - 移除离线部署功能，简化安装流程
-  - 移除 `load_dependencies.py` 依赖加载器
-  - 移除打包脚本，统一使用标准 pip 安装方式
-- **v1.3 (2026-02-01) - 离线部署支持** (已移除)
-- **v1.2 (2026-02-01) - 依赖管理优化** (已移除)
-- **v1.1 (2026-01-22)**:
-  - 新增 PDF 文件处理能力
-  - 新增批量文件处理功能
-  - 新增专用解析器（需求清单、评分表、会议纪要）
+- **v1.6 (2026-04-03) - 大模型原生能力替换**:
+  - ✅ 图片识别：移除 pytesseract/paddleocr，改用大模型原生视觉能力（Claude Vision API）
+  - ✅ 文本/Markdown：移除 chardet+正则手动解析，改用大模型语义理解
+  - ✅ 修复文档中重复的"文本文件处理"章节
+  - ✅ 更新 Quick Reference 工具推荐
+  - ✅ Excel、Word、PDF 处理逻辑保持不变
 **作者**: AI Solutions Expert Team

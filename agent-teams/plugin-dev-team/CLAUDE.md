@@ -39,10 +39,10 @@
 @requirements-agent 分析 sale-jerry-plugin 的投标功能需求
 
 # 明确需要开发
-@dev-agent 开发 bid-analysis Skill，参考需求文档 XXX
+@dev-agent 开发 bid-strategist Skill，参考需求文档 XXX
 
 # 明确需要测试
-@test-agent 测试 f:/workspace/sale-jerry-plugin/skills/bid-analysis/SKILL.md
+@test-agent 测试 f:/workspace/sale-jerry-plugin/apps/pulgins/sale-jerry-plugin/skills/bid-strategist/SKILL.md
 ```
 
 ## 开发流程
@@ -69,6 +69,19 @@ docs-agent          →  README / 使用文档
 - **Skill 定义**: 放在 `skills/{skill-name}/SKILL.md`，支持同目录下放置 context 文件
 - **Context 文件**: 放在 `context/` 目录，供 Agent 参考的共享知识
 - **命名规范**: 文件名使用 kebab-case（如 `bid-analysis`、`contract-parser`）
+
+## 开发工具 Skills
+
+本团队维护以下 4 个 Plugin 开发专用 Skill，供 Agent 参考使用：
+
+| Skill | 路径 | 用途 |
+|-------|------|------|
+| **skill-developer** | `skills/skill-developer/SKILL.md` | 创建和修改 SKILL.md 文件的标准流程 |
+| **skill-logic-auditor** | `skills/skill-logic-auditor/SKILL.md` | 审计 Skill 逻辑缺陷，防止幻觉输出 |
+| **plugin-auditor** | `skills/plugin-auditor/SKILL.md` | 审查 Plugin 配置文件和架构合理性 |
+| **plugin-deploy** | `skills/plugin-deploy/SKILL.md` | 打包 Plugin 并上传部署到服务器 |
+
+> 以上 Skill 均为开发/维护工具，不属于销售业务能力，已从 `sale-jerry-plugin` 迁移至此。
 
 ## 团队 Agent 位置
 

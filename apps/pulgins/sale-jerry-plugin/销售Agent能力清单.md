@@ -17,11 +17,10 @@
 | **09** | **会议纪要分析** | `sale-jerry-plugin:meeting-analysis` | 基于SPIN销售法分析会议内容，判断销售阶段并生成推进建议，自动生成会议分析报告和销售话术 | "分析上传的会议纪要" |
 | **10** | **SPIN深度解读** | `sale-jerry-plugin:spin-analysis` | 基于SPIN方法论（现状/痛点/影响/需求）分析会议纪要或客户对话，识别四维度信息，判断销售阶段 | "用SPIN分析这段客户对话" |
 | **11** | **需求精准匹配** | `sale-jerry-plugin:requirement-matching` | 解析客户需求文档（Excel/PDF），逐条匹配产品功能清单，计算满足率并标记定制项，基于真实功能清单 | "分析上传的需求文档" |
-| **12** | **商务控标专家** | `sale-jerry-plugin:bid-analysis` | 分析招标商务评分表，识别废标风险，精确计算得分，生成防御性和进攻性控标建议，基于真实案例库和资质库 | "分析上传的商务评分表" |
-| **13** | **投标策略分析** | `sale-jerry-plugin:bid-strategist` | 智能分析招标商务评分表，基于公司案例库和资质库自动计算得分、识别风险，提供控标优化建议 | "分析这份招标文件的评分规则" |
-| **14** | **销售实战陪练** | `sale-jerry-plugin:roleplay-dojo` | 基于真实项目数据进行销售场景演练，通过"侧写→演练→复盘"三阶段流程，模拟真实客户对话 | "针对'招商银行CMDB项目'进行销售演练" |
-| **15** | **文档智能处理** | `sale-jerry-plugin:document-processor` | 支持Excel、Word、图片、Markdown、TXT等多种文件格式的读取、解析、提取和转换 | "提取这份PDF中的需求清单" |
-| **16** | **插件架构审计** | `sale-jerry-plugin:plugin-auditor` | 对Claude Plugin配置文件、Agent/Skill定义进行全面审查，检查配置完整性、命名规范、触发语义 | "审计当前插件配置" |
+| **12** | **商务控标专家** | `sale-jerry-plugin:bid-strategist` | 智能分析招标商务评分表，基于公司案例库和资质库自动计算得分、识别废标风险，生成防御性和进攻性控标建议，自动归档分析报告 | "分析上传的商务评分表" |
+| **13** | **销售实战陪练** | `sale-jerry-plugin:roleplay-dojo` | 基于真实项目数据进行销售场景演练，通过"侧写→演练→复盘"三阶段流程，模拟真实客户对话 | "针对'招商银行CMDB项目'进行销售演练" |
+| **14** | **文档智能处理** | `sale-jerry-plugin:document-processor` | 支持Excel、Word、图片、Markdown、TXT等多种文件格式的读取、解析、提取和转换 | "提取这份PDF中的需求清单" |
+| **15** | **FABE售前方案** | `sale-jerry-plugin:fabe-proposal` | 基于FABE方法论（特征→优势→利益→证据）生成正式售前方案，优先引用知识库产品功能，输入不足时主动引导补充 | "生成CMDB自动发现的FABE方案" |
 
 ---
 
@@ -145,6 +144,7 @@
 - 包含"会议纪要、客户对话" → 自动SPIN分析
 - 包含"需求文档、功能清单" → 自动需求匹配
 - 包含"招标文件、投标" → 自动招标分析
+- 包含"售前方案、FABE方案、生成方案" → 自动生成FABE方案
 
 ---
 
@@ -165,9 +165,10 @@
 2. **客户拜访前**：用 `sales-prep` 一站式准备资料
 3. **会议结束后**：立即用 `meeting-analysis` 分析纪要
 4. **收到需求时**：用 `requirement-matching` 快速响应
-5. **投标阶段**：用 `bid-analysis` 精准控标
+5. **投标阶段**：用 `bid-strategist` 精准控标
 6. **技术沟通**：用 `jargon-decoder` 理解客户术语
-7. **实战演练**：用 `roleplay-dojo` 提升销售能力
+7. **方案呈现**：用 `fabe-proposal` 生成FABE售前方案
+8. **实战演练**：用 `roleplay-dojo` 提升销售能力
 
 ### 售前技术支持流程
 1. **项目启动**：用 `presales-init` 创建售前目录
@@ -191,9 +192,10 @@ Claude Agent
 │   ├── 销售话术 (sales-script, jargon-decoder)
 │   ├── 会议分析 (meeting-analysis, spin-analysis)
 │   ├── 需求分析 (requirement-matching)
-│   ├── 投标控标 (bid-analysis, bid-strategist)
+│   ├── 投标控标 (bid-strategist)
 │   ├── 销售陪练 (roleplay-dojo)
-│   └── 工具支持 (document-processor, plugin-auditor)
+│   ├── 方案生成 (fabe-proposal)
+│   └── 工具支持 (document-processor)
 │
 ├── Pre-Sale (售前技术支持)
 │   ├── 项目管理 (presales-init)
@@ -213,9 +215,9 @@ Claude Agent
 
 ---
 
-**版本**：v2.0.0
-**最后更新**：2026-02-24
-**技能总数**：32个
+**版本**：v2.2.0
+**最后更新**：2026-04-03
+**技能总数**：29个
 **覆盖领域**：销售管理、售前技术支持、文档处理、浏览器自动化
 
 ---
@@ -226,5 +228,4 @@ Claude Agent
 1. 直接对话询问："如何使用XX技能？"
 2. 查看技能触发关键词
 3. 上传相关文件自动触发对应技能
-4. 使用 `plugin-auditor` 审计当前插件配置
 

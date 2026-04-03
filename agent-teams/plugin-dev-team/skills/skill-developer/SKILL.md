@@ -576,7 +576,7 @@ apps/pulgins/sale-jerry-plugin/skills/{skill_name}/
 4. **安全修改**：不直接覆盖，先展示变更再确认
 5. **完整文档**：确保 Skill 文档包含所有必要章节
 6. **记录变更**：每次创建或优化 Skill 后，必须更新 `/workspace/doc/release_note.md`
-7. **⛔ 唯一入口**：本插件内所有 SKILL.md 的创建和修改都必须经过此 Skill。其他 Skill 或 Agent 在需要修改 SKILL.md 时，应委托此 Skill 执行（调用 `sale-jerry-plugin:skill-developer`），不得直接用 Edit/Write 工具修改任何 SKILL.md 文件
+7. **⛔ 唯一入口**：本插件内所有 SKILL.md 的创建和修改都必须经过此 Skill。其他 Skill 或 Agent 在需要修改 SKILL.md 时，应委托此 Skill 执行（参考 `agent-teams/plugin-dev-team/skills/skill-developer/SKILL.md`），不得直接用 Edit/Write 工具修改任何 SKILL.md 文件
 
 ## Examples
 

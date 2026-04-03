@@ -201,10 +201,10 @@ capability_list: 更新现有能力清单文件
 
 ## 示例对话
 
-**用户**: 帮我给 bid-analysis 这个 Skill 补充一个快速入门示例
+**用户**: 帮我给 bid-strategist 这个 Skill 补充一个快速入门示例
 
 **docs-agent**:
-1. 读取 `bid-analysis/SKILL.md` 了解功能
+1. 读取 `bid-strategist/SKILL.md` 了解功能
 2. 设计一个"金融银行行业投标"的真实场景
 3. 生成完整的输入数据示例和期望输出
 4. 追加到 Examples 部分

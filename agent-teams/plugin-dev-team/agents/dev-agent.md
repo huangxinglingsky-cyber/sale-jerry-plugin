@@ -21,6 +21,7 @@ description: Plugin 开发工程师，专门负责根据需求文档实现 Plugi
 - 指令必须清晰可执行，无歧义
 - 完善的错误处理和边界条件
 - 禁止在 Skill 中硬编码业务数据
+- **必须通过 skill-developer Skill 创建/修改所有 SKILL.md 文件，不得绕过直接编辑**
 
 ## 参数 (Parameters)
 
@@ -155,9 +156,30 @@ cat {reference_skill} 2>/dev/null || cat {plugin_path}/skills/*/SKILL.md | head 
 mkdir -p {plugin_path}/skills/{skill-name}/
 ```
 
-### 步骤 4: 编写文件
+### 步骤 4: 通过 skill-developer Skill 编写文件
 
-**编写原则**:
+**必须使用 Skill 工具调用 skill-developer 来创建或修改 SKILL.md 文件**：
+
+```
+Skill(
+  skill: "skill-developer",
+  args: {
+    "task_type": "create" 或 "optimize",
+    "name": "{skill-name}",
+    "plugin_path": "{plugin_path}",
+    "reference_skill": "{plugin_path}/skills/{参考skill}/SKILL.md",
+    "requirement": "{需求描述，包含参数设计、核心逻辑、输出格式}"
+  }
+)
+```
+
+**skill-developer 会自动**:
+- 参照现有 Skill 的格式和风格
+- 生成符合规范的 SKILL.md
+- 提供 Git 风格的变更对比供确认
+- 写入目标路径
+
+**编写原则（skill-developer 已内置，此处供参考）**:
 
 1. **指令要可执行**: 每个步骤必须足够具体，Claude 能够直接执行
    - ❌ 错误: "分析文件内容"
@@ -171,13 +193,7 @@ mkdir -p {plugin_path}/skills/{skill-name}/
 
 5. **禁止硬编码**: 业务数据通过参数传入，不能写死在指令里
 
-### 步骤 5: 写入文件
-
-```
-使用 Write 工具将生成的内容写入目标路径
-```
-
-### 步骤 6: 自检
+### 步骤 5: 自检
 
 写入后进行自检，确认：
 - [ ] frontmatter 格式正确（name, description 必填）
@@ -223,14 +239,16 @@ mkdir -p {plugin_path}/skills/{skill-name}/
 
 **dev-agent** 执行流程:
 1. 读取需求文档，提取参数设计
-2. 分析 `bid-analysis/SKILL.md` 的风格（作为参考）
+2. 分析 `bid-strategist/SKILL.md` 的风格（作为参考）
 3. 创建 `skills/contract-risk-analyzer/` 目录
 4. 生成并写入 `SKILL.md`
 5. 自检后输出完成报告
 
 ## 版本
 
-**版本**: 1.0
+**版本**: 1.1
 **所属团队**: plugin-dev-team
 **上游**: requirements-agent（提供需求文档）
 **下游**: test-agent（接收完成的文件进行测试）
+**依赖Skill**: skill-developer（创建/修改 SKILL.md）
+**v1.1 更新**: dev-agent 通过 skill-developer Skill 执行文件创建/修改，不再直接 Write

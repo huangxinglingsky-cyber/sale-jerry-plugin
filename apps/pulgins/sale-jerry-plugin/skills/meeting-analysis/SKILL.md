@@ -183,7 +183,9 @@ mv "{file_path}" "{project_name}/06会议纪要/会议纪要-{date}.{ext}"
 ```
 
 **2.3 文件读取**：
-调用 document-processor skill 读取文件内容
+- Markdown / TXT：直接使用大模型原生能力读取文本内容
+- 图片：直接使用大模型原生 OCR 能力识别文字
+- PDF / Word 等其他格式：调用 document-processor skill 读取文件内容
 
 #### 步骤 3: SPIN销售法分析
 
@@ -360,7 +362,7 @@ Skill(
 
 | Skill | 用途 | 调用时机 |
 |-------|------|---------|
-| document-processor | 读取会议纪要文件 | 步骤2 |
+| document-processor | 读取会议纪要文件（PDF/Word等） | 步骤2 |
 | spin-analysis | SPIN销售法分析 | 步骤3 |
 | sales-script | 生成销售话术 | 步骤5 |
 | project-status-updater | 更新项目状态 | 步骤6 |
