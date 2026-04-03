@@ -1,16 +1,16 @@
 ---
 name: fabe-proposal
-description: 基于FABE方法论生成正式售前方案，优先引用知识库产品功能清单，输入不足时引导用户补充信息而非编造
+description: 基于FABE方法论生成正式售前方案，支持Markdown和Word两种输出格式，优先引用知识库产品功能清单，输入不足时引导用户补充信息而非编造
 user-invocable: true
 ---
 
 # fabe-proposal（FABE售前方案生成）
 
-基于FABE方法论（Feature/特征 → Advantage/优势 → Benefit/利益 → Evidence/证据），生成正式、严谨的售前方案。优先读取知识库产品功能清单进行引用，确保方案内容真实可信。
+基于FABE方法论（Feature/特征 → Advantage/优势 → Benefit/利益 → Evidence/证据），生成正式、严谨的售前方案。支持输出 Markdown 和 Word 两种格式，方便在线协作和正式提交。优先读取知识库产品功能清单进行引用，确保方案内容真实可信。
 
 ## 目的 (Purpose)
 
-为销售人员提供基于FABE方法论的专业售前方案生成能力。方案必须严谨、正式，内容有据可查，杜绝虚构编造。当用户输入不足时，主动引导补充信息。
+为销售人员提供基于FABE方法论的专业售前方案生成能力。方案必须严谨、正式，内容有据可查，杜绝虚构编造。当用户输入不足时，主动引导补充信息。支持 Markdown 和 Word 双格式输出，满足不同场景需求。
 
 ## 使用场景 (When to Use)
 
@@ -18,15 +18,17 @@ user-invocable: true
 - 销售需要向客户呈现产品价值时
 - 需要基于FABE方法论准备说服材料时
 - 拜访客户前需要准备正式方案文档时
+- 需要提交 Word 格式方案文件给客户时
 - 用户说"生成售前方案"、"FABE方案"、"生成方案"等
 
 ## 能力 (Capabilities)
 
 - **FABE结构化输出**: 按照特征→优势→利益→证据四步法生成方案
+- **双格式输出**: 同时支持 Markdown（在线协作）和 Word（正式提交）两种格式
 - **知识库优先**: 优先读取产品功能清单，确保产品相关内容有据可查
 - **智能引导**: 输入不足时主动提问引导，拒绝编造
 - **产品/非产品兼容**: 产品功能直接引用KB，非产品话题结合KB数据补充生成
-- **正式文档输出**: 生成结构完整、语言正式的Markdown方案文档
+- **正式文档输出**: 生成结构完整、语言正式的专业方案文档
 - **客户定制**: 根据客户行业、痛点、决策人定制方案内容
 
 ## 参数 (Parameters)
@@ -41,6 +43,7 @@ user-invocable: true
 | project_name | string | ❌ | 无 | 关联的项目名称，用于归档 |
 | feature_list_path | string | ❌ | `通用知识/功能清单/EasyOps功能清单.md` | 产品功能清单文件路径 |
 | proposal_type | string | ❌ | `standard` | 方案类型：standard(标准方案)/brief(简报)/full(完整方案) |
+| output_format | string | ❌ | `both` | 输出格式：markdown/word/both（同时生成两种格式） |
 
 ## 指令 (Instructions)
 
@@ -55,6 +58,7 @@ user-invocable: true
 3. **结构严谨**：严格遵循FABE四步法，每个环节逻辑自洽
 4. **正式规范**：方案语言正式、专业，适合向客户呈现
 5. **有据可查**：每个主张都有来源标注
+6. **格式灵活**：按需输出 Markdown 和/或 Word 格式
 
 ### 执行步骤
 
@@ -160,7 +164,7 @@ user-invocable: true
 
 ---
 
-#### 步骤 3: 生成FABE售前方案
+#### 步骤 3: 生成FABE售前方案（Markdown版本）
 
 **根据 `proposal_type` 选择输出模板**：
 
@@ -266,7 +270,111 @@ user-invocable: true
 
 ---
 
-#### 步骤 4: 自查与输出
+#### 步骤 4: 生成Word版本（如需要）
+
+**当 `output_format` 为 `word` 或 `both` 时，执行此步骤。**
+
+**4.1 使用 python-docx 生成 Word 文档**
+
+```python
+from docx import Document
+from docx.shared import Pt, Inches, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.table import WD_TABLE_ALIGNMENT
+from datetime import datetime
+
+def generate_word_proposal(markdown_content: str, output_path: str, metadata: dict):
+    """
+    将 Markdown 方案内容转换为格式化的 Word 文档
+
+    Args:
+        markdown_content: Markdown 格式的方案内容
+        output_path: Word 文件输出路径
+        metadata: 方案元数据（客户名称、行业等）
+    """
+    doc = Document()
+
+    # 设置文档样式
+    style = doc.styles['Normal']
+    style.font.name = 'Microsoft YaHei'
+    style.font.size = Pt(11)
+
+    # 添加标题
+    title = doc.add_heading(metadata.get('title', '售前方案'), 0)
+    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    # 添加元信息表格
+    meta_table = doc.add_table(rows=4, cols=2)
+    meta_table.style = 'Table Grid'
+    meta_data = [
+        ('客户', metadata.get('customer_name', '-')),
+        ('行业', metadata.get('customer_industry', '-')),
+        ('日期', datetime.now().strftime('%Y-%m-%d')),
+        ('版本', 'V1.0')
+    ]
+    for i, (label, value) in enumerate(meta_data):
+        meta_table.rows[i].cells[0].text = label
+        meta_table.rows[i].cells[1].text = value
+
+    doc.add_paragraph()  # 空行
+
+    # 解析 Markdown 内容并转换为 Word 格式
+    # （实际实现需要完整的 Markdown 解析逻辑）
+    sections = parse_markdown_sections(markdown_content)
+
+    for section in sections:
+        if section['type'] == 'heading':
+            doc.add_heading(section['content'], level=section['level'])
+        elif section['type'] == 'paragraph':
+            doc.add_paragraph(section['content'])
+        elif section['type'] == 'table':
+            table = doc.add_table(rows=len(section['rows']), cols=len(section['rows'][0]))
+            table.style = 'Table Grid'
+            for i, row in enumerate(section['rows']):
+                for j, cell in enumerate(row):
+                    table.rows[i].cells[j].text = cell
+        elif section['type'] == 'list':
+            for item in section['items']:
+                doc.add_paragraph(item, style='List Bullet')
+
+    # 添加页脚
+    footer = doc.sections[0].footer
+    footer_para = footer.paragraphs[0]
+    footer_para.text = f"本方案由 fabe-proposal 技能生成 | 生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M')}"
+    footer_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    # 保存文档
+    doc.save(output_path)
+    return output_path
+```
+
+**4.2 Word 文档格式规范**
+
+| 元素 | 格式要求 |
+|------|----------|
+| 标题 | 黑体，18pt，居中 |
+| 一级标题 | 黑体，16pt，加粗 |
+| 二级标题 | 黑体，14pt，加粗 |
+| 三级标题 | 黑体，12pt，加粗 |
+| 正文 | 宋体/Microsoft YaHei，11pt |
+| 表格 | 表格网格样式，表头加粗 |
+| 页边距 | 上下 2.54cm，左右 3.17cm |
+
+**4.3 输出路径规则**
+
+```
+# 如果有 project_name
+{项目目录}/07方案/FABE方案-{主题}-{日期}.md
+{项目目录}/07方案/FABE方案-{主题}-{日期}.docx
+
+# 如果没有 project_name
+/workspace/tmp/FABE方案-{主题}-{日期}.md
+/workspace/tmp/FABE方案-{主题}-{日期}.docx
+```
+
+---
+
+#### 步骤 5: 自查与输出
 
 **自查清单**：
 1. ✅ 是否所有产品功能都有KB来源标注？
@@ -275,6 +383,7 @@ user-invocable: true
 4. ✅ 是否有虚构的产品功能？（如有，必须删除）
 5. ✅ 方案语言是否正式、专业？
 6. ✅ 是否包含下一步建议？
+7. ✅ Word 文档格式是否规范（如生成）？
 
 **问题项处理**：
 - 如有标注为 `[补充内容]` 的内容超过总内容的50%，在方案末尾添加声明：
@@ -295,13 +404,41 @@ user-invocable: true
   "proposal_type": "standard",
   "topic": "{方案主题}",
   "customer_name": "{客户名称}",
+  "output_format": "both",
   "kb_match": {
     "status": "partial",
     "matched_features": 3,
     "supplemented_features": 1
   },
-  "output_file": "{项目目录}/07方案/FABE方案-{日期}.md",
+  "output_files": {
+    "markdown": "{项目目录}/07方案/FABE方案-{主题}-20260403.md",
+    "word": "{项目目录}/07方案/FABE方案-{主题}-20260403.docx"
+  },
   "sections": ["方案概述", "F-特征", "A-优势", "B-利益", "E-证据", "总结建议"]
+}
+```
+
+### 仅 Markdown 输出
+
+```json
+{
+  "status": "success",
+  "output_format": "markdown",
+  "output_files": {
+    "markdown": "{路径}/FABE方案-{主题}-20260403.md"
+  }
+}
+```
+
+### 仅 Word 输出
+
+```json
+{
+  "status": "success",
+  "output_format": "word",
+  "output_files": {
+    "word": "{路径}/FABE方案-{主题}-20260403.docx"
+  }
 }
 ```
 
@@ -327,7 +464,7 @@ user-invocable: true
 ```json
 {
   "status": "error",
-  "error_type": "{KB_NOT_FOUND | TOPIC_EMPTY | UNKNOWN}",
+  "error_type": "{KB_NOT_FOUND | TOPIC_EMPTY | WORD_GENERATION_FAILED | UNKNOWN}",
   "message": "{错误描述}",
   "suggestion": "{处理建议}"
 }
@@ -335,7 +472,7 @@ user-invocable: true
 
 ## 示例 (Examples)
 
-### 示例 1: 产品功能直接命中（充足输入）
+### 示例 1: 双格式输出（推荐）
 
 **输入**:
 ```json
@@ -346,11 +483,24 @@ user-invocable: true
   "pain_points": "资产台账手动维护，数据不准确，CMDB使用率低",
   "decision_maker": "运维总监",
   "project_name": "招商银行-CMDB项目",
-  "proposal_type": "standard"
+  "proposal_type": "standard",
+  "output_format": "both"
 }
 ```
 
 **输出摘要**:
+```json
+{
+  "status": "success",
+  "output_format": "both",
+  "output_files": {
+    "markdown": "/shared/sale-kb/projects/招商银行-CMDB项目/07方案/FABE方案-CMDB自动发现-20260403.md",
+    "word": "/shared/sale-kb/projects/招商银行-CMDB项目/07方案/FABE方案-CMDB自动发现-20260403.docx"
+  }
+}
+```
+
+**Markdown 方案内容摘要**:
 ```markdown
 # 招商银行 CMDB自动发现售前方案
 
@@ -366,17 +516,10 @@ user-invocable: true
 支持SNMP、WMI、SSH、API等多种协议采集，覆盖主流异构环境。
 > 来源：通用知识/功能清单/EasyOps功能清单.md 第92行
 
-#### F3. 变更实时感知 `[产品功能]`
-资源变更自动感知，CMDB数据实时保持最新。
-> 来源：通用知识/功能清单/EasyOps功能清单.md 第108行
-
 ### A - Advantage（优势）
 
 #### A1. 零人工介入
 相比传统Excel手动维护，自动发现实现资产信息100%自动化采集。
-
-#### A2. 异构环境统一管理
-一套平台管理物理机、VMware、OpenStack、K8s等多类资源。
 
 ### B - Benefit（利益）
 
@@ -384,27 +527,15 @@ user-invocable: true
 - 消除手动维护，CMDB数据准确率从60%提升至95%+
 - 资产变更分钟级感知，支撑快速故障定位
 
-#### B2. 管理价值
-- 运维团队从"维护台账"转向"价值交付"
-- CMDB使用率显著提升，真正成为运维核心系统
-
-#### B3. 经济价值
-- 减少人工巡检工作量约80%
-- 资产合规率提升，降低审计风险
-
 ### E - Evidence（证据）
 
 #### E1. 产品能力证据
 - 功能清单第85行："支持物理机、虚拟机、容器、网络设备的自动发现"
-- 功能清单第108行："资源变更实时感知"
-
-#### E2. 案例证据
-- 同业案例：某股份制银行，实施自动发现后CMDB准确率从55%提升至98%
 ```
 
 ---
 
-### 示例 2: 非产品话题（需要补充内容）
+### 示例 2: 仅 Word 格式（正式提交）
 
 **输入**:
 ```json
@@ -413,11 +544,21 @@ user-invocable: true
   "customer_name": "国家电网",
   "customer_industry": "能源-电力",
   "pain_points": "运维效率低，人工作业多",
-  "proposal_type": "standard"
+  "proposal_type": "full",
+  "output_format": "word"
 }
 ```
 
-**输出特征**: F部分包含 `[补充内容]` 标注，A/B部分结合行业经验，E部分引用行业报告和案例数据，方案末尾附免责声明。
+**输出**:
+```json
+{
+  "status": "success",
+  "output_format": "word",
+  "output_files": {
+    "word": "/workspace/tmp/FABE方案-IT运维数字化转型-20260403.docx"
+  }
+}
+```
 
 ---
 
@@ -444,6 +585,7 @@ user-invocable: true
 ## 建议补充
 3. **客户痛点**: 客户目前面临的主要挑战？
 4. **方案目标**: 首次推介 / 竞标 / 技术交流？
+5. **输出格式**: 需要 Markdown / Word / 两种都要？
 ```
 
 ---
@@ -472,7 +614,18 @@ user-invocable: true
 }
 ```
 
-### 3. 项目状态更新失败
+### 3. Word 文档生成失败
+
+```json
+{
+  "status": "error",
+  "error_type": "WORD_GENERATION_FAILED",
+  "message": "Word 文档生成失败: {错误详情}",
+  "suggestion": "Markdown 版本已生成成功。请检查 python-docx 库是否正确安装，或联系技术支持。"
+}
+```
+
+### 4. 项目状态更新失败
 
 ```json
 {
@@ -485,7 +638,35 @@ user-invocable: true
 
 ---
 
+## 最佳实践 (Best Practices)
+
+### 输出格式选择建议
+
+| 场景 | 推荐格式 | 原因 |
+|------|----------|------|
+| 内部讨论、在线协作 | `markdown` | 方便版本控制和在线查看 |
+| 正式提交给客户 | `word` | 符合企业文档规范，可打印 |
+| 既要内部评审又要提交客户 | `both` | 一份生成、两种用途 |
+| 快速预览 | `markdown` | 直接在对话中展示 |
+
+### Word 文档优化建议
+
+1. **生成后检查**：打开 Word 文档检查格式是否符合预期
+2. **微调排版**：根据客户偏好调整字体、行距等
+3. **添加封面**：正式提交前可添加企业封面页
+4. **转 PDF**：如需不可编辑版本，可用 Word 另存为 PDF
+
+---
+
 ## 版本 (Version)
+
+- **v1.1 (2026-04-03) - 双格式输出**
+  - ✅ 新增 `output_format` 参数，支持 markdown/word/both 三种输出格式
+  - ✅ 新增步骤 4：Word 文档生成流程
+  - ✅ 新增 python-docx 代码模板和格式规范
+  - ✅ 更新输出格式说明，支持双文件输出
+  - ✅ 更新示例，展示不同输出格式的使用方式
+  - ✅ 新增输出格式选择建议和 Word 文档优化建议
 
 - **v1.0 (2026-04-03) - 初始版本**
   - 基于FABE方法论的标准售前方案生成
@@ -494,5 +675,10 @@ user-invocable: true
   - 产品/非产品内容分类标注
   - 标准方案/简报/完整方案三种输出模式
 
-**依赖**: Read 工具（读取知识库功能清单文件）
-**关联技能**: project-status-updater（项目状态更新）
+**依赖**:
+- Read 工具（读取知识库功能清单文件）
+- python-docx（生成 Word 文档）
+
+**关联技能**:
+- project-status-updater（项目状态更新）
+- document-processor（文档处理，可选）

@@ -1,6 +1,6 @@
 ---
 name: daily-report
-description: 日报生成技能，通过扫描工作空间文件变化，自动识别前一天新增或修改的文件，智能分析文件内容生成工作日报
+description: 日报生成技能，通过claude-mem获取前一天会话记录，智能总结成面向客户推进方向的工作日报（不超过300字）
 category: productivity
 priority: medium
 ---
@@ -9,65 +9,55 @@ priority: medium
 
 ## Purpose
 
-为销售和项目团队提供自动化的日报生成能力，通过分析项目状态文件的会话轨迹和文件系统变化来客观准确地汇总工作成果。
+为销售和项目团队提供自动化的日报生成能力，基于 claude-mem 记录的前一天会话内容，智能总结成面向客户推进方向的工作日报。
 
 **核心功能**:
-- 优先分析项目状态.md中的会话轨迹章节（最准确）
-- 自动扫描 /workspace 目录的文件变化（补充）
-- 识别前一天新增或修改的文件
-- 智能分析文件内容，提取关键信息
-- 自动分类和优先级排序
-- 生成简洁的工作日报
+- 通过 claude-mem 获取前一天的工作会话记录
+- 智能分析会话内容，提取客户推进相关的工作事项
+- 生成简洁的工作总结（不超过300字）
+- 面向客户推进方向，突出销售进展和价值
 - 自动保存并同步到 Javis 平台
 
 **核心优势**:
-- ✅ **双数据源**：会话轨迹（优先）+ 文件变化（补充），确保准确性
-- ✅ **客观准确**：基于实际的工作记录和文件系统变化
-- ✅ **自动化**：无需手动整理，自动扫描和分析
-- ✅ **智能化**：自动识别项目、提取关键数据
-- ✅ **结构化**：标准格式，便于快速阅读和追溯
+- ✅ **会话驱动**：基于真实的会话记录，反映实际工作内容
+- ✅ **客户导向**：总结聚焦于客户推进方向，而非技术细节
+- ✅ **简洁高效**：300字以内，快速阅读
+- ✅ **智能终止**：无会话记录时自动终止，不生成空日报
 
 ## When to Use
 
 在以下情况下使用此技能：
 - 每天工作结束时需要生成日报
-- 需要快速汇总当天的工作成果
+- 需要快速汇总当天的客户推进工作
 - 需要向上级或团队汇报当天进展
+- 用户说"生成日报"、"今天的日报"、"写日报"等
 
 ## Parameters
 
 | 参数 | 类型 | 必须 | 默认值 | 描述 |
 |------|------|------|--------|------|
-| date | string | ❌ | 今天 | 日报日期，格式：YYYY-MM-DD，默认为当天 |
-| output_path | string | ❌ | /workspace/日报/ | 日报保存路径 |
-
-**文件名格式**：
-- 格式：`{创建者姓名}-{空间名称}-{日期}.md`
-- 示例：`黄星玲-越南银行-2026-03-02.md`
-- 创建者姓名通过 Javis API 获取（`/api/v1/workspaces/{id}`）
-- 空间名称从环境变量 `JAVIS_WORKSPACE_NAME` 获取
-- 如果 API 调用失败，使用 `JAVIS_LOGIN_USERNAME` 作为备选
+| date | string | ❌ | 昨天 | 日报统计日期，格式：YYYY-MM-DD，默认为昨天 |
 
 ## Instructions
 
 ### 执行角色与核心原则
 
 **你的角色定位**：
-你是一位专业的工作日报助手，擅长从文件系统变化中提取关键工作事项，生成简洁清晰的工作汇报。
+你是一位专业的销售工作日报助手，擅长从会话记录中提取客户推进相关的工作事项，生成简洁清晰的工作汇报。
 
 **核心原则**：
-1. **简洁性优先**：只记录完成事项和待办事项
-2. **结果导向**：关注实际产出的文件和成果，而非过程细节
-3. **结构清晰**：使用标准格式，便于快速阅读
-4. **客观准确**：基于文件系统的实际变化，而非主观记录
+1. **客户导向**：只记录与客户推进相关的工作内容
+2. **简洁性优先**：总结不超过300字
+3. **结果导向**：关注客户进展和推进成果
+4. **无会话即终止**：没有会话记录时不生成日报
 
 ### 执行流程
 
-#### 第一步：确定日期和获取用户信息
+#### 步骤 1: 确定日期
 
 ```bash
-# 获取当前日期（今天）
-current_date=$(date +%Y-%m-%d)
+# 计算前一天的日期（日报统计的是前一天的工作）
+yesterday=$(date -d "yesterday" +%Y-%m-%d)
 
 # 检查是否为工作日（周一到周五）
 day_of_week=$(date +%u)  # 1=周一, 7=周日
@@ -76,418 +66,154 @@ if [ "$day_of_week" -gt 5 ]; then
     exit 0
 fi
 
-# 计算前一天的日期（日报统计的是前一天的工作）
-yesterday=$(date -d "yesterday" +%Y-%m-%d)
-yesterday_timestamp=$(date -d "yesterday" +%s)
+echo "📅 正在生成 ${yesterday} 的工作日报..."
+```
 
+#### 步骤 2: 获取前一天会话记录
+
+**使用 claude-mem 的 search 工具获取会话记录**：
+
+```bash
+# 调用 claude-mem search 获取前一天的会话
+# dateStart 和 dateEnd 设置为同一天（昨天）
+echo "🔍 正在从 claude-mem 获取 ${yesterday} 的会话记录..."
+
+# 使用 Skill 工具调用 claude-mem:mem-search
+# 参数：
+# - query: 畺空或使用通配符，获取所有记录
+# - dateStart: ${yesterday}
+# - dateEnd: ${yesterday}
+# - limit: 100
+# - type: sessions（只获取会话）
+```
+
+**调用示例**：
+```json
+{
+  "skill": "claude-mem:mem-search",
+  "args": {
+    "query": "",
+    "dateStart": "2026-04-02",
+    "dateEnd": "2026-04-02",
+    "limit": 100,
+    "type": "sessions"
+  }
+}
+```
+
+#### 步骤 3: 检查会话记录是否存在
+
+**如果没有任何会话记录，直接终止任务**：
+
+```markdown
+# 检查结果
+if [ ${#sessions} -eq 0 ]; then
+    echo "ℹ️ 昨日（${yesterday}）无会话记录，不生成日报。"
+    echo ""
+    echo "💡 提示：日报基于会话记录生成，请在工作日使用 Agent 进行工作。"
+    exit 0
+fi
+
+echo "✅ 找到 ${#sessions} 条会话记录"
+```
+
+**终止条件**：
+- claude-mem 返回空结果
+- 返回的会话数量为 0
+- 所有会话都与客户推进无关（如纯技术调试）
+
+#### 步骤 4: 分析会话内容，生成客户推进总结
+
+**分析维度**：
+
+从会话记录中提取以下客户推进相关信息：
+1. **客户名称**：涉及哪些客户
+2. **项目进展**：项目推进到什么阶段
+3. **关键动作**：做了哪些推进动作（调研、分析、方案、会议等）
+4. **阶段性成果**：取得了什么进展或成果
+5. **下一步计划**：接下来要做什么
+
+**总结模板（面向客户推进）**：
+
+```markdown
+# 工作日报 - {日期}
+
+## 客户推进总结
+
+{不超过300字的客户推进工作总结，聚焦于：}
+{- 拜访/跟进的客户}
+{- 完成的分析/方案工作}
+{- 项目阶段性进展}
+{- 关键成果或突破}
+
+---
+*统计日期: {日期}*
+*会话数: {N}条*
+```
+
+**总结写作规范**：
+
+1. **聚焦客户**：每句话都与客户推进相关
+2. **动词开头**：使用"完成"、"推进"、"分析"、"生成"等动词
+3. **量化成果**：尽可能用数字说话（"匹配5个案例"、"分析20条需求"）
+4. **简洁明了**：每项工作1句话，总计不超过300字
+5. **不记录技术细节**：不记录代码调试、环境配置等技术工作
+
+**示例总结**：
+
+```markdown
+# 工作日报 - 2026-04-02
+
+## 客户推进总结
+
+1. **招商银行-CMDB项目**：完成企业调研，识别客户为金融行业城商行，IT规模约500人；匹配8个金融行业案例；生成针对性销售话术。
+
+2. **国家电网-监控平台项目**：分析招标商务评分表，预估得分82分，识别2个风险项（资质缺失），输出控标建议3条。
+
+3. **中国移动-ITSM项目**：分析会议纪要，识别客户痛点为"流程效率低、工单处理慢"，判断销售阶段为"需求探索期"，生成下一步推进建议。
+
+---
+*统计日期: 2026-04-02*
+*会话数: 5条*
+```
+
+#### 步骤 5: 获取用户信息并保存日报
+
+```bash
 # 获取空间创建者姓名和空间名称
 workspace_id="${JAVIS_WORKSPACE_ID}"
 auth_token="${JAVIS_AUTH_TOKEN}"
 api_url="https://javis.elevo.vip/api/v1/workspaces/${workspace_id}"
 
+# 通过API获取创建者姓名
+creator_name=$(curl -s -H "Authorization: Bearer ${auth_token}" "${api_url}" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['data']['creator']['name'])" 2>/dev/null)
 
-# 通过API获取创建者姓名（带重试机制）
-creator_name=""
-max_retries=3
-retry_count=0
-
-while [ $retry_count -lt $max_retries ] && [ -z "$creator_name" ]; do
-    retry_count=$((retry_count + 1))
-    echo "🔄 正在获取创建者姓名（第 ${retry_count}/${max_retries} 次尝试）..."
-
-    creator_name=$(curl -s -H "Authorization: Bearer ${auth_token}" "${api_url}" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['data']['creator']['name'])" 2>/dev/null)
-
-    # 如果获取失败且未达到最大重试次数，等待1秒后重试
-    if [ -z "$creator_name" ] && [ $retry_count -lt $max_retries ]; then
-        sleep 1
-    fi
-done
-
-# 如果3次尝试都失败，使用"未知用户"
 if [ -z "$creator_name" ]; then
     creator_name="未知用户"
-    echo "⚠️ 无法获取创建者姓名，使用默认值：未知用户"
 fi
 
 workspace_name="${JAVIS_WORKSPACE_NAME:-未知空间}"
 
 # 创建日报目录
 mkdir -p /workspace/日报
-```
 
-#### 第二步：扫描工作空间文件变化
-
-**使用 find 命令扫描前一天新增或修改的文件**：
-
-```bash
-# 扫描 /workspace 目录下前一天新增或修改的文件
-# 排除特定目录和文件类型
-echo "🔍 正在扫描 /workspace 目录的文件变化..."
-
-# 查找前一天（24小时内）修改的文件
-# -type f: 只查找文件
-# -mtime -1: 24小时内修改的文件
-# ! -path: 排除特定目录
-changed_files=$(find /workspace \
-  -type f \
-  -mtime -1 \
-  ! -path "*/日报/*" \
-  ! -path "*/.git/*" \
-  ! -path "*/node_modules/*" \
-  ! -path "*/__pycache__/*" \
-  ! -path "*/.*" \
-  ! -name "*.log" \
-  ! -name "*.tmp" \
-  2>/dev/null)
-
-# 检查是否有文件变化
-if [ -z "$changed_files" ]; then
-    echo "ℹ️ 昨日（${yesterday}）无文件变化记录，无需生成日报。"
-    exit 0
-fi
-
-# 统计文件数量
-file_count=$(echo "$changed_files" | wc -l)
-echo "📊 发现 ${file_count} 个文件在昨日有变化"
-```
-
-**文件分类和优先级**：
-
-按照文件类型和所在目录进行分类，识别工作重点：
-
-```bash
-# 定义文件分类规则
-declare -A file_categories
-
-# 项目文档类（高优先级）
-project_docs=$(echo "$changed_files" | grep -E "项目状态\.md|项目相关方\.md|会议纪要.*\.md|需求.*\.md|方案.*\.md")
-
-# 案例和报告类（高优先级）
-case_reports=$(echo "$changed_files" | grep -E "案例匹配报告|商务分析|需求分析|会议分析|POC.*\.md")
-
-# 话术和准备资料（中优先级）
-sales_materials=$(echo "$changed_files" | grep -E "话术|销售准备|拜访资料")
-
-# 其他工作文件（中优先级）
-other_files=$(echo "$changed_files" | grep -E "\.md$|\.docx$|\.xlsx$" | grep -v -E "项目状态|案例匹配|商务分析|需求分析|会议分析|话术")
-
-# 按优先级合并文件列表
-priority_files=$(printf "%s\n%s\n%s\n%s" "$project_docs" "$case_reports" "$sales_materials" "$other_files" | grep -v "^$")
-```
-
-#### 第三步：智能分析文件内容
-
-**优先分析项目状态.md中的会话轨迹**：
-
-```bash
-# 存储完成事项
-declare -a completed_tasks
-
-# 第一优先级：从项目状态.md的会话轨迹章节提取工作记录
-echo "🔍 分析项目状态文件的会话轨迹..."
-
-# 查找所有项目的项目状态文件
-status_files=$(find /workspace -name "项目状态.md" -type f ! -path "*/日报/*" 2>/dev/null)
-
-while IFS= read -r status_file; do
-    if [ ! -f "$status_file" ]; then
-        continue
-    fi
-
-    project_name=$(dirname "$status_file" | xargs basename)
-
-    # 提取会话轨迹章节中昨天的记录
-    # 会话轨迹格式：| 时间 | Agent/Skill | 会话简要总结 |
-
-    # 使用 awk 提取会话轨迹章节
-    in_session_section=0
-    while IFS= read -r line; do
-        # 检测会话轨迹章节开始
-        if [[ "$line" =~ ^##[[:space:]]*🔄[[:space:]]*会话轨迹 ]]; then
-            in_session_section=1
-            continue
-        fi
-
-        # 检测下一个章节开始（会话轨迹章节结束）
-        if [[ "$in_session_section" -eq 1 ]] && [[ "$line" =~ ^##[[:space:]] ]]; then
-            break
-        fi
-
-        # 在会话轨迹章节内，提取昨天的记录
-        if [[ "$in_session_section" -eq 1 ]] && [[ "$line" =~ ^\|[[:space:]]*${yesterday} ]]; then
-            # 提取表格行：| 时间 | Agent/Skill | 会话简要总结 |
-            summary=$(echo "$line" | awk -F'|' '{print $4}' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
-
-            if [ -n "$summary" ]; then
-                completed_tasks+=("${project_name}: ${summary}")
-            fi
-        fi
-    done < "$status_file"
-
-done <<< "$status_files"
-
-echo "✅ 从会话轨迹提取到 ${#completed_tasks[@]} 项记录"
-
-# 第二优先级：如果会话轨迹没有记录，则分析文件变化
-if [ ${#completed_tasks[@]} -eq 0 ]; then
-    echo "📋 会话轨迹无记录，开始分析文件变化..."
-
-    # 分析每个文件，提取关键信息
-    while IFS= read -r file_path; do
-        if [ ! -f "$file_path" ]; then
-            continue
-        fi
-
-        # 获取文件名和所在目录
-        file_name=$(basename "$file_path")
-        dir_name=$(dirname "$file_path" | xargs basename)
-
-        # 根据文件类型和内容智能生成工作描述
-        case "$file_path" in
-            *"项目状态.md")
-                # 项目状态更新
-                project_name=$(echo "$file_path" | sed 's|/workspace/||' | cut -d'/' -f1)
-                completed_tasks+=("更新项目状态：${project_name}")
-                ;;
-            *"案例匹配报告"*)
-                # 案例匹配
-                project_name=$(echo "$file_path" | sed 's|/workspace/||' | cut -d'/' -f1)
-                # 从文件中提取匹配数量
-                case_count=$(grep -oP "共匹配:\s*\K\d+" "$file_path" 2>/dev/null | head -1)
-                if [ -n "$case_count" ]; then
-                    completed_tasks+=("完成${project_name}案例匹配分析（匹配${case_count}个案例）")
-                else
-                    completed_tasks+=("完成${project_name}案例匹配分析")
-                fi
-                ;;
-            *"需求分析"*|*"需求匹配"*)
-                # 需求分析
-                project_name=$(echo "$file_path" | sed 's|/workspace/||' | cut -d'/' -f1)
-                # 从文件中提取需求数量和匹配度
-                req_count=$(grep -oP "需求总数:\s*\K\d+" "$file_path" 2>/dev/null | head -1)
-                match_rate=$(grep -oP "匹配度:\s*\K[\d.]+%" "$file_path" 2>/dev/null | head -1)
-                if [ -n "$req_count" ] && [ -n "$match_rate" ]; then
-                    completed_tasks+=("完成${project_name}需求分析（${req_count}条需求，匹配度${match_rate}）")
-                else
-                    completed_tasks+=("完成${project_name}需求分析")
-                fi
-                ;;
-            *"会议分析"*|*"会议纪要"*)
-                # 会议分析
-                project_name=$(echo "$file_path" | sed 's|/workspace/||' | cut -d'/' -f1)
-                meeting_date=$(grep -oP "会议时间:\s*\K[\d-]+" "$file_path" 2>/dev/null | head -1)
-                if [ -n "$meeting_date" ]; then
-                    completed_tasks+=("分析${project_name}会议纪要（${meeting_date}）")
-                else
-                    completed_tasks+=("分析${project_name}会议纪要")
-                fi
-                ;;
-            *"商务分析"*)
-                # 商务分析
-                project_name=$(echo "$file_path" | sed 's|/workspace/||' | cut -d'/' -f1)
-                score=$(grep -oP "预估得分:\s*\K[\d.]+" "$file_path" 2>/dev/null | head -1)
-                if [ -n "$score" ]; then
-                    completed_tasks+=("完成${project_name}商务评分分析（预估得分${score}分）")
-                else
-                    completed_tasks+=("完成${project_name}商务评分分析")
-                fi
-                ;;
-            *"话术"*)
-                # 销售话术
-                project_name=$(echo "$file_path" | sed 's|/workspace/||' | cut -d'/' -f1)
-                completed_tasks+=("生成${project_name}销售话术")
-                ;;
-            *"方案"*)
-                # 方案文档
-                project_name=$(echo "$file_path" | sed 's|/workspace/||' | cut -d'/' -f1)
-                completed_tasks+=("编写${project_name}方案文档")
-                ;;
-            *)
-                # 其他文件，根据目录名称推断
-                project_name=$(echo "$file_path" | sed 's|/workspace/||' | cut -d'/' -f1)
-                if [[ "$project_name" != "日报" ]] && [[ "$project_name" != "." ]]; then
-                    completed_tasks+=("更新${project_name}项目文档（${file_name}）")
-                fi
-                ;;
-        esac
-    done <<< "$priority_files"
-
-    echo "✅ 从文件变化提取到 ${#completed_tasks[@]} 项记录"
-fi
-
-# 去重和排序
-completed_tasks=($(printf '%s\n' "${completed_tasks[@]}" | sort -u))
-
-# 检查是否有实质性工作内容
-if [ ${#completed_tasks[@]} -eq 0 ]; then
-    echo "ℹ️ 昨日（${yesterday}）无实质性工作记录，无需生成日报。"
-    exit 0
-fi
-
-echo "✅ 最终提取到 ${#completed_tasks[@]} 项完成事项"
-```
-
-**智能分析策略**：
-1. **第一优先级**: 从所有项目的"项目状态.md"文件中提取"会话轨迹"章节
-2. **精确匹配**: 只提取日期为`${yesterday}`的会话记录
-3. **格式解析**: 解析表格格式 `| 时间 | Agent/Skill | 会话简要总结 |`
-4. **项目关联**: 自动关联项目名称，格式为"项目名: 会话总结"
-5. **第二优先级**: 如果会话轨迹没有记录，则分析文件系统变化作为补充
-
-#### 第四步：识别待办事项
-
-**从项目状态文件中提取待办事项**：
-
-```bash
-# 存储待办事项
-declare -a todo_tasks
-
-# 查找所有项目的项目状态文件
-status_files=$(find /workspace -name "项目状态.md" -type f ! -path "*/日报/*" 2>/dev/null)
-
-while IFS= read -r status_file; do
-    if [ ! -f "$status_file" ]; then
-        continue
-    fi
-
-    project_name=$(dirname "$status_file" | xargs basename)
-
-    # 从项目状态文件中提取待办事项
-    # 1. 查找"会话轨迹"章节中的待办事项标识
-    # 2. 查找标记为"待办"、"TODO"、"计划"的内容
-    # 3. 查找未完成的checkbox项 "- [ ]"
-
-    # 提取未完成的待办事项
-    pending_items=$(grep -E "\- \[ \]" "$status_file" 2>/dev/null)
-
-    while IFS= read -r item; do
-        if [ -n "$item" ]; then
-            # 清理格式，只保留内容
-            clean_item=$(echo "$item" | sed 's/- \[ \] //' | sed 's/^\s*//')
-            if [ -n "$clean_item" ]; then
-                todo_tasks+=("$clean_item")
-            fi
-        fi
-    done <<< "$pending_items"
-
-done <<< "$status_files"
-
-# 如果没有找到待办事项，添加默认提示
-if [ ${#todo_tasks[@]} -eq 0 ]; then
-    todo_tasks+=("持续跟进客户项目进展")
-    todo_tasks+=("准备下一阶段工作资料")
-fi
-
-# 去重
-todo_tasks=($(printf '%s\n' "${todo_tasks[@]}" | sort -u | head -10))
-
-echo "📋 提取到 ${#todo_tasks[@]} 项待办事项"
-```
-
-**待办事项来源**：
-- 项目状态文件中的未完成checkbox
-- 项目状态文件中标记为"待办"的内容
-- 如果没有明确的待办事项，生成通用的跟进提示
-
-**日报模板**：
-
-```markdown
-# 工作日报 - {日期}
-
-## ✅ 今日完成
-{列出当天完成的主要任务，每项1行}
-1. 任务1：简要描述和结果
-2. 任务2：简要描述和结果
-3. 任务3：简要描述和结果
-
-## 📌 待办事项
-{列出待办任务，每项1行}
-- [ ] 待办1
-- [ ] 待办2
-- [ ] 待办3
-
----
-*生成时间: {时间戳}*
-```
-
-#### 第五步：生成日报
-
-**日报模板**：
-
-```bash
-# 构建日报内容
-report_content="# 工作日报 - ${yesterday}
-
-## ✅ 今日完成
-
-"
-
-# 添加完成事项（编号列表）
-index=1
-for task in "${completed_tasks[@]}"; do
-    report_content="${report_content}${index}. ${task}
-"
-    index=$((index + 1))
-done
-
-report_content="${report_content}
-## 📌 待办事项
-
-"
-
-# 添加待办事项（checkbox列表）
-for todo in "${todo_tasks[@]}"; do
-    report_content="${report_content}- [ ] ${todo}
-"
-done
-
-# 添加时间戳
-current_time=$(date +"%Y-%m-%d %H:%M:%S")
-
-# 确定数据来源
-if [ ${#completed_tasks[@]} -gt 0 ]; then
-    data_source="会话轨迹 (优先) + 文件变化 (补充)"
-else
-    data_source="文件变化分析"
-fi
-
-report_content="${report_content}
----
-*生成时间: ${current_time}*
-*统计日期: ${yesterday}*
-*文件变更数: ${file_count}个*
-*数据来源: ${data_source}*
-"
-
-echo "📝 日报内容生成完成"
-```
-
-**日报格式说明**：
-- 标题使用统计日期（昨天）
-- 完成事项使用编号列表（1. 2. 3.）
-- 待办事项使用checkbox列表（- [ ]）
-- 包含生成时间和统计日期
-- 显示文件变更数量
-
-#### 第六步：保存日报并同步到 Javis
-
-```bash
 # 保存日报到本地
-# 注意：日报文件名使用工作日期（昨天），与日报内容统计日期保持一致
 output_file="/workspace/日报/${creator_name}-${workspace_name}-${yesterday}.md"
 echo "$report_content" > "$output_file"
 echo "✅ 日报已生成: $output_file"
+```
 
+#### 步骤 6: 同步到 Javis 平台（可选）
+
+```bash
 # 同步到 Javis 平台
 daily_report_workspace_id="cmm8se74z049g30s5eeazl02d"
 auth_token="${JAVIS_AUTH_TOKEN}"
 api_url="https://javis.elevo.vip/api/v1/workspaces/${daily_report_workspace_id}/files/text-file"
 
-# 构建请求体
 file_name="${creator_name}-${workspace_name}-${yesterday}.md"
 parent_path="会议纪要内容/日报周报内容"
 
-# 调用 API 上传日报
 curl -X POST "${api_url}" \
   -H "Authorization: Bearer ${auth_token}" \
   -H "Content-Type: application/json" \
@@ -497,96 +223,122 @@ curl -X POST "${api_url}" \
     \"content\": $(echo "$report_content" | jq -Rs .)
   }"
 
-echo "✅ 日报已同步到 Javis 平台: ${parent_path}/${file_name}"
-echo ""
-echo "📊 统计摘要："
-echo "  - 统计日期: ${yesterday}"
-echo "  - 文件变更: ${file_count}个"
-echo "  - 完成事项: ${#completed_tasks[@]}项"
-echo "  - 待办事项: ${#todo_tasks[@]}项"
+echo "✅ 日报已同步到 Javis 平台"
 ```
 
-### 输出示例
+### 完整执行逻辑伪代码
 
-**完整日报示例**：
+```
+function generate_daily_report():
+    # 步骤1: 确定日期
+    yesterday = get_yesterday_date()
+
+    # 步骤2: 获取会话记录
+    sessions = call_skill("claude-mem:mem-search", {
+        "dateStart": yesterday,
+        "dateEnd": yesterday,
+        "limit": 100,
+        "type": "sessions"
+    })
+
+    # 步骤3: 检查会话是否存在
+    if sessions is empty:
+        print("ℹ️ 昨日（${yesterday}）无会话记录，不生成日报。")
+        return  # 直接终止，不生成任何文件
+
+    # 步骤4: 分析会话，生成客户推进总结
+    summary = analyze_sessions_for_customer_progress(sessions)
+
+    if summary is empty or not related_to_customer:
+        print("ℹ️ 昨日会话与客户推进无关，不生成日报。")
+        return
+
+    # 限制300字
+    summary = truncate(summary, max_length=300)
+
+    # 步骤5: 获取用户信息
+    user_info = get_user_info_from_javis()
+
+    # 步骤6: 生成并保存日报
+    report = generate_report(summary, yesterday, len(sessions))
+    save_report(report, user_info)
+
+    # 步骤7: 同步到 Javis
+    sync_to_javis(report, user_info)
+
+    print("✅ 日报生成完成")
+```
+
+## Output Format
+
+### 成功输出
 
 ```markdown
-# 工作日报 - 2026-03-04
+📅 正在生成 2026-04-02 的工作日报...
+🔍 正在从 claude-mem 获取 2026-04-02 的会话记录...
+✅ 找到 5 条会话记录
+📝 正在分析会话内容，生成客户推进总结...
+✅ 日报已生成: /workspace/日报/黄星玲-销售工作空间-2026-04-02.md
+✅ 日报已同步到 Javis 平台
 
-## ✅ 今日完成
+📊 统计摘要：
+  - 统计日期: 2026-04-02
+  - 会话数: 5条
+  - 涉及客户: 3个
+```
 
-1. 招商银行-CMDB项目: 完成企业调研（金融-银行），匹配8个案例，生成销售话术
-2. 招商银行-CMDB项目: 分析45条需求，匹配度79.8%，识别3项定制化需求
-3. 国家电网-监控平台: 分析商务评分表，预估得分85分，识别2个风险项
-4. 中国移动-ITSM项目: 分析会议纪要，识别客户痛点：性能问题、运维效率低。销售阶段：需求探索
+### 无会话记录（终止）
 
-## 📌 待办事项
+```markdown
+📅 正在生成 2026-04-02 的工作日报...
+🔍 正在从 claude-mem 获取 2026-04-02 的会话记录...
+ℹ️ 昨日（2026-04-02）无会话记录，不生成日报。
 
-- [ ] 跟进招商银行CMDB项目技术澄清
-- [ ] 完成国家电网投标方案编写
-- [ ] 准备中国移动项目二次拜访资料
-- [ ] 持续跟进客户项目进展
+💡 提示：日报基于会话记录生成，请在工作日使用 Agent 进行工作。
+```
 
----
-*生成时间: 2026-03-05 09:00:15*
-*统计日期: 2026-03-04*
-*文件变更数: 12个*
-*数据来源: 会话轨迹 (优先) + 文件变化 (补充)*
+### 周末（终止）
+
+```markdown
+ℹ️ 今天是周末，无需生成日报。
 ```
 
 ## Best Practices
 
-### 内容提取原则
-
-**数据来源优先级**：
-1. **第一优先级 - 会话轨迹**：从项目状态.md的"会话轨迹"章节提取
-   - 优势：最准确、最详细的工作记录
-   - 格式：`| 时间 | Agent/Skill | 会话简要总结 |`
-   - 只提取日期匹配的记录
-2. **第二优先级 - 文件变化**：扫描文件系统变化作为补充
-   - 优势：即使没有会话轨迹也能生成日报
-   - 通过文件类型和内容智能推断工作内容
+### 客户推进总结写作规范
 
 **DO（推荐做法）**：
-- ✅ 优先使用会话轨迹，数据最准确
-- ✅ 会话轨迹格式为"项目名: 会话总结"
-- ✅ 文件变化作为补充数据源
-- ✅ 保持简洁明了，一行一项
-- ✅ 自动关联项目名称和文件类型
+- ✅ 聚焦客户推进相关的工作
+- ✅ 使用动词开头：完成、推进、分析、生成、拜访
+- ✅ 量化成果：匹配N个案例、分析N条需求、得分N分
+- ✅ 关联项目名称
+- ✅ 控制在300字以内
 
 **DON'T（避免做法）**：
-- ❌ 不要包含日报生成相关的文件
-- ❌ 不要记录技术配置文件的变化
-- ❌ 不要包含临时文件和日志文件
-- ❌ 不要重复记录相同的工作事项
+- ❌ 记录纯技术工作（代码调试、环境配置）
+- ❌ 记录内部工具使用（除非与客户直接相关）
+- ❌ 过于详细的流程描述
+- ❌ 超过300字
+- ❌ 生成没有实质内容的日报
 
-### 文件扫描规范
+### 会话分析与过滤
 
-**包含的文件类型**：
-- Markdown文档（.md）
-- Word文档（.docx）
-- Excel文档（.xlsx）
-- 项目状态文件
-- 会议纪要、需求文档、方案文档等
+**保留的会话类型**：
+- 客户调研、企业分析
+- 案例匹配、需求分析
+- 方案生成、话术准备
+- 会议分析、销售准备
+- 投标分析、控标策略
 
-**排除的目录和文件**：
-- 日报目录（/workspace/日报/）
-- Git目录（.git/）
-- 依赖目录（node_modules/, __pycache__/）
-- 隐藏文件和目录（.*）
-- 日志文件（*.log）
-- 临时文件（*.tmp）
-
-### 格式规范
-
-- 使用Markdown格式
-- 使用emoji增强可读性（✅📌）
-- 使用列表而非段落
-- 包含时间戳
+**过滤的会话类型**：
+- 纯代码开发、调试
+- 环境配置、工具安装
+- 与客户无关的技术讨论
+- 内部测试、实验
 
 ## Examples
 
-### 示例1：标准日报生成
+### 示例1：正常日报生成
 
 **输入**：
 ```
@@ -594,54 +346,55 @@ echo "  - 待办事项: ${#todo_tasks[@]}项"
 ```
 
 **系统执行**：
-1. 扫描 /workspace 目录
-2. 发现12个文件在昨天有变化
-3. 分析文件内容，提取4项完成事项
-4. 从项目状态文件提取4项待办事项
-5. 生成日报并同步
+1. 确定昨天日期：2026-04-02
+2. 调用 claude-mem 获取5条会话记录
+3. 分析会话，提取3个客户的推进工作
+4. 生成300字以内的总结
+5. 保存并同步
 
 **输出**：
-```
-🔍 正在扫描 /workspace 目录的文件变化...
-📊 发现 12 个文件在昨日有变化
-🔍 分析项目状态文件的会话轨迹...
-✅ 从会话轨迹提取到 4 项记录
-✅ 最终提取到 4 项完成事项
-📋 提取到 4 项待办事项
-📝 日报内容生成完成
-✅ 日报已生成: /workspace/日报/黄星玲-越南银行-2026-03-04.md
-✅ 日报已同步到 Javis 平台: 会议纪要内容/日报周报内容/黄星玲-越南银行-2026-03-04.md
+```markdown
+# 工作日报 - 2026-04-02
 
-📊 统计摘要：
-  - 统计日期: 2026-03-04
-  - 文件变更: 12个
-  - 完成事项: 4项
-  - 待办事项: 4项
+## 客户推进总结
+
+1. **招商银行-CMDB项目**：完成企业调研，识别客户为金融行业城商行；匹配8个金融案例；生成销售话术。
+
+2. **国家电网-监控平台**：分析招标评分表，预估得分82分，识别2个风险项，输出控标建议。
+
+3. **中国移动-ITSM项目**：分析会议纪要，识别痛点，判断销售阶段，生成推进建议。
+
+---
+*统计日期: 2026-04-02*
+*会话数: 5条*
 ```
 
-### 示例2：无工作内容
+### 示例2：无会话记录
 
 **输入**：
 ```
 用户：生成今天的日报
 ```
 
-**场景**：昨天没有文件变化
+**场景**：昨天没有使用 Agent
 
 **输出**：
 ```
-🔍 正在扫描 /workspace 目录的文件变化...
-ℹ️ 昨日（2026-03-04）无文件变化记录，无需生成日报。
+📅 正在生成 2026-04-02 的工作日报...
+🔍 正在从 claude-mem 获取 2026-04-02 的会话记录...
+ℹ️ 昨日（2026-04-02）无会话记录，不生成日报。
+
+💡 提示：日报基于会话记录生成，请在工作日使用 Agent 进行工作。
 ```
 
-### 示例3：周末提示
+### 示例3：周末
 
 **输入**：
 ```
 用户：生成今天的日报
 ```
 
-**场景**：今天是周六或周日
+**场景**：今天是周六
 
 **输出**：
 ```
@@ -650,6 +403,21 @@ echo "  - 待办事项: ${#todo_tasks[@]}项"
 
 ---
 
-*Skill Version: 3.0.0*
-*Last Updated: 2026-03-05*
-*Major Change: 从会话分析改为文件系统扫描*
+## Version
+
+**版本**: 4.0.0
+**最后更新**: 2026-04-03
+**更新内容**:
+- **v4.0 (2026-04-03) - 会话驱动模式**:
+  - ✅ 移除文件扫描逻辑，改用 claude-mem 获取会话记录
+  - ✅ 日报内容改为面向客户推进方向的总结
+  - ✅ 限制总结不超过300字
+  - ✅ 无会话记录时直接终止，不生成日报
+  - ✅ 新增会话分析与过滤逻辑
+- v3.0 (2026-03-05): 从会话分析改为文件系统扫描
+- v2.0 (2026-03-01): 新增会话轨迹优先策略
+- v1.0 (2026-02-20): 初始版本
+
+**依赖**:
+- claude-mem:mem-search（获取会话记录）
+- Javis API（获取用户信息、同步日报）
