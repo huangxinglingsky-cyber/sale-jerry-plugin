@@ -12,6 +12,7 @@ priority: high
 将 Plugin 目录打包为 zip 压缩包，并通过 API 上传到服务器，实现 Plugin 的快速部署。
 
 **核心功能**:
+- 自动更新 plugin.json 中的版本号（递增 patch 版本）
 - 自动打包指定 Plugin 目录为 zip 压缩包
 - 通过 API 上传到服务器
 - 使用 Bearer Token 认证
@@ -19,6 +20,7 @@ priority: high
 
 **核心价值**:
 - 一键打包部署，简化发布流程
+- 自动更新版本号，便于版本追踪
 - 自动化认证，无需手动处理 Token
 - 清晰的执行反馈，便于问题排查
 
@@ -31,14 +33,21 @@ priority: high
 
 ## Capabilities
 
-### 1. 目录打包
+### 1. 版本号自动更新
+
+在打包前自动更新 plugin.json 中的版本号：
+- 读取当前版本号（语义化版本格式：major.minor.patch）
+- 自动递增 patch 版本号（如 1.0.1 → 1.0.2）
+- 保存更新后的 plugin.json 文件
+
+### 2. 目录打包
 
 将指定的 Plugin 目录打包为 zip 压缩包：
 - 使用 Python zipfile 模块打包（兼容性更好）
 - 排除 `.git` 目录、`__pycache__`、`.pyc` 文件
 - 生成的压缩包名称：`{plugin_name}.zip`
 
-### 2. API 上传
+### 3. API 上传
 
 通过 REST API 上传压缩包：
 - 接口：`PUT /api/v1/plugins/{plugin_id}/reupload`
@@ -46,7 +55,7 @@ priority: high
 - 参数：`stripFirstLevel=true`（去除压缩包根目录层级）
 - 文件字段：`file`
 
-### 3. 错误处理
+### 4. 错误处理
 
 完善的错误处理机制：
 - 目录不存在检查
@@ -62,6 +71,7 @@ priority: high
 | plugin_dir | string | ❌ | apps/pulgins/sale-jerry-plugin | Plugin 目录路径（相对于工作空间根目录） |
 | output_dir | string | ❌ | /tmp | 压缩包输出目录 |
 | skip_upload | boolean | ❌ | false | 是否跳过上传（仅打包） |
+| skip_version_bump | boolean | ❌ | false | 是否跳过版本号更新 |
 
 ## Instructions
 
@@ -75,10 +85,84 @@ priority: high
 
 **核心原则**：
 - 安全第一：妥善处理认证 Token
+- 版本追踪：自动更新版本号，便于追溯
 - 清晰反馈：每个步骤都有明确的执行结果反馈
 - 错误处理：遇到问题立即停止并提示用户
 
 ### 执行步骤
+
+#### 步骤 0: 更新版本号（新增步骤）
+
+**0.1 检查 plugin.json 文件**
+
+```bash
+PLUGIN_DIR="{plugin_dir}"
+PLUGIN_JSON="$PLUGIN_DIR/.claude-plugin/plugin.json"
+
+if [ ! -f "$PLUGIN_JSON" ]; then
+  echo "⚠️ plugin.json 文件不存在: $PLUGIN_JSON"
+  echo "跳过版本号更新步骤"
+else
+  echo "📝 正在更新版本号..."
+fi
+```
+
+**0.2 读取当前版本号并递增**
+
+使用 Python 脚本解析和更新语义化版本号：
+
+```bash
+python3 << 'EOF'
+import json
+import os
+
+plugin_dir = "{plugin_dir}"
+plugin_json_path = os.path.join(plugin_dir, ".claude-plugin", "plugin.json")
+
+if not os.path.exists(plugin_json_path):
+    print("⚠️ plugin.json 不存在，跳过版本更新")
+    exit(0)
+
+# 读取 plugin.json
+with open(plugin_json_path, 'r', encoding='utf-8') as f:
+    config = json.load(f)
+
+# 获取当前版本
+current_version = config.get('version', '1.0.0')
+print(f"当前版本: {current_version}")
+
+# 解析版本号（语义化版本格式：major.minor.patch）
+parts = current_version.split('.')
+if len(parts) == 3:
+    major, minor, patch = int(parts[0]), int(parts[1]), int(parts[2])
+    # 递增 patch 版本号
+    patch += 1
+    new_version = f"{major}.{minor}.{patch}"
+else:
+    # 格式不符合预期，直接在末尾加 .1
+    new_version = f"{current_version}.1"
+
+# 更新版本号
+config['version'] = new_version
+
+# 保存回 plugin.json
+with open(plugin_json_path, 'w', encoding='utf-8') as f:
+    json.dump(config, f, indent=2, ensure_ascii=False)
+
+print(f"✅ 版本号已更新: {current_version} → {new_version}")
+EOF
+```
+
+**0.3 版本号递增规则**
+
+| 当前版本 | 递增后版本 | 说明 |
+|---------|-----------|------|
+| 1.0.0 | 1.0.1 | patch + 1 |
+| 1.0.9 | 1.0.10 | patch 进位 |
+| 1.2.3 | 1.2.4 | patch + 1 |
+| 2.0.0 | 2.0.1 | patch + 1 |
+
+> **说明**：默认只递增 patch 版本号（第三位）。如需递增 minor 或 major 版本，请手动修改 plugin.json 后再部署。
 
 #### 步骤 1: 参数验证
 
@@ -308,6 +392,10 @@ fi
 ```markdown
 ✅ Plugin 部署完成
 
+## 版本信息
+- 版本号已更新: 1.0.1 → 1.0.2
+- plugin.json 路径: apps/pulgins/sale-jerry-plugin/.claude-plugin/plugin.json
+
 ## 打包信息
 - Plugin 目录: {plugin_dir}
 - 压缩包路径: {zip_file}
@@ -331,6 +419,9 @@ fi
 **成功输出**:
 ```markdown
 ✅ Plugin 部署完成
+
+## 版本信息
+- 版本号已更新: 1.0.1 → 1.0.2
 
 ## 打包信息
 - Plugin 目录: apps/pulgins/sale-jerry-plugin
@@ -395,6 +486,11 @@ fi
 
 ## Best Practices
 
+### 版本管理
+- 每次部署自动递增 patch 版本号
+- 如需发布 major/minor 版本，请手动修改 plugin.json
+- 建议在部署后打 Git 标签记录版本
+
 ### 打包建议
 - 确保所有代码已保存并提交
 - 检查 `.gitignore` 中的排除项
@@ -405,24 +501,21 @@ fi
 - 检查网络连接正常
 - 大文件上传可能需要较长时间
 
-### 版本管理
-- 建议在部署前打 Git 标签
-- 记录每次部署的版本号和时间
-- 保留旧版本以备回滚
-
 ## Notes
 
-1. **Token 安全**: 不要在日志中输出完整 Token
-2. **目录路径**: 支持相对路径和绝对路径
-3. **压缩格式**: 使用 zip 格式，兼容性好
-4. **排除规则**: 自动排除 `.git`、`__pycache__` 等
-5. **stripFirstLevel**: 参数为 true 时，去除压缩包根目录层级
-6. **钉钉通知**: 部署成功后自动发送 Release Note 到钉钉群，需设置环境变量 `$DDWEBHOOK`（加签密钥）
-7. **通知跳过**: 如 `DDWEBHOOK` 环境变量未设置，不影响部署，仅跳过通知步骤
+1. **版本自动更新**: 每次部署自动递增 patch 版本号（如 1.0.1 → 1.0.2）
+2. **Token 安全**: 不要在日志中输出完整 Token
+3. **目录路径**: 支持相对路径和绝对路径
+4. **压缩格式**: 使用 zip 格式，兼容性好
+5. **排除规则**: 自动排除 `.git`、`__pycache__` 等
+6. **stripFirstLevel**: 参数为 true 时，去除压缩包根目录层级
+7. **钉钉通知**: 部署成功后自动发送 Release Note 到钉钉群，需设置环境变量 `$DDWEBHOOK`（加签密钥）
+8. **通知跳过**: 如 `DDWEBHOOK` 环境变量未设置，不影响部署，仅跳过通知步骤
+9. **跳过版本更新**: 设置 `skip_version_bump: true` 可跳过版本号更新步骤
 
 ## Examples
 
-### 示例 1: 默认部署
+### 示例 1: 默认部署（自动更新版本号）
 
 **输入**:
 ```javascript
@@ -432,14 +525,19 @@ Skill(
 ```
 
 **执行流程**:
-1. 验证环境变量和目录
-2. 打包 `apps/pulgins/sale-jerry-plugin` 目录
-3. 上传到 Plugin ID `cmk3oovu1002m4prviw8mqq21`
-4. 输出结果
+1. 读取 plugin.json，版本号从 1.0.1 更新为 1.0.2
+2. 验证环境变量和目录
+3. 打包 `apps/pulgins/sale-jerry-plugin` 目录
+4. 上传到 Plugin ID `cmk3oovu1002m4prviw8mqq21`
+5. 发送钉钉通知
+6. 输出结果
 
 **输出**:
 ```markdown
 ✅ Plugin 部署完成
+
+## 版本信息
+- 版本号已更新: 1.0.1 → 1.0.2
 
 ## 打包信息
 - Plugin 目录: apps/pulgins/sale-jerry-plugin
@@ -454,7 +552,23 @@ Skill(
 - 钉钉通知: ✅ 已发送
 ```
 
-### 示例 2: 指定 Plugin ID
+### 示例 2: 跳过版本号更新
+
+**输入**:
+```javascript
+Skill(
+  skill: "plugin-deploy",
+  args: {
+    "skip_version_bump": true
+  }
+)
+```
+
+**执行流程**:
+1. 跳过版本号更新步骤
+2. 直接打包上传
+
+### 示例 3: 指定 Plugin ID
 
 **输入**:
 ```javascript
@@ -467,9 +581,10 @@ Skill(
 ```
 
 **执行流程**:
-1. 使用指定的 Plugin ID 上传
+1. 更新版本号
+2. 使用指定的 Plugin ID 上传
 
-### 示例 3: 仅打包不上传
+### 示例 4: 仅打包不上传
 
 **输入**:
 ```javascript
@@ -482,13 +597,17 @@ Skill(
 ```
 
 **执行流程**:
-1. 打包 Plugin 目录
-2. 跳过上传步骤
-3. 仅输出压缩包信息
+1. 更新版本号
+2. 打包 Plugin 目录
+3. 跳过上传步骤
+4. 仅输出压缩包信息
 
 **输出**:
 ```markdown
 ✅ Plugin 打包完成（已跳过上传）
+
+## 版本信息
+- 版本号已更新: 1.0.1 → 1.0.2
 
 ## 打包信息
 - Plugin 目录: apps/pulgins/sale-jerry-plugin
@@ -496,7 +615,7 @@ Skill(
 - 压缩包大小: 125KB
 ```
 
-### 示例 4: 自定义目录
+### 示例 5: 自定义目录
 
 **输入**:
 ```javascript
@@ -510,17 +629,19 @@ Skill(
 ```
 
 **执行流程**:
-1. 打包 `plugins/my-custom-plugin` 目录
-2. 压缩包输出到 `./dist/my-custom-plugin.zip`
-3. 上传到服务器
+1. 更新 `plugins/my-custom-plugin/.claude-plugin/plugin.json` 中的版本号
+2. 打包 `plugins/my-custom-plugin` 目录
+3. 压缩包输出到 `./dist/my-custom-plugin.zip`
+4. 上传到服务器
 
 ---
 
-**版本**: 1.2
-**最后更新**: 2026-03-18
+**版本**: 1.3
+**最后更新**: 2026-04-03
 **作者**: AI Solutions Expert Team
 **依赖**: Python 3, curl, dingtalk-message skill
 **变更记录**:
+- v1.3 (2026-04-03): 新增版本号自动更新步骤（步骤0），每次部署自动递增 patch 版本号
 - v1.2 (2026-03-18): 钉钉通知 Webhook 配置改为从环境变量 `$DDWEBHOOK` 获取，委托 `dingtalk-message` 技能发送
 - v1.1 (2026-03-16): 新增发布后自动通知钉钉群功能
 - v1.0 (2026-03-14): 初始版本
