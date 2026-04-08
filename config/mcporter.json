@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "dingtalk-ai-table": {
+      "baseUrl": "https://mcp-gw.dingtalk.com/server/a3935af604cb4b09698e8ba5cb84e053a5e1319377552f5a8cfa68da986510fb?key=8c337179ea51578322ed9682e7bcb593"
+    }
+  }
+}
