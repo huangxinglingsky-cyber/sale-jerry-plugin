@@ -225,7 +225,37 @@ python3 /tmp/bump_version.py "$PLUGIN_DIR"
 
 #### 步骤 1: 参数验证
 
-**1.0 Plugin 选择逻辑**
+**1.0 参数为空时的交互选择**
+
+当用户未传入任何参数时（`plugin_name`、`plugin_id`、`plugin_dir` 都为空），主动询问用户选择要部署的 Plugin：
+
+> **触发条件**：`plugin_name` 为空 且 (`plugin_id` 为空 或 `plugin_dir` 为空)
+
+使用 AskUserQuestion 工具让用户选择：
+
+```javascript
+AskUserQuestion(
+  questions: [{
+    question: "请选择要部署的 Plugin：",
+    header: "Plugin选择",
+    multiSelect: false,
+    options: [
+      {
+        label: "sale-jerry-plugin",
+        description: "销售辅助 Plugin（支持钉钉通知）"
+      },
+      {
+        label: "plugin-dev-team",
+        description: "Plugin 开发团队 Plugin"
+      }
+    ]
+  }]
+)
+```
+
+用户选择后，将选中的值赋给 `plugin_name`，然后继续执行后续步骤。
+
+**1.1 Plugin 选择逻辑**
 
 根据参数确定要部署的 Plugin：
 
@@ -446,23 +476,20 @@ fi
 
 **5.2 发送钉钉通知**
 
-通过环境变量 `$DDWEBHOOK` 获取加签密钥，调用钉钉消息技能发送通知：
+调用钉钉消息技能发送通知（使用内置的默认 Webhook 地址）：
 
 ```bash
-# 从环境变量获取钉钉加签密钥
-if [ -z "$DDWEBHOOK" ]; then
-  echo "⚠️ 钉钉 Webhook 未配置（环境变量 DDWEBHOOK 为空），跳过通知"
-  echo "如需启用通知，请设置环境变量 DDWEBHOOK"
-else
-  # 调用钉钉消息技能发送 Markdown 通知
-  # 使用 dingtalk-message skill 发送群 Webhook 机器人消息
-  # 传入参数：markdown 格式的 Release Note 内容
-  Skill(skill="dingtalk-message", args="发送群Webhook机器人消息，markdown格式，标题为 JavisSales Release Note，内容为最新的版本更新日志")
-  echo "✅ 钉钉通知已发送"
-fi
+# 设置默认的钉钉 Webhook 地址
+DDWEBHOOK="https://oapi.dingtalk.com/robot/send?access_token=761b90d7bd5cdc7de5498ee12de9bd89c325b7af85bc7691016020103883baae"
+
+# 调用钉钉消息技能发送 Markdown 通知
+# 使用 dingtalk-message skill 发送群 Webhook 机器人消息
+# 传入参数：markdown 格式的 Release Note 内容，以及 webhook 地址
+Skill(skill="dingtalk-message", args="发送群Webhook机器人消息，webhook=$DDWEBHOOK，markdown格式，标题为 JavisSales Release Note，内容为最新的版本更新日志")
+echo "✅ 钉钉通知已发送"
 ```
 
-> **说明**：钉钉 Webhook 使用环境变量 `$DDWEBHOOK` 存储加签密钥，由 `dingtalk-message` 技能负责实际的消息发送、加签计算和 API 调用。本技能只需准备好通知内容，委托 `dingtalk-message` 完成发送。
+> **说明**：钉钉通知使用内置的默认 Webhook 地址 `https://oapi.dingtalk.com/robot/send?access_token=761b90d7bd5cdc7de5498ee12de9bd89c325b7af85bc7691016020103883baae`，由 `dingtalk-message` 技能负责实际的消息发送、加签计算和 API 调用。本技能只需准备好通知内容，委托 `dingtalk-message` 完成发送。
 
 **5.3 通知内容格式**
 
@@ -485,8 +512,6 @@ fi
 **5.4 错误处理**
 
 * 如果 Release Note 文件不存在，跳过通知步骤
-
-* 如果环境变量 `DDWEBHOOK` 未设置，跳过通知步骤
 
 * 通知失败不影响部署结果
 
@@ -628,15 +653,15 @@ fi
 5. **压缩格式**: 使用 zip 格式，兼容性好
 6. **排除规则**: 自动排除 `.git`、`__pycache__` 等
 7. **stripFirstLevel**: 参数为 true 时，去除压缩包根目录层级
-8. **钉钉通知**: 仅 `sale-jerry-plugin` 支持钉钉通知，需设置环境变量 `$DDWEBHOOK`（加签密钥）
-9. **通知跳过**: 如 `DDWEBHOOK` 环境变量未设置，不影响部署，仅跳过通知步骤
+8. **钉钉通知**: 仅 `sale-jerry-plugin` 支持钉钉通知，使用内置的默认 Webhook 地址
+9. **通知跳过**: 如 Plugin 不支持钉钉通知，不影响部署，仅跳过通知步骤
 10. **跳过版本更新**: 设置 `skip_version_bump: true` 可跳过版本号更新步骤
 
 ## Examples
 
-### 示例 1: 默认部署（自动更新版本号）
+### 示例 1: 无参数部署（交互选择）
 
-**输入**:
+**输入**（无参数时会弹出选择框）:
 
 ```javascript
 Skill(
@@ -646,12 +671,24 @@ Skill(
 
 **执行流程**:
 
-1. 读取 plugin.json，版本号从 1.0.1 更新为 1.0.2
-2. 验证环境变量和目录
-3. 打包 `apps/pulgins/sale-jerry-plugin` 目录
-4. 上传到 Plugin ID `cmk3oovu1002m4prviw8mqq21`
-5. 发送钉钉通知
-6. 输出结果
+1. 检测到未传入参数，弹出选择框让用户选择 Plugin
+2. 用户选择后，读取 plugin.json，版本号从 1.0.1 更新为 1.0.2
+3. 验证环境变量和目录
+4. 打包对应 Plugin 目录
+5. 上传到对应的 Plugin ID
+6. 根据 Plugin 类型决定是否发送钉钉通知
+7. 输出结果
+
+**交互示例**:
+
+```markdown
+❓ 请选择要部署的 Plugin
+
+1. sale-jerry-plugin - 销售辅助 Plugin（支持钉钉通知）
+2. plugin-dev-team - Plugin 开发团队 Plugin
+
+请选择: [1] 或 [2]
+```
 
 **输出**:
 
@@ -810,11 +847,15 @@ Skill(
 
 ***
 
-**版本**: 1.4.0
+**版本**: 1.4.2
 **最后更新**: 2026-04-08
 **作者**: AI Solutions Expert Team
 **依赖**: Python 3, curl, dingtalk-message skill
 **变更记录**:
+
+* v1.4.2 (2026-04-08): 钉钉通知 Webhook 不再从环境变量获取，改为使用内置默认值
+
+* v1.4.1 (2026-04-08): 新增参数为空时的交互选择逻辑，用户可以直接选择要部署的 Plugin
 
 * v1.4.0 (2026-04-08): 新增多 Plugin 支持，支持通过 plugin\_name 参数选择部署 sale-jerry-plugin 或 plugin-dev-team
 

@@ -874,7 +874,7 @@ function filter_daily_report_sessions(sessions):
 
   * ✅ 优化同步到 Javis 的路径，按日期归档日报
 
-  * ✅ parent\_path 改为动态路径：`会议纪要内容/日报周报内容/${yesterday}/`
+  * ✅ parent\_path 改为动态路径：`会议纪要内容/日报周报内容/${yesterday}`
 
 * **v4.6 (2026-04-08) - 空间创建者获取容错机制**:
 
