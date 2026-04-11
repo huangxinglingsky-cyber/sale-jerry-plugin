@@ -489,12 +489,16 @@ AskUserQuestion(
 ```
 使用 Bash 工具检测项目目录：
 
-# 方法 1: 查找包含 "01项目角色" 子目录的目录（标准项目结构）
+# 方法 1: 查找包含新版 "售前阶段/01_项目角色" 目录的项目（新结构）
+find . -maxdepth 3 -type d -name "01_项目角色" -path "*/售前阶段/*" 2>/dev/null | sed 's|/售前阶段/01_项目角色||' | sed 's|^\./||'
+
+# 方法 2: 查找包含旧版 "01项目角色" 子目录的目录（向后兼容）
 find . -maxdepth 2 -type d -name "01项目角色" 2>/dev/null | sed 's|/01项目角色||' | sed 's|^\./||'
 
-# 方法 2: 查找包含 "项目相关方.md" 文件的项目
-find . -maxdepth 3 -name "项目相关方.md" -path "*/01项目角色/*" 2>/dev/null | sed 's|/01项目角色/项目相关方.md||' | sed 's|^\./||'
+# 方法 3: 查找包含 "项目相关方.md" 文件的项目（新旧均兼容）
+find . -maxdepth 4 -name "项目相关方.md" 2>/dev/null | sed 's|/01_项目角色/项目相关方.md||;s|/01项目角色/项目相关方.md||' | sed 's|/售前阶段||' | sed 's|^\./||'
 
+# 合并三次查找结果并去重
 返回结果示例：
 - 农夫山泉-CMDB项目
 - 招商银行-监控平台
@@ -589,7 +593,9 @@ AskUserQuestion(
 
 **执行逻辑**:
 ```
-1. 构建文件路径：{project_name}/01项目角色/项目相关方.md
+1. 构建文件路径（智能解析，兼容新旧结构）：
+   - 优先检查：`{project_name}/售前阶段/01_项目角色/项目相关方.md`
+   - 旧版兼容：`{project_name}/售前阶段/01_项目角色/项目相关方.md`
 2. 使用 Read 工具读取现有文件
 3. 解析文件结构（项目信息、角色列表、角色说明）
 4. 提取现有角色列表
@@ -597,19 +603,26 @@ AskUserQuestion(
 
 **文件路径构建**:
 ```
-项目相关方文件路径：{project_name}/01项目角色/项目相关方.md
+项目相关方文件路径（智能解析）：
+- 新结构：`{project_name}/售前阶段/01_项目角色/项目相关方.md`
+- 旧结构（向后兼容）：`{project_name}/01项目角色/项目相关方.md`
 
 ⚠️ 路径验证：
-- 如果项目名称不包含路径分隔符，添加当前工作目录
-- 验证项目目录存在
-- 验证 01项目角色 目录存在
+- 优先检查新结构路径，若不存在则检查旧结构路径
+- 验证 01_项目角色（或旧版 01项目角色）目录存在
 - 验证 项目相关方.md 文件存在
 ```
 
 **读取文件**:
 ```
-使用 Read 工具：
-Read(file_path="{project_name}/01项目角色/项目相关方.md")
+使用 Read 工具（优先新路径，兼容旧路径）：
+ROLE_FILE=""
+if test -f "{project_name}/售前阶段/01_项目角色/项目相关方.md"; then
+  ROLE_FILE="{project_name}/售前阶段/01_项目角色/项目相关方.md"
+elif test -f "{project_name}/01项目角色/项目相关方.md"; then
+  ROLE_FILE="{project_name}/01项目角色/项目相关方.md"
+fi
+Read(file_path="${ROLE_FILE}")
 
 如果文件不存在：
 - 返回错误信息："项目相关方文件不存在，请先初始化项目"
@@ -734,7 +747,7 @@ for each new_member in new_members:
 
 使用 Edit 工具：
 Edit(
-  file_path="{project_name}/01项目角色/项目相关方.md",
+  file_path="${ROLE_FILE}",
   old_string="- **更新时间**: {旧日期}",
   new_string="- **更新时间**: {新日期}"
 )
@@ -745,7 +758,7 @@ Edit(
 使用 Edit 工具替换角色列表表格：
 
 Edit(
-  file_path="{project_name}/01项目角色/项目相关方.md",
+  file_path="${ROLE_FILE}",
   old_string="{旧表格内容}",
   new_string="{新表格内容}"
 )
@@ -785,7 +798,7 @@ Edit(
     "existing_count": 2,
     "new_count": 3,
     "total_count": 5,
-    "updated_file": "农夫山泉-CMDB项目/01项目角色/项目相关方.md"
+    "updated_file": "农夫山泉-CMDB项目/售前阶段/01_项目角色/项目相关方.md"
   },
   "extracted_members": [
     {
@@ -847,7 +860,7 @@ Edit(
 {
   "status": "error",
   "error_type": "file_not_found",
-  "message": "项目相关方文件不存在: 农夫山泉-CMDB项目/01项目角色/项目相关方.md",
+  "message": "项目相关方文件不存在: 农夫山泉-CMDB项目/售前阶段/01_项目角色/项目相关方.md",
   "suggestion": "请先使用 project-init agent 初始化项目"
 }
 ```
@@ -1105,7 +1118,7 @@ Edit(
 {
   "status": "error",
   "error_type": "file_not_found",
-  "message": "项目相关方文件不存在: 不存在的项目/01项目角色/项目相关方.md",
+  "message": "项目相关方文件不存在: 不存在的项目/售前阶段/01_项目角色/项目相关方.md",
   "suggestion": "请先使用 project-init agent 初始化项目"
 }
 ```
@@ -1456,7 +1469,7 @@ project-status-updater \
 {
   "status": "error",
   "error_type": "file_not_found",
-  "message": "项目相关方文件不存在: {project_name}/01项目角色/项目相关方.md",
+  "message": "项目相关方文件不存在: {project_name}/售前阶段/01_项目角色/项目相关方.md",
   "suggestion": "请先使用 project-init agent 初始化项目"
 }
 ```

@@ -362,11 +362,29 @@ def generate_word_proposal(markdown_content: str, output_path: str, metadata: di
 
 **4.3 输出路径规则**
 
-```
-# 如果有 project_name
-{项目目录}/07方案/FABE方案-{主题}-{日期}.md
-{项目目录}/07方案/FABE方案-{主题}-{日期}.docx
+```bash
+# 如果有 project_name，先判断目录结构版本
+if test -d "{project_name}/售前阶段/06_方案沟通"; then
+  # 新版结构
+  OUTPUT_DIR="{project_name}/售前阶段/06_方案沟通"
+elif test -d "{project_name}/05过程方案"; then
+  # 旧版结构 fallback
+  OUTPUT_DIR="{project_name}/05过程方案"
+elif test -d "{project_name}/售前阶段"; then
+  # 售前阶段存在但子目录尚未创建，补建后使用
+  mkdir -p "{project_name}/售前阶段/06_方案沟通"
+  OUTPUT_DIR="{project_name}/售前阶段/06_方案沟通"
+else
+  # 无项目结构，保存到临时目录
+  OUTPUT_DIR="/workspace/tmp"
+fi
 
+# 输出文件
+${OUTPUT_DIR}/FABE方案-{主题}-{日期}.md
+${OUTPUT_DIR}/FABE方案-{主题}-{日期}.docx
+```
+
+```
 # 如果没有 project_name
 /workspace/tmp/FABE方案-{主题}-{日期}.md
 /workspace/tmp/FABE方案-{主题}-{日期}.docx
@@ -411,8 +429,8 @@ def generate_word_proposal(markdown_content: str, output_path: str, metadata: di
     "supplemented_features": 1
   },
   "output_files": {
-    "markdown": "{项目目录}/07方案/FABE方案-{主题}-20260403.md",
-    "word": "{项目目录}/07方案/FABE方案-{主题}-20260403.docx"
+    "markdown": "{project_name}/售前阶段/06_方案沟通/FABE方案-{主题}-20260403.md",
+    "word": "{project_name}/售前阶段/06_方案沟通/FABE方案-{主题}-20260403.docx"
   },
   "sections": ["方案概述", "F-特征", "A-优势", "B-利益", "E-证据", "总结建议"]
 }
@@ -494,8 +512,8 @@ def generate_word_proposal(markdown_content: str, output_path: str, metadata: di
   "status": "success",
   "output_format": "both",
   "output_files": {
-    "markdown": "/shared/sale-kb/projects/招商银行-CMDB项目/07方案/FABE方案-CMDB自动发现-20260403.md",
-    "word": "/shared/sale-kb/projects/招商银行-CMDB项目/07方案/FABE方案-CMDB自动发现-20260403.docx"
+    "markdown": "/shared/sale-kb/projects/招商银行-CMDB项目/售前阶段/06_方案沟通/FABE方案-CMDB自动发现-20260403.md",
+    "word": "/shared/sale-kb/projects/招商银行-CMDB项目/售前阶段/06_方案沟通/FABE方案-CMDB自动发现-20260403.docx"
   }
 }
 ```

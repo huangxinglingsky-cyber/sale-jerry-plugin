@@ -697,8 +697,12 @@ all: 返回所有案例，不限时间
 **使用 Bash 工具查找项目目录**:
 
 ```bash
-# 查找当前工作目录下所有包含 "03相关案例" 子目录的项目目录
+# 查找当前工作目录下所有包含案例目录的项目（兼容新旧结构）
+# 新结构：项目名/售前阶段/03_商务案例
+find . -maxdepth 3 -type d -name "03_商务案例" 2>/dev/null | sed 's|/售前阶段/03_商务案例||' | sed 's|^\./||'
+# 旧结构（向后兼容）：项目名/03相关案例
 find . -maxdepth 2 -type d -name "03相关案例" 2>/dev/null | sed 's|/03相关案例||' | sed 's|^\./||'
+# 合并两次查找结果并去重
 ```
 
 **解析检测结果**:
@@ -710,7 +714,7 @@ find . -maxdepth 2 -type d -name "03相关案例" 2>/dev/null | sed 's|/03相关
 {
   "status": "error",
   "error_type": "no_project_found",
-  "message": "未找到项目目录（包含 03相关案例 子目录的目录），请手动指定 project_name 参数或先创建项目目录结构"
+  "message": "未找到项目目录（包含 售前阶段/03_商务案例 或旧版 03相关案例 子目录的目录），请手动指定 project_name 参数或先创建项目目录结构"
 }
 ```
 
@@ -757,15 +761,15 @@ find . -maxdepth 2 -type d -name "03相关案例" 2>/dev/null | sed 's|/03相关
       "options": [
         {
           "label": "XX银行CMDB项目",
-          "description": "保存到 XX银行CMDB项目/03相关案例/ 目录"
+          "description": "保存到 XX银行CMDB项目/售前阶段/03_商务案例/ 目录"
         },
         {
           "label": "YY化工监控项目",
-          "description": "保存到 YY化工监控项目/03相关案例/ 目录"
+          "description": "保存到 YY化工监控项目/售前阶段/03_商务案例/ 目录"
         },
         {
           "label": "ZZ证券DevOps项目",
-          "description": "保存到 ZZ证券DevOps项目/03相关案例/ 目录"
+          "description": "保存到 ZZ证券DevOps项目/售前阶段/03_商务案例/ 目录"
         }
       ],
       "multiSelect": false
@@ -776,11 +780,17 @@ find . -maxdepth 2 -type d -name "03相关案例" 2>/dev/null | sed 's|/03相关
 
 #### 5.5.3 验证项目目录结构
 
-**检查 03相关案例 目录是否存在**:
+**检查案例目录是否存在（兼容新旧结构）**:
 
 ```
-使用 Bash 工具检查:
-test -d "{project_name}/03相关案例" && echo "exists" || echo "not_exists"
+使用 Bash 工具检查（优先新结构，兼容旧结构）:
+CASE_DIR=""
+if test -d "{project_name}/售前阶段/03_商务案例"; then
+  CASE_DIR="{project_name}/售前阶段/03_商务案例"
+elif test -d "{project_name}/03相关案例"; then
+  CASE_DIR="{project_name}/03相关案例"
+fi
+echo ${CASE_DIR:-"not_exists"}
 ```
 
 **如果目录不存在**:
@@ -790,7 +800,7 @@ test -d "{project_name}/03相关案例" && echo "exists" || echo "not_exists"
 {
   "status": "error",
   "error_type": "directory_not_found",
-  "message": "项目目录 {project_name}/03相关案例 不存在，请先创建该目录或检查项目名称是否正确"
+  "message": "项目目录 {project_name}/售前阶段/03_商务案例 不存在，请先创建该目录或检查项目名称是否正确"
 }
 ```
 
@@ -809,9 +819,9 @@ test -d "{project_name}/03相关案例" && echo "exists" || echo "not_exists"
 **保存目标路径**:
 
 ```
-{project_name}/03相关案例/案例匹配报告.md
+{project_name}/售前阶段/03_商务案例/案例匹配报告.md
 或
-{project_name}/03相关案例/案例匹配报告-{YYYYMMDD}.md
+{project_name}/售前阶段/03_商务案例/案例匹配报告-{YYYYMMDD}.md
 ```
 
 **文件保存逻辑**:
@@ -821,7 +831,7 @@ test -d "{project_name}/03相关案例" && echo "exists" || echo "not_exists"
 **使用 Read 工具检查文件**:
 
 ```
-尝试读取: {project_name}/03相关案例/案例匹配报告.md
+尝试读取: {project_name}/售前阶段/03_商务案例/案例匹配报告.md
 ```
 
 **判断逻辑**:
@@ -932,7 +942,7 @@ test -d "{project_name}/03相关案例" && echo "exists" || echo "not_exists"
 
 4. **使用 Write 工具创建文件**:
 
-   * 文件路径: `{project_name}/03相关案例/案例匹配报告-{YYYYMMDD}.md`
+   * 文件路径: `{project_name}/售前阶段/03_商务案例/案例匹配报告-{YYYYMMDD}.md`
 
    * 写入完整报告内容
 
@@ -946,7 +956,7 @@ test -d "{project_name}/03相关案例" && echo "exists" || echo "not_exists"
   "project_name": "XX银行CMDB项目",
   "project_auto_detected": true,  // 可选，如果是自动检测到唯一项目则为 true
   "project_user_selected": true,  // 可选，如果是用户从多个项目中选择则为 true
-  "file_path": "{project_name}/03相关案例/案例匹配报告.md",
+  "file_path": "{project_name}/售前阶段/03_商务案例/案例匹配报告.md",
   "file_action": "appended",  // 或 "created"
   "matched_cases": [...],
   "statistics": {...},
@@ -972,7 +982,7 @@ test -d "{project_name}/03相关案例" && echo "exists" || echo "not_exists"
 
 **错误处理**:
 
-* 如果目录 `{project_name}/03相关案例/` 不存在，返回错误信息提示创建目录
+* 如果目录 `{project_name}/售前阶段/03_商务案例/` 不存在，返回错误信息提示创建目录
 
 * 如果文件写入失败，返回错误信息
 
@@ -1067,7 +1077,7 @@ Skill(
 | 字段 | 说明 |
 |------|------|
 | status | 匹配状态（success/no_match/error） |
-| file_path | 案例匹配报告保存路径（如"{项目名称}/03相关案例/案例匹配报告.md"） |
+| file_path | 案例匹配报告保存路径（如"{项目名称}/售前阶段/03_商务案例/案例匹配报告.md"） |
 | file_action | 文件操作类型（created=创建新文件，appended=追加到现有文件） |
 | matched_cases | 匹配的案例列表（按相似度降序） |
 | statistics | 统计信息（总数、价格范围、时间分布） |
@@ -1112,7 +1122,7 @@ Skill(
 4. 按时间筛选：优先一年内，不足3个则扩展到五年内
 5. 计算相似度并排序
 6. 返回所有匹配的案例（不进行精选或截取）
-7. 使用指定的项目名称或自动检测，保存案例匹配报告到 `XX银行CMDB项目/03相关案例/` 目录
+7. 使用指定的项目名称或自动检测，保存案例匹配报告到 `XX银行CMDB项目/售前阶段/03_商务案例/` 目录
 
 **输出价值**：为销售人员提供所有匹配的银行类CMDB案例（不遗漏任何案例），并自动生成案例匹配报告文件
 
@@ -1133,18 +1143,18 @@ Skill(
 **场景 A: 只有一个项目目录**
 
 ```
-自动检测到: XX银行CMDB项目/03相关案例/
+自动检测到: XX银行CMDB项目/售前阶段/03_商务案例/
 处理流程:
 1-6. 同示例1的步骤1-6
 7. 自动使用检测到的项目名称 "XX银行CMDB项目"
-8. 保存报告到 XX银行CMDB项目/03相关案例/
+8. 保存报告到 XX银行CMDB项目/售前阶段/03_商务案例/
 
 返回结果包含:
 {
   "status": "success",
   "project_name": "XX银行CMDB项目",
   "project_auto_detected": true,
-  "file_path": "XX银行CMDB项目/03相关案例/案例匹配报告.md",
+  "file_path": "XX银行CMDB项目/售前阶段/03_商务案例/案例匹配报告.md",
   ...
 }
 ```
@@ -1153,22 +1163,22 @@ Skill(
 
 ```
 自动检测到:
-- XX银行CMDB项目/03相关案例/
-- YY化工监控项目/03相关案例/
-- ZZ证券DevOps项目/03相关案例/
+- XX银行CMDB项目/售前阶段/03_商务案例/
+- YY化工监控项目/售前阶段/03_商务案例/
+- ZZ证券DevOps项目/售前阶段/03_商务案例/
 
 处理流程:
 1-6. 同示例1的步骤1-6
 7. 使用 AskUserQuestion 询问用户选择项目
 8. 用户选择 "XX银行CMDB项目"
-9. 保存报告到 XX银行CMDB项目/03相关案例/
+9. 保存报告到 XX银行CMDB项目/售前阶段/03_商务案例/
 
 返回结果包含:
 {
   "status": "success",
   "project_name": "XX银行CMDB项目",
   "project_user_selected": true,
-  "file_path": "XX银行CMDB项目/03相关案例/案例匹配报告.md",
+  "file_path": "XX银行CMDB项目/售前阶段/03_商务案例/案例匹配报告.md",
   ...
 }
 ```
@@ -1176,13 +1186,13 @@ Skill(
 **场景 C: 没有项目目录**
 
 ```
-未检测到任何包含 03相关案例 的项目目录
+未检测到任何包含 售前阶段/03_商务案例 或旧版 03相关案例 的项目目录
 
 返回错误:
 {
   "status": "error",
   "error_type": "no_project_found",
-  "message": "未找到项目目录（包含 03相关案例 子目录的目录），请手动指定 project_name 参数或先创建项目目录结构"
+  "message": "未找到项目目录（包含 售前阶段/03_商务案例 或旧版 03相关案例 子目录的目录），请手动指定 project_name 参数或先创建项目目录结构"
 }
 ```
 
@@ -1217,7 +1227,7 @@ Skill(
 3. 限定三年内案例
 4. 相似度排序（优先完全匹配多个模块的案例）
 5. 返回所有匹配的案例（不进行精选或截取）
-6. 保存案例匹配报告到 `YY化工CMDB监控项目/03相关案例/` 目录（或自动检测的项目）
+6. 保存案例匹配报告到 `YY化工CMDB监控项目/售前阶段/03_商务案例/` 目录（或自动检测的项目）
 
 **输出价值**：找到制造业所有相关案例（不遗漏任何案例），可能包含单模块或多模块组合方案，包括"一体化运维"等同义词案例，并自动生成报告文件
 
@@ -1278,7 +1288,7 @@ Skill(
 4. 金额转换为万元后，筛选金额>=50万的案例
 5. 按时间降序排列
 6. 返回所有匹配的案例（不进行精选或截取）
-7. 保存案例匹配报告到 `DevOps大单案例研究/03相关案例/` 目录（或自动检测的项目）
+7. 保存案例匹配报告到 `DevOps大单案例研究/售前阶段/03_商务案例/` 目录（或自动检测的项目）
 
 **输出价值**：找到最近一年的所有DevOps大单案例（不遗漏任何案例），跨行业参考，并自动生成报告文件
 
@@ -1552,7 +1562,7 @@ sales-script scenario="初次拜访" cases="[匹配的案例列表]"
 
     * 如果没有项目，返回明确错误提示
 
-  * ✅ 新增步骤6：自动保存案例匹配报告到项目的 `03相关案例` 目录
+  * ✅ 新增步骤6：自动保存案例匹配报告到项目的 `售前阶段/03_商务案例` 目录
 
   * ✅ 智能文件处理：如果报告已存在则追加内容（以日期作为章节分隔），如果不存在则创建新文件（文件名包含日期）
 

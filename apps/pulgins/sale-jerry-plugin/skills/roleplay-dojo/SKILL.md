@@ -225,20 +225,20 @@ cat "{project_name}/项目状态.md"
 
 **2.2 读取会议纪要**（如果存在）：
 ```bash
-MEETING_FILE=$(ls "{project_name}/06会议纪要/" | head -1)
-if [ -n "$MEETING_FILE" ]; then Read(file_path="{project_name}/06会议纪要/$MEETING_FILE"); fi
+MEETING_FILE=$(ls "{project_name}/售前阶段/05_会议纪要/" | head -1)
+if [ -n "$MEETING_FILE" ]; then Read(file_path="{project_name}/售前阶段/05_会议纪要/$MEETING_FILE"); fi
 ```
 
 **2.3 读取销售话术**（如果存在）：
 ```bash
-SCRIPT_FILE=$(ls "{project_name}/09沟通话术/" | head -1)
-if [ -n "$SCRIPT_FILE" ]; then Read(file_path="{project_name}/09沟通话术/$SCRIPT_FILE"); fi
+SCRIPT_FILE=$(ls "{project_name}/售前阶段/11_通用资料/" | head -1)
+if [ -n "$SCRIPT_FILE" ]; then Read(file_path="{project_name}/售前阶段/11_通用资料/$SCRIPT_FILE"); fi
 ```
 
 **2.4 读取需求文件**（如果存在）：
 ```bash
-REQ_FILE=$(ls "{project_name}/02需求文件/" | head -1)
-if [ -n "$REQ_FILE" ]; then Read(file_path="{project_name}/02需求文件/$REQ_FILE"); fi
+REQ_FILE=$(ls "{project_name}/售前阶段/02_需求文件/" | head -1)
+if [ -n "$REQ_FILE" ]; then Read(file_path="{project_name}/售前阶段/02_需求文件/$REQ_FILE"); fi
 ```
 
 #### 步骤 3: 生成客户画像
@@ -339,7 +339,7 @@ if [ -n "$REQ_FILE" ]; then Read(file_path="{project_name}/02需求文件/$REQ_F
 
 #### 步骤 7: 保存演练记录
 
-保存位置：`{project_name}/09沟通话术/演练记录-{date}.md`
+保存位置：`{project_name}/售前阶段/11_通用资料/演练记录-{date}.md`
 
 记录内容：
 - 演练场景
