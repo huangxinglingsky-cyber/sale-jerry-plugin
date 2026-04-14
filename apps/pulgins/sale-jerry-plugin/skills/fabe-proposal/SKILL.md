@@ -41,7 +41,7 @@ user-invocable: true
 | pain_points | string | ❌ | 无 | 客户痛点，用于强化利益论证 |
 | decision_maker | string | ❌ | 无 | 决策人角色，用于调整方案视角 |
 | project_name | string | ❌ | 无 | 关联的项目名称，用于归档 |
-| feature_list_path | string | ❌ | `通用知识/功能清单/EasyOps功能清单.md` | 产品功能清单文件路径 |
+| feature_list_path | string | ❌ | `通用知识/功能清单/EasyOps功能清单.md` | 产品功能清单文件路径（⚠️ 只读知识库，禁止写入） |
 | proposal_type | string | ❌ | `standard` | 方案类型：standard(标准方案)/brief(简报)/full(完整方案) |
 | output_format | string | ❌ | `both` | 输出格式：markdown/word/both（同时生成两种格式） |
 
