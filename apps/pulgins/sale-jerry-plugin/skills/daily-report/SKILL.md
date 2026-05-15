@@ -1,6 +1,6 @@
 ---
 name: daily-report
-description: 日报生成技能，通过claude-mem获取前一天的sessions和observations记录，智能总结成面向客户推进方向的工作日报（不超过300字）
+description: 日报生成技能，通过claude-mem获取前一天的sessions记录，智能总结成面向客户推进方向的工作日报（不超过300字）
 category: productivity
 priority: medium
 ---
@@ -199,39 +199,22 @@ echo "🔍 正在从 claude-mem 获取 ${yesterday} 的会话记录..."
 }
 ```
 
-**同时搜索 observations（工作记录）**：
-
-除会话记录外，还需搜索同一天的 observations：
-
-```json
-{
-  "skill": "claude-mem:mem-search",
-  "args": {
-    "query": "",
-    "dateStart": "2026-04-02",
-    "dateEnd": "2026-04-03",
-    "limit": 100,
-    "type": "observations"
-  }
-}
-```
-
-> **说明**：dateEnd 设为 dateStart + 1天（如查4月2日，dateEnd 设为4月3日）。sessions 记录对话会话，observations 记录具体工作事项，两者都是日报的数据来源，需同时获取。
+> **说明**：dateEnd 设为 dateStart + 1天（如查4月2日，dateEnd 设为4月3日）。通过 sessions 记录对话会话来生成日报。
 
 #### 步骤 3: 检查会话记录是否存在
 
-**只有 sessions 和 observations 都为空时，才终止任务**：
+**sessions 为空时终止任务**：
 
 ```markdown
 # 检查结果
-if [ ${#sessions} -eq 0 ] && [ ${#observations} -eq 0 ]; then
-    echo "ℹ️ 昨日（${yesterday}）无会话记录和工作记录，不生成日报。"
+if [ ${#sessions} -eq 0 ]; then
+    echo "ℹ️ 昨日（${yesterday}）无会话记录，不生成日报。"
     echo ""
     echo "💡 提示：日报基于会话记录生成，请在工作日使用 Agent 进行工作。"
     exit 0
 fi
 
-echo "✅ 找到 ${#sessions} 条原始会话记录，${#observations} 条工作记录"
+echo "✅ 找到 ${#sessions} 条原始会话记录"
 ```
 
 **终止条件**：
@@ -240,15 +223,15 @@ echo "✅ 找到 ${#sessions} 条原始会话记录，${#observations} 条工作
 
 * 昨天是周末（周六或周日）
 
-* claude-mem 的 sessions 和 observations 均返回空结果
+* claude-mem 的 sessions 返回空结果
 
-* sessions 和 observations 数量均为 0
+* sessions 数量为 0
 
-> **注意**：只要 sessions 或 observations 任一存在记录就生成日报，不因内容与客户推进无关而跳过。
+> **注意**：会话记录是日报的唯一数据来源，sessions 为空时不生成日报。
 
-#### 步骤 3.5: 过滤日报生成相关会话和工作记录（⚠️ 重要）
+#### 步骤 3.5: 过滤日报生成相关会话（⚠️ 重要）
 
-**⚠️ 必须过滤掉日报生成技能自身的 sessions 和 observations，否则日报内容会变成"日报系统验证"等无效内容。**
+**⚠️ 必须过滤掉日报生成技能自身的 sessions，否则日报内容会变成"日报系统验证"等无效内容。**
 
 **过滤规则**：
 
@@ -324,18 +307,17 @@ def filter_daily_report_sessions(sessions):
 **过滤后检查**：
 
 ```markdown
-# 过滤日报相关会话和工作记录后，检查是否还有有效数据
+# 过滤日报相关会话后，检查是否还有有效数据
 sessions = filter_daily_report_sessions(sessions)
-observations = filter_daily_report_observations(observations)
 
-if [ ${#sessions} -eq 0 ] && [ ${#observations} -eq 0 ]; then
+if [ ${#sessions} -eq 0 ]; then
     echo "ℹ️ 昨日（${yesterday}）过滤日报会话后无有效工作记录，不生成日报。"
     echo ""
     echo "💡 提示：昨日可能仅执行了日报生成任务，无其他工作内容。"
     exit 0
 fi
 
-echo "✅ 过滤后保留 ${#sessions} 条有效会话记录，${#observations} 条有效工作记录"
+echo "✅ 过滤后保留 ${#sessions} 条有效会话记录"
 ```
 
 **⚠️ 重要提醒**：
@@ -346,11 +328,36 @@ echo "✅ 过滤后保留 ${#sessions} 条有效会话记录，${#observations} 
 
 * 如果过滤后没有会话，应终止日报生成
 
-#### 步骤 4: 分析会话和工作记录内容，生成工作总结
+#### 步骤 4: 分析会话内容，生成工作总结
+
+**会话聚合分组**：
+
+在分析内容之前，先对 sessions 按主题相似度进行聚合分组，避免逐条列举产生流水账：
+
+**聚合规则**：
+- 将 sessions 按主题相似度合并（如同一客户的多次操作、同一功能的多个步骤）
+- 每个任务组只生成一条总结，子步骤作为补充说明嵌入其中
+- 主题判断依据：客户名称、项目名称、功能模块、工作类型（调研/方案/开发/修复等）
+
+**聚合示例**：
+
+❌ 流水账写法（逐条列举）：
+```
+1. 打开招商银行项目文件
+2. 修改了客户名称
+3. 补充了IT规模信息
+4. 生成了销售话术
+5. 验证了话术内容
+```
+
+✅ 聚合写法（合并为一条）：
+```
+1. **招商银行-CMDB项目**：完成企业调研并生成销售话术（补充IT规模约500人，验证话术针对性）。
+```
 
 **分类判断**：
 
-先判断 sessions 和 observations 的综合内容是否与客户推进相关，再选择对应的总结策略：
+先判断 sessions 的内容是否与客户推进相关，再选择对应的总结策略：
 
 * **与客户推进相关** → 按"客户推进总结"模板，分析推进进展、阶段性成果和待办事项
 
@@ -358,7 +365,7 @@ echo "✅ 过滤后保留 ${#sessions} 条有效会话记录，${#observations} 
 
 **分析维度（客户推进相关）**：
 
-从 sessions 和 observations 中提取以下客户推进相关信息：
+从 sessions 中提取以下客户推进相关信息：
 
 1. **客户名称**：涉及哪些客户
 2. **项目进展**：项目推进到什么阶段
@@ -403,6 +410,12 @@ echo "✅ 过滤后保留 ${#sessions} 条有效会话记录，${#observations} 
 2. **量化成果**：尽可能用数字说话（"匹配5个案例"、"分析20条需求"）
 3. **简洁明了**：每项工作1句话，总计不超过300字
 4. **包含待办**：末尾列出下一步计划或待办事项
+
+**聚合写作规范**：
+
+1. 同一会话产生的多个操作步骤，合并为一条总结
+2. 主句描述任务目标/产出，从句或括号内补充关键细节
+3. 一个任务只占一条编号，避免"写了方案→改了客户名→验证了PPT"式的流水账拆分
 
 **示例总结（客户推进相关）**：
 
@@ -605,7 +618,7 @@ function generate_daily_report():
         sync_to_javis(report_content, file_name)
         return
 
-    # 步骤2: 获取会话记录和工作记录
+    # 步骤2: 获取会话记录
     # ⚠️ 注意：dateEnd 必须比 dateStart 多1天
     sessions = call_skill("claude-mem:mem-search", {
         "dateStart": yesterday,
@@ -613,35 +626,31 @@ function generate_daily_report():
         "limit": 100,
         "type": "sessions"
     })
-    observations = call_skill("claude-mem:mem-search", {
-        "dateStart": yesterday,
-        "dateEnd": add_days(yesterday, 1),
-        "limit": 100,
-        "type": "observations"
-    })
 
-    # 步骤3: 检查是否存在（sessions 和 observations 都为空才终止）
-    if sessions is empty and observations is empty:
-        print("ℹ️ ${yesterday} 无会话记录和工作记录，不生成日报。")
+    # 步骤3: 检查是否存在（sessions 为空则终止）
+    if sessions is empty:
+        print("ℹ️ ${yesterday} 无会话记录，不生成日报。")
         return
 
-    # 步骤3.5: ⚠️ 过滤日报生成相关的会话和工作记录（必须执行）
+    # 步骤3.5: ⚠️ 过滤日报生成相关的会话（必须执行）
     sessions = filter_daily_report_sessions(sessions)
-    observations = filter_daily_report_observations(observations)
 
     # 过滤关键词：daily-report, 日报生成, 生成日报, 日报系统验证, 验证系统日期, 周末检测逻辑
-    # sessions 检查 request/completed 字段，observations 检查 title/body 字段
+    # sessions 检查 request/completed 字段
 
-    if sessions is empty after filter and observations is empty after filter:
+    if sessions is empty after filter:
         print("ℹ️ ${yesterday} 过滤日报会话后无有效工作记录，不生成日报。")
         print("💡 提示：昨日可能仅执行了日报生成任务，无其他工作内容。")
         return
 
-    # 步骤4: 分析会话和工作记录，生成工作总结
-    if sessions or observations are related to customer_progress:
-        summary = generate_customer_progress_summary(sessions, observations)
+    # 步骤4: 分析会话内容，生成工作总结
+    # 4.1 按主题相似度聚合分组，避免流水账
+    sessions = aggregate_by_topic(sessions)
+    # 4.2 判断内容类型并生成总结
+    if sessions are related to customer_progress:
+        summary = generate_customer_progress_summary(sessions)
     else:
-        summary = generate_general_work_summary(sessions, observations)
+        summary = generate_general_work_summary(sessions)
 
     if summary is empty:
         print("ℹ️ ${yesterday} 会话内容无法生成有效总结，不生成日报。")
@@ -663,7 +672,7 @@ function generate_daily_report():
     # 步骤6: 生成并保存日报（以实际会话日期命名）
     # ⚠️ 文件名格式：空间创建者-空间名称-日期.md
     file_name = f"{creator_name}-{workspace_name}-{yesterday}.md"
-    report = generate_report(summary, yesterday, len(sessions), len(observations))
+    report = generate_report(summary, yesterday, len(sessions))
     save_report(report, file_name)
 
     # 步骤7: 同步到 Javis
@@ -695,34 +704,14 @@ function filter_daily_report_sessions(sessions):
             filtered_sessions.append(session)
 
     return filtered_sessions
+```
 
-
-function filter_daily_report_observations(observations):
-    """过滤掉日报生成相关的工作记录"""
-    filter_keywords = [
-        "daily-report",
-        "日报生成",
-        "生成日报",
-        "日报系统验证",
-        "验证系统日期",
-        "周末检测逻辑",
-        "daily report"
-    ]
-
-    filtered_observations = []
-    for obs in observations:
-        # observations 检查 title 和 body 字段
-        title = obs.get("title", "")
-        body = obs.get("body", "")
-        text = (title + " " + body).lower()
-        should_filter = any(kw.lower() in text for kw in filter_keywords)
-
-        if should_filter:
-            print(f"  🚫 过滤观察记录: {title[:50]}...")
-        else:
-            filtered_observations.append(obs)
-
-    return filtered_observations
+function aggregate_by_topic(sessions):
+    """按主题相似度聚合会话，合并同一任务的多个操作步骤"""
+    # 聚合依据：客户名称、项目名称、功能模块、工作类型
+    # 同一主题的多条 session 合并为一个任务组
+    # 每个任务组输出一条总结，子步骤作为补充说明嵌入
+    return grouped_sessions  # 聚合后的任务组列表
 ```
 
 ## Output Format
@@ -732,12 +721,12 @@ function filter_daily_report_observations(observations):
 ```markdown
 📅 正在生成 2026-04-02 的工作日报...
 🔍 正在从 claude-mem 获取 2026-04-02 的会话记录...
-✅ 找到 5 条原始会话记录，8 条工作记录
-🔍 正在过滤日报生成相关会话和工作记录...
+✅ 找到 5 条原始会话记录
+🔍 正在过滤日报生成相关会话...
   🚫 过滤: 日报系统验证：执行日报生成技能...
-📊 过滤结果: sessions 原始 5 条 → 过滤 1 条 → 保留 4 条；observations 原始 8 条 → 过滤 0 条 → 保留 8 条
-✅ 过滤后保留 4 条有效会话记录，8 条有效工作记录
-📝 正在分析会话和工作记录内容，生成客户推进总结...
+📊 过滤结果: 原始 5 条 → 过滤 1 条 → 保留 4 条
+✅ 过滤后保留 4 条有效会话记录
+📝 正在分析会话内容，生成客户推进总结...
 📋 日报命名信息：
   - 空间创建者: 张三
   - 空间名称: 华能信息IT资产运维管理平台
@@ -747,9 +736,9 @@ function filter_daily_report_observations(observations):
 
 📊 统计摘要：
   - 统计日期: 2026-04-02
-  - 原始会话: 5条 / 工作记录: 8条
+  - 原始会话: 5条
   - 过滤: 1条（日报生成相关）
-  - 有效会话: 4条 / 有效工作记录: 8条
+  - 有效会话: 4条
   - 涉及客户: 3个
 ```
 
@@ -998,129 +987,28 @@ function filter_daily_report_observations(observations):
 
 ## Version
 
-**版本**: 4.11.0
-**最后更新**: 2026-04-18
-**更新内容**:
+**版本**: 4.13.0
+**最后更新**: 2026-04-24
 
-* **v4.11 (2026-04-18) - 新增 observations 数据源**:
-
-  * ✅ 步骤 2 新增 observations 搜索：在获取 sessions 的同时，也搜索同一天的 observations（工作记录）
-  * ✅ 步骤 3 修改终止条件：只有 sessions 和 observations 都为空时才终止，任一有数据则继续生成日报
-  * ✅ 步骤 3.5 新增 `filter_daily_report_observations` 函数，对 observations 的 title/body 字段执行相同的关键词过滤
-  * ✅ 步骤 4 更新分析逻辑：综合 sessions 和 observations 内容生成工作总结
-  * ✅ 伪代码同步更新，反映双数据源逻辑
-
-* **v4.10 (2026-04-18) - MCP Server 重试机制 + 回滚错误的 project 参数**:
-
-  * 🐛 回滚 v4.8 错误修复：删除 mem-search 调用中的 `project: ${JAVIS_WORKSPACE_NAME}` 参数（claude-mem 实际存储的 project 字段值为 `"workspace"`，传入工作空间名称会导致查询结果为空）
-
-  * ✅ 增强 MCP Server 可用性检测：单次检测改为最多重试 3 次，每次间隔 1 分钟
-
-  * ✅ 3 次重试全部失败后不再直接终止，而是生成包含友好提示信息的日报文件并同步到 Javis
-
-  * ✅ 保持禁止跳过 MCP Server 检测的约束不变
-
-* **v4.9 (2026-04-18) - claude-mem 可用性检测**:
-
-  * ✅ 新增步骤 2 前置检查：在调用 mem-search 前先检测 claude-mem MCP Server 是否可用
-
-  * ✅ MCP Server 不可用时输出友好提示，引导用户前往「设置 → AI模型 → 记忆系统」启用
-
-  * ✅ 禁止跳过 MCP Server 检测，未配置时终止日报生成而非生成空日报
-
-* **v4.8 (2026-04-18) - 空间数据隔离修复**:
-
-  * 🐛 修复 mem-search 调用缺少 project 参数导致跨空间数据泄露的问题
-
-  * ✅ 强制传入 `project: ${JAVIS_WORKSPACE_NAME}` 限定查询范围为当前工作空间
-
-  * ✅ 同步更新调用示例、注释说明和伪代码
-
-* **v4.7 (2026-04-08) - 日报同步路径优化**:
-
-  * ✅ 优化同步到 Javis 的路径，按日期归档日报
-
-  * ✅ parent\_path 改为动态路径：`会议纪要内容/日报周报内容/${yesterday}`
-
-* **v4.6 (2026-04-08) - 空间创建者获取容错机制**:
-
-  * 🐛 修复获取空间创建者失败时无重试机制的问题
-
-  * ✅ 新增5次重试机制，每次间隔30秒
-
-  * ✅ 重试全部失败后使用"未知用户"作为默认值
-
-  * ✅ 增加重试过程的日志输出，便于排查问题
-
-* **v4.5 (2026-04-08) - 空间创建者名称修复**:
-
-  * 🐛 修复日报文件命名使用执行用户名而非空间创建者名的问题
-
-  * ✅ 明确区分"空间创建者"（creator）和"执行用户"
-
-  * ✅ 增加 API 调用调试信息输出，便于排查命名问题
-
-  * ✅ 添加常见错误排查表格和 API 响应示例
-
-  * ✅ 更新伪代码，增加获取空间创建者信息的步骤
-
-* **v4.4 (2026-04-08) - 日报会话过滤逻辑**:
-
-  * 🐛 修复日报内容包含"日报系统验证"等无效内容的问题
-
-  * ✅ 新增步骤 3.5：过滤日报生成相关的会话记录
-
-  * ✅ 定义过滤关键词：daily-report、日报生成、生成日报、日报系统验证、验证系统日期、周末检测逻辑等
-
-  * ✅ 过滤后无有效会话时终止日报生成，并给出提示
-
-  * ✅ 更新完整执行逻辑伪代码，增加 filter\_daily\_report\_sessions 函数
-
-* **v4.3 (2026-04-04) - claude-mem 日期参数修复**:
-
-  * 🐛 修复 dateEnd 参数：当 dateStart == dateEnd 时 API 返回空结果
-
-  * ✅ dateEnd 改为 dateStart + 1天，正确获取指定日期的会话记录
-
-  * ✅ 更新调用示例、注释说明和伪代码
-
-* **v4.2 (2026-04-04) - 周末检测逻辑修复**:
-
-  * 🐛 修复周末检测逻辑：改为检测**昨天**的星期几，而非今天
-
-  * ✅ 周六执行 → 昨天周五是工作日 → 正常生成日报
-
-  * ✅ 周日执行 → 昨天周六是周末 → 终止，不生成日报
-
-  * ✅ 周一执行 → 昨天周日是周末 → 终止，不生成日报
-
-* **v4.1 (2026-04-04) - 日期逻辑优化**:
-
-  * ✅ 移除周末拦截，改为基于会话内容自然判断
-
-  * ✅ 周六执行 → 生成周五日报（昨天=周五，有会话则生成）
-
-  * ✅ 周日/周一执行 → 昨天=周六/周日，无工作会话则自然终止
-
-  * ✅ 日报日期始终为前一个日历日，以实际会话内容日期为准
-
-* **v4.0 (2026-04-03) - 会话驱动模式**:
-
-  * ✅ 移除文件扫描逻辑，改用 claude-mem 获取会话记录
-
-  * ✅ 日报内容改为面向客户推进方向的总结
-
-  * ✅ 限制总结不超过300字
-
-  * ✅ 无会话记录时直接终止，不生成日报
-
-  * ✅ 新增会话分析与过滤逻辑
-
-* v3.0 (2026-03-05): 从会话分析改为文件系统扫描
-
-* v2.0 (2026-03-01): 新增会话轨迹优先策略
-
-* v1.0 (2026-02-20): 初始版本
+| 版本 | 日期 | 说明 |
+|------|------|------|
+| v4.13 | 2026-04-24 | 步骤 4 新增会话聚合分组逻辑和聚合写作规范，避免流水账式日报 |
+| v4.12 | 2026-04-24 | 移除 observations 数据源，回归 sessions 单一数据源，降低复杂度 |
+| v4.11 | 2026-04-18 | 新增 observations 作为补充数据源，sessions 为空时也能生成日报 |
+| v4.10 | 2026-04-18 | 增强 MCP Server 可用性检测，支持 3 次重试和降级生成提示日报 |
+| v4.9 | 2026-04-18 | 新增 claude-mem MCP Server 可用性前置检查，未配置时生成提示文件 |
+| v4.8 | 2026-04-18 | 修复 mem-search 缺少 project 参数导致跨空间数据泄露的问题 |
+| v4.7 | 2026-04-08 | 日报同步路径改为按日期动态归档 |
+| v4.6 | 2026-04-08 | 获取空间创建者信息新增 5 次重试机制，失败时降级为"未知用户" |
+| v4.5 | 2026-04-08 | 修复日报文件命名错误使用执行用户而非空间创建者的问题 |
+| v4.4 | 2026-04-08 | 新增日报生成相关会话过滤逻辑，防止日报内容包含无效系统记录 |
+| v4.3 | 2026-04-04 | 修复 dateEnd 参数错误导致 API 返回空结果的问题 |
+| v4.2 | 2026-04-04 | 修复周末检测逻辑，改为检测昨天而非今天的星期几 |
+| v4.1 | 2026-04-04 | 移除硬编码周末拦截，改为基于会话内容自然判断 |
+| v4.0 | 2026-04-03 | 重构为会话驱动模式，通过 claude-mem 获取会话记录生成日报 |
+| v3.0 | 2026-03-05 | 改为文件系统扫描模式 |
+| v2.0 | 2026-03-01 | 新增会话轨迹优先策略 |
+| v1.0 | 2026-02-20 | 初始版本 |
 
 **依赖**:
 
