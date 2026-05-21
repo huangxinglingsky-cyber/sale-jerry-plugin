@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB"/><stop offset="100%" stop-color="#1E3A5F"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/><feOffset dx="0" dy="3" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)"/>
+
+  <text x="60" y="65" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="bold">.claude-plugin/plugin.json</text>
+  <rect x="60" y="78" width="60" height="3" rx="1.5" fill="#2563EB"/>
+  <text x="380" y="65" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18">— Plugin 的身份证</text>
+
+  <!-- 左侧 JSON 代码块 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="105" width="560" height="420" rx="12" fill="#1E293B"/>
+    <rect x="60" y="105" width="560" height="36" rx="12" fill="#0F172A"/>
+    <rect x="60" y="129" width="560" height="12" fill="#0F172A"/>
+    <circle cx="82" cy="123" r="5" fill="#EF4444" opacity="0.7"/>
+    <circle cx="98" cy="123" r="5" fill="#F59E0B" opacity="0.7"/>
+    <circle cx="114" cy="123" r="5" fill="#22C55E" opacity="0.7"/>
+    <text x="140" y="128" fill="#64748B" font-family="Consolas, Menlo, monospace" font-size="12">plugin.json</text>
+
+    <text font-family="Consolas, Menlo, monospace" font-size="14" y="165" x="85" fill="#E2E8F0">
+      <tspan x="85">{</tspan>
+      <tspan x="85" dy="24">  <tspan fill="#7DD3FC">"name"</tspan>: <tspan fill="#A5F3FC">"sale-jerry-plugin"</tspan>,</tspan>
+      <tspan x="85" dy="24">  <tspan fill="#7DD3FC">"version"</tspan>: <tspan fill="#A5F3FC">"1.0.16"</tspan>,</tspan>
+      <tspan x="85" dy="24">  <tspan fill="#7DD3FC">"description"</tspan>: <tspan fill="#A5F3FC">"销售辅助插件"</tspan>,</tspan>
+      <tspan x="85" dy="24">  <tspan fill="#7DD3FC">"author"</tspan>: {</tspan>
+      <tspan x="85" dy="24">    <tspan fill="#7DD3FC">"name"</tspan>: <tspan fill="#A5F3FC">"UwinTech"</tspan>,</tspan>
+      <tspan x="85" dy="24">    <tspan fill="#7DD3FC">"email"</tspan>: <tspan fill="#A5F3FC">"jerry@easyops.cn"</tspan></tspan>
+      <tspan x="85" dy="24">  },</tspan>
+      <tspan x="85" dy="24">  <tspan fill="#7DD3FC">"license"</tspan>: <tspan fill="#A5F3FC">"MIT"</tspan>,</tspan>
+      <tspan x="85" dy="24">  <tspan fill="#7DD3FC">"agents"</tspan>: [<tspan fill="#A5F3FC">"./agents/sales-master.md"</tspan>],</tspan>
+      <tspan x="85" dy="24">  <tspan fill="#7DD3FC">"skills"</tspan>: <tspan fill="#A5F3FC">"./skills/"</tspan></tspan>
+      <tspan x="85" dy="24">}</tspan>
+    </text>
+  </g>
+
+  <!-- 右侧字段说明 -->
+  <g filter="url(#cardShadow)">
+    <rect x="660" y="105" width="560" height="420" rx="12" fill="#FFFFFF"/>
+    <text x="690" y="145" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="20" font-weight="bold">核心字段说明</text>
+
+    <!-- 字段列表 -->
+    <rect x="690" y="165" width="100" height="26" rx="13" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="740" y="183" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="bold">name</text>
+    <text x="805" y="183" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Plugin 唯一标识名称</text>
+
+    <rect x="690" y="205" width="100" height="26" rx="13" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="740" y="223" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="bold">version</text>
+    <text x="805" y="223" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">语义化版本号（如 1.0.16）</text>
+
+    <rect x="690" y="245" width="100" height="26" rx="13" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="740" y="263" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="bold">agents</text>
+    <text x="805" y="263" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Agent 定义文件路径数组</text>
+
+    <rect x="690" y="285" width="100" height="26" rx="13" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="740" y="303" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="bold">skills</text>
+    <text x="805" y="303" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Skill 目录路径（自动扫描子目录）</text>
+
+    <line x1="690" y1="330" x2="1190" y2="330" stroke="#E2E8F0" stroke-width="1"/>
+
+    <text x="690" y="360" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">运转方式</text>
+    <text x="690" y="390" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">
+      <tspan x="690" dy="0">Claude Code 启动时：</tspan>
+      <tspan x="690" dy="26">1. 扫描已安装的 Plugin 目录</tspan>
+      <tspan x="690" dy="26">2. 读取每个 plugin.json</tspan>
+      <tspan x="690" dy="26">3. 注册其中声明的 Agents 和 Skills</tspan>
+      <tspan x="690" dy="26">4. 用户对话时自动匹配可用能力</tspan>
+    </text>
+  </g>
+
+  <!-- 底部提示 -->
+  <rect x="60" y="555" width="1160" height="44" rx="8" fill="#F97316" fill-opacity="0.06"/>
+  <text x="640" y="582" text-anchor="middle" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15">
+    这是整个 Plugin 唯一必须存在的文件 — 没有 plugin.json，Plugin 不会被识别
+  </text>
+
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">04 / 10</text>
+</svg>

@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" /><stop offset="100%" stop-color="#1E3A5F" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" /><feOffset dx="0" dy="3" result="off" />
+      <feComponentTransfer><feFuncA type="linear" slope="0.10" /></feComponentTransfer>
+      <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC" />
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)" />
+
+  <text x="60" y="60" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="bold">skills/ — Skill 定义目录</text>
+  <path fill="#2563EB" d="M61.50,73 H118.50 A1.50,1.50 0 0 1 120,74.50 V74.50 A1.50,1.50 0 0 1 118.50,76 H61.50 A1.50,1.50 0 0 1 60,74.50 V74.50 A1.50,1.50 0 0 1 61.50,73 Z" />
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,100 H1208 A12,12 0 0 1 1220,112 V158 A12,12 0 0 1 1208,170 H72 A12,12 0 0 1 60,158 V112 A12,12 0 0 1 72,100 Z" />
+    <path fill="#F97316" d="M63,100 H63 A3,3 0 0 1 66,103 V167 A3,3 0 0 1 63,170 H63 A3,3 0 0 1 60,167 V103 A3,3 0 0 1 63,100 Z" />
+    <text x="90" y="133" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">名词解释</text>
+    <text x="90" y="157" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="17" font-weight="bold">Skill = 单一职责的可执行指令集</text>
+    <text x="400" y="157" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">类似一个"工具"或"能力卡片"，每个 Skill 做好一件事</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#1E293B" d="M72,195 H418 A12,12 0 0 1 430,207 V483 A12,12 0 0 1 418,495 H72 A12,12 0 0 1 60,483 V207 A12,12 0 0 1 72,195 Z" />
+    <path fill="#0F172A" d="M72,195 H418 A12,12 0 0 1 430,207 V219 A12,12 0 0 1 418,231 H72 A12,12 0 0 1 60,219 V207 A12,12 0 0 1 72,195 Z" />
+    <rect x="60" y="219" width="370" height="12" fill="#0F172A" />
+    <circle cx="82" cy="213" r="5" fill="#EF4444" opacity="0.7" />
+    <circle cx="98" cy="213" r="5" fill="#F59E0B" opacity="0.7" />
+    <circle cx="114" cy="213" r="5" fill="#22C55E" opacity="0.7" />
+
+    <text font-family="Consolas, Menlo, monospace" fill="#7DD3FC" font-size="13" x="80" y="252">skills/</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="80" y="274"><tspan fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">company-research/</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="100" y="294"><tspan fill="#94A3B8">└── </tspan><tspan fill="#A5F3FC">SKILL.md</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="80" y="316"><tspan fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">daily-report/</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="100" y="336"><tspan fill="#94A3B8">└── </tspan><tspan fill="#A5F3FC">SKILL.md</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="80" y="358"><tspan fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">dingtalk-ai-table/</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="100" y="378"><tspan fill="#94A3B8">├── </tspan><tspan fill="#A5F3FC">SKILL.md</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="100" y="398"><tspan fill="#94A3B8">├── </tspan><tspan fill="#64748B">references/</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="100" y="418"><tspan fill="#94A3B8">└── </tspan><tspan fill="#64748B">scripts/</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="80" y="440"><tspan fill="#94A3B8">└── </tspan><tspan fill="#93C5FD">sales-script/</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="100" y="460"><tspan fill="#94A3B8">├── </tspan><tspan fill="#A5F3FC">SKILL.md</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="100" y="480"><tspan fill="#94A3B8">├── </tspan><tspan fill="#64748B">config/</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="100" y="500"><tspan fill="#94A3B8">└── </tspan><tspan fill="#64748B">resource/</tspan>
+    </text></g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M467,195 H813 A12,12 0 0 1 825,207 V483 A12,12 0 0 1 813,495 H467 A12,12 0 0 1 455,483 V207 A12,12 0 0 1 467,195 Z" />
+    <path fill="#2563EB" d="M457,195 H823 A2,2 0 0 1 825,197 V197 A2,2 0 0 1 823,199 H457 A2,2 0 0 1 455,197 V197 A2,2 0 0 1 457,195 Z" />
+    <text x="480" y="230" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">SKILL.md 核心要素</text>
+
+    <text x="480" y="262" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="bold">Purpose</text>
+    <text x="480" y="282" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">功能目的，2-3 句话说明</text>
+
+    <text x="480" y="312" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="bold">Parameters</text>
+    <text x="480" y="332" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">参数定义表（名称、类型、默认值）</text>
+
+    <text x="480" y="362" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="bold">Instructions</text>
+    <text x="480" y="382" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">详细执行步骤，必须可执行、无歧义</text>
+
+    <text x="480" y="412" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="bold">Examples</text>
+    <text x="480" y="432" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">1-2 个完整使用示例</text>
+
+    <text x="480" y="462" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="bold">Version</text>
+    <text x="480" y="482" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">版本号与变更记录</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M862,195 H1208 A12,12 0 0 1 1220,207 V483 A12,12 0 0 1 1208,495 H862 A12,12 0 0 1 850,483 V207 A12,12 0 0 1 862,195 Z" />
+    <path fill="#2563EB" d="M852,195 H1218 A2,2 0 0 1 1220,197 V197 A2,2 0 0 1 1218,199 H852 A2,2 0 0 1 850,197 V197 A2,2 0 0 1 852,195 Z" />
+    <text x="875" y="230" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">辅助资源子目录</text>
+
+    <path fill="#2563EB" fill-opacity="0.08" d="M889,252 H991 A14,14 0 0 1 1005,266 V266 A14,14 0 0 1 991,280 H889 A14,14 0 0 1 875,266 V266 A14,14 0 0 1 889,252 Z" />
+    <text x="940" y="271" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13">references/</text>
+    <text x="875" y="295" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">API 参考文档、错误码表</text>
+
+    <path fill="#2563EB" fill-opacity="0.08" d="M889,318 H971 A14,14 0 0 1 985,332 V332 A14,14 0 0 1 971,346 H889 A14,14 0 0 1 875,332 V332 A14,14 0 0 1 889,318 Z" />
+    <text x="930" y="337" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13">scripts/</text>
+    <text x="875" y="361" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">辅助脚本（数据处理等）</text>
+
+    <path fill="#2563EB" fill-opacity="0.08" d="M889,384 H961 A14,14 0 0 1 975,398 V398 A14,14 0 0 1 961,412 H889 A14,14 0 0 1 875,398 V398 A14,14 0 0 1 889,384 Z" />
+    <text x="925" y="403" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13">config/</text>
+    <text x="875" y="427" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">配置文件、映射表</text>
+
+    <path fill="#2563EB" fill-opacity="0.08" d="M889,450 H971 A14,14 0 0 1 985,464 V464 A14,14 0 0 1 971,478 H889 A14,14 0 0 1 875,464 V464 A14,14 0 0 1 889,450 Z" />
+    <text x="930" y="469" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13">resource/</text>
+    <text x="875" y="483" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">模板、示例等静态资源</text>
+  </g>
+
+  
+  <path fill="#2563EB" fill-opacity="0.06" d="M68,520 H1212 A8,8 0 0 1 1220,528 V567 A8,8 0 0 1 1212,575 H68 A8,8 0 0 1 60,567 V528 A8,8 0 0 1 68,520 Z" />
+  <text x="100" y="548" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">关键规则:</text>
+  <text x="230" y="548" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">每个 Skill 必须有独立的子目录，子目录中 SKILL.md 是唯一必须文件</text>
+
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">06 / 10</text>
+</svg>

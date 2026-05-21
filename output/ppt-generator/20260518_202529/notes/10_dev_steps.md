@@ -1,0 +1,1 @@
+最后是开发步骤。最小可用 Plugin 只需 plugin.json + 一个 SKILL.md。Agent 和 MCP 按需添加。蓝色是必须步骤，橙色可选但推荐，绿色是收尾。

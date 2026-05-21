@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E3A5F" />
+    </linearGradient>
+    <linearGradient id="accentBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#F97316" />
+    </linearGradient>
+    <linearGradient id="circleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#F97316" stop-opacity="0.08" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+
+  
+  <rect width="1280" height="720" fill="url(#bgGrad)" />
+
+  
+  <circle cx="1100" cy="150" r="250" fill="url(#circleGrad)" />
+  <circle cx="200" cy="600" r="180" fill="url(#circleGrad)" />
+
+  
+  <line x1="0" y1="360" x2="1280" y2="360" stroke="#2563EB" stroke-opacity="0.08" stroke-width="1" />
+  <line x1="640" y1="0" x2="640" y2="720" stroke="#2563EB" stroke-opacity="0.05" stroke-width="1" />
+
+  
+  <path fill="url(#accentBar)" opacity="0.6" d="M82,200 H82 A2,2 0 0 1 84,202 V518 A2,2 0 0 1 82,520 H82 A2,2 0 0 1 80,518 V202 A2,2 0 0 1 82,200 Z" />
+
+  
+  <text x="120" y="300" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="48" font-weight="bold">
+    Claude Code Plugin
+  </text>
+  <text x="120" y="365" fill="#E2E8F0" font-family="Microsoft YaHei, Arial, sans-serif" font-size="42" font-weight="bold">
+    目录结构详解
+  </text>
+
+  
+  <text x="120" y="430" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="20">
+    从零理解 Plugin 的骨架与运转机制
+  </text>
+
+  
+  <path fill="url(#accentBar)" d="M121.50,470 H238.50 A1.50,1.50 0 0 1 240,471.50 V471.50 A1.50,1.50 0 0 1 238.50,473 H121.50 A1.50,1.50 0 0 1 120,471.50 V471.50 A1.50,1.50 0 0 1 121.50,470 Z" />
+
+  
+  <text x="120" y="520" fill="#64748B" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16">
+    2026-05-18
+  </text>
+  <text x="120" y="545" fill="#64748B" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">
+    UwinTech 团队内部培训
+  </text>
+
+  
+  <text x="780" y="580" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13" opacity="0.4">
+    plugin-name/
+  </text>
+  <text x="780" y="600" fill="#3B82F6" font-family="Consolas, Menlo, monospace" font-size="13" opacity="0.35">
+    ├── .claude-plugin/
+  </text>
+  <text x="780" y="620" fill="#3B82F6" font-family="Consolas, Menlo, monospace" font-size="13" opacity="0.35">
+    ├── agents/
+  </text>
+  <text x="780" y="640" fill="#3B82F6" font-family="Consolas, Menlo, monospace" font-size="13" opacity="0.35">
+    ├── skills/
+  </text>
+  <text x="780" y="660" fill="#3B82F6" font-family="Consolas, Menlo, monospace" font-size="13" opacity="0.35">
+    └── .mcp.json
+  </text>
+</svg>

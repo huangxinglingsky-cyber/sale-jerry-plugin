@@ -1,0 +1,1 @@
+这是 Plugin 的完整运转机制。从 Claude Code 启动加载，到 Agent 识别意图调度 Skill，再到执行返回结果。Skill 有三种触发方式。

@@ -1,0 +1,1 @@
+plugin.json 是 Plugin 的身份证，Claude Code 通过读取这个文件来注册和识别插件。左边是一个实际示例，右边是每个字段的含义。

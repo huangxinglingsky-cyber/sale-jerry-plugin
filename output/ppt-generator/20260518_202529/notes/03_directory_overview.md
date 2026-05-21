@@ -1,0 +1,1 @@
+这是 Plugin 的标准目录结构。注意，只有 .claude-plugin/plugin.json 是必须的，其他目录按需创建。

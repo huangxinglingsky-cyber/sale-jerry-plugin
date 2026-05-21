@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" /><stop offset="100%" stop-color="#1E3A5F" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" /><feOffset dx="0" dy="3" result="off" />
+      <feComponentTransfer><feFuncA type="linear" slope="0.10" /></feComponentTransfer>
+      <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC" />
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)" />
+
+  <text x="60" y="65" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="bold">.claude-plugin/plugin.json</text>
+  <path fill="#2563EB" d="M61.50,78 H118.50 A1.50,1.50 0 0 1 120,79.50 V79.50 A1.50,1.50 0 0 1 118.50,81 H61.50 A1.50,1.50 0 0 1 60,79.50 V79.50 A1.50,1.50 0 0 1 61.50,78 Z" />
+  <text x="380" y="65" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18">— Plugin 的身份证</text>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#1E293B" d="M72,105 H608 A12,12 0 0 1 620,117 V513 A12,12 0 0 1 608,525 H72 A12,12 0 0 1 60,513 V117 A12,12 0 0 1 72,105 Z" />
+    <path fill="#0F172A" d="M72,105 H608 A12,12 0 0 1 620,117 V129 A12,12 0 0 1 608,141 H72 A12,12 0 0 1 60,129 V117 A12,12 0 0 1 72,105 Z" />
+    <rect x="60" y="129" width="560" height="12" fill="#0F172A" />
+    <circle cx="82" cy="123" r="5" fill="#EF4444" opacity="0.7" />
+    <circle cx="98" cy="123" r="5" fill="#F59E0B" opacity="0.7" />
+    <circle cx="114" cy="123" r="5" fill="#22C55E" opacity="0.7" />
+    <text x="140" y="128" fill="#64748B" font-family="Consolas, Menlo, monospace" font-size="12">plugin.json</text>
+
+    <text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="165">{</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="189">  "name": "sale-jerry-plugin",</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="213">  "version": "1.0.16",</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="237">  "description": "销售辅助插件",</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="261">  "author": {</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="285">    "name": "UwinTech",</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="309">    "email": "jerry@easyops.cn"</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="333">  },</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="357">  "license": "MIT",</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="381">  "agents": ["./agents/sales-master.md"],</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="405">  "skills": "./skills/"</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="14" x="85" y="429">}</text></g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M672,105 H1208 A12,12 0 0 1 1220,117 V513 A12,12 0 0 1 1208,525 H672 A12,12 0 0 1 660,513 V117 A12,12 0 0 1 672,105 Z" />
+    <text x="690" y="145" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="20" font-weight="bold">核心字段说明</text>
+
+    
+    <path fill="#2563EB" fill-opacity="0.1" d="M703,165 H777 A13,13 0 0 1 790,178 V178 A13,13 0 0 1 777,191 H703 A13,13 0 0 1 690,178 V178 A13,13 0 0 1 703,165 Z" />
+    <text x="740" y="183" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="bold">name</text>
+    <text x="805" y="183" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Plugin 唯一标识名称</text>
+
+    <path fill="#2563EB" fill-opacity="0.1" d="M703,205 H777 A13,13 0 0 1 790,218 V218 A13,13 0 0 1 777,231 H703 A13,13 0 0 1 690,218 V218 A13,13 0 0 1 703,205 Z" />
+    <text x="740" y="223" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="bold">version</text>
+    <text x="805" y="223" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">语义化版本号（如 1.0.16）</text>
+
+    <path fill="#2563EB" fill-opacity="0.1" d="M703,245 H777 A13,13 0 0 1 790,258 V258 A13,13 0 0 1 777,271 H703 A13,13 0 0 1 690,258 V258 A13,13 0 0 1 703,245 Z" />
+    <text x="740" y="263" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="bold">agents</text>
+    <text x="805" y="263" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Agent 定义文件路径数组</text>
+
+    <path fill="#2563EB" fill-opacity="0.1" d="M703,285 H777 A13,13 0 0 1 790,298 V298 A13,13 0 0 1 777,311 H703 A13,13 0 0 1 690,298 V298 A13,13 0 0 1 703,285 Z" />
+    <text x="740" y="303" text-anchor="middle" fill="#2563EB" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="bold">skills</text>
+    <text x="805" y="303" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Skill 目录路径（自动扫描子目录）</text>
+
+    <line x1="690" y1="330" x2="1190" y2="330" stroke="#E2E8F0" stroke-width="1" />
+
+    <text x="690" y="360" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">运转方式</text>
+    <text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="690" y="390">Claude Code 启动时：</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="690" y="416">1. 扫描已安装的 Plugin 目录</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="690" y="442">2. 读取每个 plugin.json</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="690" y="468">3. 注册其中声明的 Agents 和 Skills</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="690" y="494">4. 用户对话时自动匹配可用能力</text></g>
+
+  
+  <path fill="#F97316" fill-opacity="0.06" d="M68,555 H1212 A8,8 0 0 1 1220,563 V591 A8,8 0 0 1 1212,599 H68 A8,8 0 0 1 60,591 V563 A8,8 0 0 1 68,555 Z" />
+  <text x="640" y="582" text-anchor="middle" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15">
+    这是整个 Plugin 唯一必须存在的文件 — 没有 plugin.json，Plugin 不会被识别
+  </text>
+
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">04 / 10</text>
+</svg>

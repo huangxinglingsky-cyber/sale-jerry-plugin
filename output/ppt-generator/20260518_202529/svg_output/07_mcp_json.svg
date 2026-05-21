@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB"/><stop offset="100%" stop-color="#1E3A5F"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/><feOffset dx="0" dy="3" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)"/>
+
+  <text x="60" y="60" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="bold">.mcp.json — MCP Server 配置</text>
+  <rect x="60" y="73" width="60" height="3" rx="1.5" fill="#2563EB"/>
+
+  <!-- 名词解释 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="100" width="1160" height="80" rx="12" fill="#FFFFFF"/>
+    <rect x="60" y="100" width="6" height="80" rx="3" fill="#F97316"/>
+    <text x="90" y="135" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">名词解释</text>
+    <text x="90" y="162" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">MCP Server = 外部服务的适配器</text>
+    <text x="420" y="162" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15">让 AI Agent 能调用外部工具和数据源（如数据库、API、记忆系统）</text>
+  </g>
+
+  <!-- 左侧：定位 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="210" width="560" height="220" rx="12" fill="#FFFFFF"/>
+    <rect x="60" y="210" width="560" height="4" rx="2" fill="#2563EB"/>
+    <text x="85" y="248" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">定位与用途</text>
+    <text x="85" y="282" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">
+      <tspan x="85" dy="0">在 Plugin 根目录放置一个 .mcp.json 文件，</tspan>
+      <tspan x="85" dy="24">声明 Plugin 依赖的外部 MCP Server。</tspan>
+    </text>
+    <text x="85" y="340" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">
+      <tspan x="85" dy="0">当 Plugin 需要访问外部服务时：</tspan>
+      <tspan x="85" dy="24">→ 记忆系统（claude-mem）</tspan>
+      <tspan x="85" dy="24">→ 第三方 API（钉钉、飞书）</tspan>
+      <tspan x="85" dy="24">→ 数据库、搜索引擎等</tspan>
+    </text>
+  </g>
+
+  <!-- 右侧：示例 JSON -->
+  <g filter="url(#cardShadow)">
+    <rect x="660" y="210" width="560" height="220" rx="12" fill="#1E293B"/>
+    <rect x="660" y="210" width="560" height="36" rx="12" fill="#0F172A"/>
+    <rect x="660" y="234" width="560" height="12" fill="#0F172A"/>
+    <circle cx="682" cy="228" r="5" fill="#EF4444" opacity="0.7"/>
+    <circle cx="698" cy="228" r="5" fill="#F59E0B" opacity="0.7"/>
+    <circle cx="714" cy="228" r="5" fill="#22C55E" opacity="0.7"/>
+    <text x="735" y="232" fill="#64748B" font-family="Consolas, Menlo, monospace" font-size="12">.mcp.json</text>
+
+    <text font-family="Consolas, Menlo, monospace" font-size="13" y="270" x="680" fill="#E2E8F0">
+      <tspan x="680">{</tspan>
+      <tspan x="680" dy="22">  <tspan fill="#7DD3FC">"mcpServers"</tspan>: {</tspan>
+      <tspan x="680" dy="22">    <tspan fill="#7DD3FC">"claude-mem"</tspan>: {</tspan>
+      <tspan x="680" dy="22">      <tspan fill="#7DD3FC">"command"</tspan>: <tspan fill="#A5F3FC">"npx"</tspan>,</tspan>
+      <tspan x="680" dy="22">      <tspan fill="#7DD3FC">"args"</tspan>: [<tspan fill="#A5F3FC">"-y"</tspan>, <tspan fill="#A5F3FC">"claude-mem@latest"</tspan>]</tspan>
+      <tspan x="680" dy="22">    },</tspan>
+      <tspan x="680" dy="22">    <tspan fill="#7DD3FC">"钉钉API"</tspan>: {</tspan>
+      <tspan x="680" dy="22">      <tspan fill="#7DD3FC">"url"</tspan>: <tspan fill="#A5F3FC">"https://mcp.dingtalk.com/..."</tspan></tspan>
+      <tspan x="680" dy="22">    }</tspan>
+      <tspan x="680" dy="22">  }</tspan>
+      <tspan x="680" dy="22">}</tspan>
+    </text>
+  </g>
+
+  <!-- 底部：桥接示意 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="460" width="1160" height="120" rx="12" fill="#FFFFFF"/>
+    <text x="640" y="495" text-anchor="middle" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">MCP 桥接示意</text>
+
+    <!-- Agent -->
+    <rect x="100" y="515" width="160" height="45" rx="22" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="180" y="543" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">AI Agent</text>
+
+    <!-- 箭头 -->
+    <text x="290" y="543" fill="#94A3B8" font-size="24">→</text>
+
+    <!-- MCP Server -->
+    <rect x="330" y="515" width="160" height="45" rx="22" fill="#F97316" fill-opacity="0.1"/>
+    <text x="410" y="543" text-anchor="middle" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">MCP Server</text>
+
+    <!-- 箭头 -->
+    <text x="520" y="543" fill="#94A3B8" font-size="24">→</text>
+
+    <!-- 外部服务 -->
+    <rect x="560" y="515" width="160" height="45" rx="22" fill="#22C55E" fill-opacity="0.1"/>
+    <text x="640" y="543" text-anchor="middle" fill="#22C55E" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">外部服务</text>
+
+    <!-- 示例标签 -->
+    <text x="810" y="543" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">如：claude-mem / 钉钉 API / 数据库</text>
+  </g>
+
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">07 / 10</text>
+</svg>

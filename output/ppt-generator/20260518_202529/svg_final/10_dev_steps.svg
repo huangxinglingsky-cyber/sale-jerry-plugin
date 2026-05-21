@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" /><stop offset="100%" stop-color="#1E3A5F" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" /><feOffset dx="0" dy="3" result="off" />
+      <feComponentTransfer><feFuncA type="linear" slope="0.10" /></feComponentTransfer>
+      <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC" />
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)" />
+
+  <text x="60" y="60" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="bold">开发步骤拆解</text>
+  <path fill="#2563EB" d="M61.50,73 H118.50 A1.50,1.50 0 0 1 120,74.50 V74.50 A1.50,1.50 0 0 1 118.50,76 H61.50 A1.50,1.50 0 0 1 60,74.50 V74.50 A1.50,1.50 0 0 1 61.50,73 Z" />
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,100 H418 A12,12 0 0 1 430,112 V168 A12,12 0 0 1 418,180 H72 A12,12 0 0 1 60,168 V112 A12,12 0 0 1 72,100 Z" />
+    <path fill="#2563EB" d="M62,100 H63 A2,2 0 0 1 65,102 V178 A2,2 0 0 1 63,180 H62 A2,2 0 0 1 60,178 V102 A2,2 0 0 1 62,100 Z" />
+    <path fill="#2563EB" d="M95,115 H95 A15,15 0 0 1 110,130 V130 A15,15 0 0 1 95,145 H95 A15,15 0 0 1 80,130 V130 A15,15 0 0 1 95,115 Z" />
+    <text x="95" y="135" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">1</text>
+    <text x="122" y="133" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">创建 plugin.json</text>
+    <text x="122" y="160" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">定义插件名称、版本、作者等基本信息</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M467,100 H813 A12,12 0 0 1 825,112 V168 A12,12 0 0 1 813,180 H467 A12,12 0 0 1 455,168 V112 A12,12 0 0 1 467,100 Z" />
+    <path fill="#2563EB" d="M457,100 H458 A2,2 0 0 1 460,102 V178 A2,2 0 0 1 458,180 H457 A2,2 0 0 1 455,178 V102 A2,2 0 0 1 457,100 Z" />
+    <path fill="#2563EB" d="M490,115 H490 A15,15 0 0 1 505,130 V130 A15,15 0 0 1 490,145 H490 A15,15 0 0 1 475,130 V130 A15,15 0 0 1 490,115 Z" />
+    <text x="490" y="135" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">2</text>
+    <text x="517" y="133" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">规划 Skill 拆分</text>
+    <text x="517" y="160" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">每个独立功能点对应一个 Skill</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M862,100 H1208 A12,12 0 0 1 1220,112 V168 A12,12 0 0 1 1208,180 H862 A12,12 0 0 1 850,168 V112 A12,12 0 0 1 862,100 Z" />
+    <path fill="#2563EB" d="M852,100 H853 A2,2 0 0 1 855,102 V178 A2,2 0 0 1 853,180 H852 A2,2 0 0 1 850,178 V102 A2,2 0 0 1 852,100 Z" />
+    <path fill="#2563EB" d="M885,115 H885 A15,15 0 0 1 900,130 V130 A15,15 0 0 1 885,145 H885 A15,15 0 0 1 870,130 V130 A15,15 0 0 1 885,115 Z" />
+    <text x="885" y="135" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">3</text>
+    <text x="912" y="133" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">编写 SKILL.md</text>
+    <text x="912" y="160" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">定义参数、指令、输出格式和示例</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,205 H418 A12,12 0 0 1 430,217 V273 A12,12 0 0 1 418,285 H72 A12,12 0 0 1 60,273 V217 A12,12 0 0 1 72,205 Z" />
+    <path fill="#F97316" d="M62,205 H63 A2,2 0 0 1 65,207 V283 A2,2 0 0 1 63,285 H62 A2,2 0 0 1 60,283 V207 A2,2 0 0 1 62,205 Z" />
+    <path fill="#F97316" d="M95,220 H95 A15,15 0 0 1 110,235 V235 A15,15 0 0 1 95,250 H95 A15,15 0 0 1 80,235 V235 A15,15 0 0 1 95,220 Z" />
+    <text x="95" y="240" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">4</text>
+    <text x="122" y="238" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">创建 Agent（可选）</text>
+    <text x="122" y="265" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">编排多个 Skill 的调度逻辑</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M467,205 H813 A12,12 0 0 1 825,217 V273 A12,12 0 0 1 813,285 H467 A12,12 0 0 1 455,273 V217 A12,12 0 0 1 467,205 Z" />
+    <path fill="#F97316" d="M457,205 H458 A2,2 0 0 1 460,207 V283 A2,2 0 0 1 458,285 H457 A2,2 0 0 1 455,283 V207 A2,2 0 0 1 457,205 Z" />
+    <path fill="#F97316" d="M490,220 H490 A15,15 0 0 1 505,235 V235 A15,15 0 0 1 490,250 H490 A15,15 0 0 1 475,235 V235 A15,15 0 0 1 490,220 Z" />
+    <text x="490" y="240" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">5</text>
+    <text x="517" y="238" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">配置 .mcp.json（可选）</text>
+    <text x="517" y="265" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">接入外部服务（MCP Server）</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M862,205 H1208 A12,12 0 0 1 1220,217 V273 A12,12 0 0 1 1208,285 H862 A12,12 0 0 1 850,273 V217 A12,12 0 0 1 862,205 Z" />
+    <path fill="#22C55E" d="M852,205 H853 A2,2 0 0 1 855,207 V283 A2,2 0 0 1 853,285 H852 A2,2 0 0 1 850,283 V207 A2,2 0 0 1 852,205 Z" />
+    <path fill="#22C55E" d="M885,220 H885 A15,15 0 0 1 900,235 V235 A15,15 0 0 1 885,250 H885 A15,15 0 0 1 870,235 V235 A15,15 0 0 1 885,220 Z" />
+    <text x="885" y="240" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">6</text>
+    <text x="912" y="238" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">测试 → 打包 → 部署</text>
+    <text x="912" y="265" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">本地测试 → zip 打包 → 上传发布</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,315 H1208 A12,12 0 0 1 1220,327 V503 A12,12 0 0 1 1208,515 H72 A12,12 0 0 1 60,503 V327 A12,12 0 0 1 72,315 Z" />
+    <text x="85" y="350" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">开发优先级与依赖关系</text>
+
+    
+    <path fill="#2563EB" d="M110,375 H220 A25,25 0 0 1 245,400 V400 A25,25 0 0 1 220,425 H110 A25,25 0 0 1 85,400 V400 A25,25 0 0 1 110,375 Z" />
+    <text x="165" y="405" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">plugin.json</text>
+
+    <text x="260" y="405" fill="#94A3B8" font-size="22">→</text>
+
+    <path fill="#2563EB" d="M310,375 H420 A25,25 0 0 1 445,400 V400 A25,25 0 0 1 420,425 H310 A25,25 0 0 1 285,400 V400 A25,25 0 0 1 310,375 Z" />
+    <text x="365" y="405" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">SKILL.md</text>
+
+    <text x="460" y="405" fill="#94A3B8" font-size="22">→</text>
+
+    <path fill="#F97316" d="M510,375 H620 A25,25 0 0 1 645,400 V400 A25,25 0 0 1 620,425 H510 A25,25 0 0 1 485,400 V400 A25,25 0 0 1 510,375 Z" />
+    <text x="565" y="405" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">Agent.md</text>
+
+    <text x="660" y="405" fill="#94A3B8" font-size="22">→</text>
+
+    <path fill="#F97316" d="M710,375 H820 A25,25 0 0 1 845,400 V400 A25,25 0 0 1 820,425 H710 A25,25 0 0 1 685,400 V400 A25,25 0 0 1 710,375 Z" />
+    <text x="765" y="405" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">.mcp.json</text>
+
+    <text x="860" y="405" fill="#94A3B8" font-size="22">→</text>
+
+    <path fill="#22C55E" d="M910,375 H1020 A25,25 0 0 1 1045,400 V400 A25,25 0 0 1 1020,425 H910 A25,25 0 0 1 885,400 V400 A25,25 0 0 1 910,375 Z" />
+    <text x="965" y="405" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">测试部署</text>
+
+    <text x="85" y="465" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">
+      <tspan fill="#2563EB" font-weight="bold">蓝色 = 必须</tspan>
+      <tspan dx="20" fill="#F97316" font-weight="bold">橙色 = 可选但推荐</tspan>
+      <tspan dx="20" fill="#22C55E" font-weight="bold">绿色 = 收尾步骤</tspan>
+    </text>
+
+    <text x="85" y="495" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">
+      最小可用 Plugin 只需 plugin.json + 一个 SKILL.md，Agent 和 MCP 按需添加
+    </text>
+  </g>
+
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">10 / 10</text>
+</svg>

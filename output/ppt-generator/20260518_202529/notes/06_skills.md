@@ -1,0 +1,1 @@
+Skill 是单一职责的可执行指令集，定义在 skills/ 目录下。每个 Skill 一个子目录，其中 SKILL.md 是必须的。Skill 目录下还可以放辅助资源。

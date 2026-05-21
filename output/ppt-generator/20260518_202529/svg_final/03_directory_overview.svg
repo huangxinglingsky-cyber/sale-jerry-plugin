@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#1E3A5F" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" />
+      <feOffset dx="0" dy="3" result="off" />
+      <feComponentTransfer><feFuncA type="linear" slope="0.10" /></feComponentTransfer>
+      <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+
+  
+  <rect width="1280" height="720" fill="#F8FAFC" />
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)" />
+
+  
+  <text x="60" y="65" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="32" font-weight="bold">标准目录结构总览</text>
+  <path fill="#2563EB" d="M61.50,78 H118.50 A1.50,1.50 0 0 1 120,79.50 V79.50 A1.50,1.50 0 0 1 118.50,81 H61.50 A1.50,1.50 0 0 1 60,79.50 V79.50 A1.50,1.50 0 0 1 61.50,78 Z" />
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#1E293B" d="M72,110 H568 A12,12 0 0 1 580,122 V558 A12,12 0 0 1 568,570 H72 A12,12 0 0 1 60,558 V122 A12,12 0 0 1 72,110 Z" />
+
+    
+    <path fill="#0F172A" d="M72,110 H568 A12,12 0 0 1 580,122 V134 A12,12 0 0 1 568,146 H72 A12,12 0 0 1 60,134 V122 A12,12 0 0 1 72,110 Z" />
+    <rect x="60" y="134" width="520" height="12" fill="#0F172A" />
+    <circle cx="82" cy="128" r="5" fill="#EF4444" opacity="0.7" />
+    <circle cx="98" cy="128" r="5" fill="#F59E0B" opacity="0.7" />
+    <circle cx="114" cy="128" r="5" fill="#22C55E" opacity="0.7" />
+    <text x="140" y="133" fill="#64748B" font-family="Consolas, Menlo, monospace" font-size="12">目录结构</text>
+
+    
+    <text font-family="Consolas, Menlo, monospace" fill="#7DD3FC" font-size="15" x="85" y="175">plugin-name/</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="15" x="85" y="205"><tspan fill="#94A3B8">├── </tspan><tspan fill="#FBBF24">.claude-plugin/</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="15" x="85" y="233"><tspan fill="#94A3B8">│   └── </tspan><tspan fill="#A5F3FC">plugin.json</tspan><tspan fill="#64748B">      ← 必须</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="15" x="85" y="263"><tspan fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">.mcp.json</tspan><tspan fill="#64748B">            ← 可选</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="15" x="85" y="291"><tspan fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">commands/</tspan><tspan fill="#64748B">            ← 可选</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="15" x="85" y="319"><tspan fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">agents/</tspan><tspan fill="#64748B">              ← 可选</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="15" x="85" y="347"><tspan fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">skills/</tspan><tspan fill="#64748B">              ← 可选</tspan>
+      </text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="15" x="85" y="375"><tspan fill="#94A3B8">└── </tspan><tspan fill="#93C5FD">README.md</tspan><tspan fill="#64748B">            ← 可选</tspan>
+    </text></g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M632,110 H1208 A12,12 0 0 1 1220,122 V208 A12,12 0 0 1 1208,220 H632 A12,12 0 0 1 620,208 V122 A12,12 0 0 1 632,110 Z" />
+    <path fill="#F97316" d="M623,110 H623 A3,3 0 0 1 626,113 V217 A3,3 0 0 1 623,220 H623 A3,3 0 0 1 620,217 V113 A3,3 0 0 1 623,110 Z" />
+    <text x="650" y="142" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">唯一必须项</text>
+    <text x="650" y="170" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">.claude-plugin/plugin.json</text>
+    <text x="650" y="195" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">定义 Plugin 元数据，Claude Code 通过它识别和注册插件</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M632,240 H898 A12,12 0 0 1 910,252 V388 A12,12 0 0 1 898,400 H632 A12,12 0 0 1 620,388 V252 A12,12 0 0 1 632,240 Z" />
+    <path fill="#2563EB" d="M622,240 H908 A2,2 0 0 1 910,242 V242 A2,2 0 0 1 908,244 H622 A2,2 0 0 1 620,242 V242 A2,2 0 0 1 622,240 Z" />
+    <text x="650" y="275" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">agents/</text>
+    <text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="650" y="300">定义 AI 代理角色，每个</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="650" y="322">Agent 一个 .md 文件</text></g>
+
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M942,240 H1208 A12,12 0 0 1 1220,252 V388 A12,12 0 0 1 1208,400 H942 A12,12 0 0 1 930,388 V252 A12,12 0 0 1 942,240 Z" />
+    <path fill="#2563EB" d="M932,240 H1218 A2,2 0 0 1 1220,242 V242 A2,2 0 0 1 1218,244 H932 A2,2 0 0 1 930,242 V242 A2,2 0 0 1 932,240 Z" />
+    <text x="960" y="275" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">skills/</text>
+    <text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="960" y="300">定义具体能力，每个 Skill</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="960" y="322">一个子目录 + SKILL.md</text></g>
+
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M632,420 H798 A12,12 0 0 1 810,432 V558 A12,12 0 0 1 798,570 H632 A12,12 0 0 1 620,558 V432 A12,12 0 0 1 632,420 Z" />
+    <path fill="#94A3B8" d="M622,420 H808 A2,2 0 0 1 810,422 V422 A2,2 0 0 1 808,424 H622 A2,2 0 0 1 620,422 V422 A2,2 0 0 1 622,420 Z" />
+    <text x="650" y="455" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">.mcp.json</text>
+    <text x="650" y="480" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">MCP Server</text>
+    <text x="650" y="500" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">配置文件</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M842,420 H1008 A12,12 0 0 1 1020,432 V558 A12,12 0 0 1 1008,570 H842 A12,12 0 0 1 830,558 V432 A12,12 0 0 1 842,420 Z" />
+    <path fill="#94A3B8" d="M832,420 H1018 A2,2 0 0 1 1020,422 V422 A2,2 0 0 1 1018,424 H832 A2,2 0 0 1 830,422 V422 A2,2 0 0 1 832,420 Z" />
+    <text x="860" y="455" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">commands/</text>
+    <text x="860" y="480" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">斜杠命令</text>
+    <text x="860" y="500" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">快捷触发</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M1052,420 H1208 A12,12 0 0 1 1220,432 V558 A12,12 0 0 1 1208,570 H1052 A12,12 0 0 1 1040,558 V432 A12,12 0 0 1 1052,420 Z" />
+    <path fill="#94A3B8" d="M1042,420 H1218 A2,2 0 0 1 1220,422 V422 A2,2 0 0 1 1218,424 H1042 A2,2 0 0 1 1040,422 V422 A2,2 0 0 1 1042,420 Z" />
+    <text x="1070" y="455" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">README.md</text>
+    <text x="1070" y="480" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">文档说明</text>
+  </g>
+
+  
+  <path fill="#2563EB" fill-opacity="0.06" d="M68,590 H1212 A8,8 0 0 1 1220,598 V626 A8,8 0 0 1 1212,634 H68 A8,8 0 0 1 60,626 V598 A8,8 0 0 1 68,590 Z" />
+  <text x="640" y="617" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">
+    除了 .claude-plugin/plugin.json 是必须的，其余目录和文件按需创建
+  </text>
+
+  
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">03 / 10</text>
+</svg>

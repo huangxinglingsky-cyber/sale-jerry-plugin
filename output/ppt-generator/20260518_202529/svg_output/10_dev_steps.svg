@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB"/><stop offset="100%" stop-color="#1E3A5F"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/><feOffset dx="0" dy="3" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)"/>
+
+  <text x="60" y="60" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="bold">开发步骤拆解</text>
+  <rect x="60" y="73" width="60" height="3" rx="1.5" fill="#2563EB"/>
+
+  <!-- 步骤1 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="100" width="370" height="80" rx="12" fill="#FFFFFF"/>
+    <rect x="60" y="100" width="5" height="80" rx="2" fill="#2563EB"/>
+    <rect x="80" y="115" width="30" height="30" rx="15" fill="#2563EB"/>
+    <text x="95" y="135" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">1</text>
+    <text x="122" y="133" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">创建 plugin.json</text>
+    <text x="122" y="160" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">定义插件名称、版本、作者等基本信息</text>
+  </g>
+
+  <!-- 步骤2 -->
+  <g filter="url(#cardShadow)">
+    <rect x="455" y="100" width="370" height="80" rx="12" fill="#FFFFFF"/>
+    <rect x="455" y="100" width="5" height="80" rx="2" fill="#2563EB"/>
+    <rect x="475" y="115" width="30" height="30" rx="15" fill="#2563EB"/>
+    <text x="490" y="135" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">2</text>
+    <text x="517" y="133" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">规划 Skill 拆分</text>
+    <text x="517" y="160" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">每个独立功能点对应一个 Skill</text>
+  </g>
+
+  <!-- 步骤3 -->
+  <g filter="url(#cardShadow)">
+    <rect x="850" y="100" width="370" height="80" rx="12" fill="#FFFFFF"/>
+    <rect x="850" y="100" width="5" height="80" rx="2" fill="#2563EB"/>
+    <rect x="870" y="115" width="30" height="30" rx="15" fill="#2563EB"/>
+    <text x="885" y="135" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">3</text>
+    <text x="912" y="133" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">编写 SKILL.md</text>
+    <text x="912" y="160" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">定义参数、指令、输出格式和示例</text>
+  </g>
+
+  <!-- 步骤4 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="205" width="370" height="80" rx="12" fill="#FFFFFF"/>
+    <rect x="60" y="205" width="5" height="80" rx="2" fill="#F97316"/>
+    <rect x="80" y="220" width="30" height="30" rx="15" fill="#F97316"/>
+    <text x="95" y="240" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">4</text>
+    <text x="122" y="238" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">创建 Agent（可选）</text>
+    <text x="122" y="265" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">编排多个 Skill 的调度逻辑</text>
+  </g>
+
+  <!-- 步骤5 -->
+  <g filter="url(#cardShadow)">
+    <rect x="455" y="205" width="370" height="80" rx="12" fill="#FFFFFF"/>
+    <rect x="455" y="205" width="5" height="80" rx="2" fill="#F97316"/>
+    <rect x="475" y="220" width="30" height="30" rx="15" fill="#F97316"/>
+    <text x="490" y="240" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">5</text>
+    <text x="517" y="238" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">配置 .mcp.json（可选）</text>
+    <text x="517" y="265" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">接入外部服务（MCP Server）</text>
+  </g>
+
+  <!-- 步骤6 -->
+  <g filter="url(#cardShadow)">
+    <rect x="850" y="205" width="370" height="80" rx="12" fill="#FFFFFF"/>
+    <rect x="850" y="205" width="5" height="80" rx="2" fill="#22C55E"/>
+    <rect x="870" y="220" width="30" height="30" rx="15" fill="#22C55E"/>
+    <text x="885" y="240" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">6</text>
+    <text x="912" y="238" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">测试 → 打包 → 部署</text>
+    <text x="912" y="265" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">本地测试 → zip 打包 → 上传发布</text>
+  </g>
+
+  <!-- 开发优先级示意 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="315" width="1160" height="200" rx="12" fill="#FFFFFF"/>
+    <text x="85" y="350" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">开发优先级与依赖关系</text>
+
+    <!-- 流程图 -->
+    <rect x="85" y="375" width="160" height="50" rx="25" fill="#2563EB"/>
+    <text x="165" y="405" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">plugin.json</text>
+
+    <text x="260" y="405" fill="#94A3B8" font-size="22">→</text>
+
+    <rect x="285" y="375" width="160" height="50" rx="25" fill="#2563EB"/>
+    <text x="365" y="405" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">SKILL.md</text>
+
+    <text x="460" y="405" fill="#94A3B8" font-size="22">→</text>
+
+    <rect x="485" y="375" width="160" height="50" rx="25" fill="#F97316"/>
+    <text x="565" y="405" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">Agent.md</text>
+
+    <text x="660" y="405" fill="#94A3B8" font-size="22">→</text>
+
+    <rect x="685" y="375" width="160" height="50" rx="25" fill="#F97316"/>
+    <text x="765" y="405" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">.mcp.json</text>
+
+    <text x="860" y="405" fill="#94A3B8" font-size="22">→</text>
+
+    <rect x="885" y="375" width="160" height="50" rx="25" fill="#22C55E"/>
+    <text x="965" y="405" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">测试部署</text>
+
+    <text x="85" y="465" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">
+      <tspan fill="#2563EB" font-weight="bold">蓝色 = 必须</tspan>
+      <tspan dx="20" fill="#F97316" font-weight="bold">橙色 = 可选但推荐</tspan>
+      <tspan dx="20" fill="#22C55E" font-weight="bold">绿色 = 收尾步骤</tspan>
+    </text>
+
+    <text x="85" y="495" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">
+      最小可用 Plugin 只需 plugin.json + 一个 SKILL.md，Agent 和 MCP 按需添加
+    </text>
+  </g>
+
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">10 / 10</text>
+</svg>

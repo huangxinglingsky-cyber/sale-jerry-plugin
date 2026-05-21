@@ -1,0 +1,1 @@
+Claude Code Plugin 是一个可安装的扩展包，为 AI Agent 提供额外能力。它通过目录结构来组织，Claude Code 会自动发现和加载。一个 Plugin 就是一组相关能力的集合。

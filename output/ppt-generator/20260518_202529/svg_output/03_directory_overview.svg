@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#1E3A5F"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="3" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1280" height="720" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)"/>
+
+  <!-- 页面标题 -->
+  <text x="60" y="65" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="32" font-weight="bold">标准目录结构总览</text>
+  <rect x="60" y="78" width="60" height="3" rx="1.5" fill="#2563EB"/>
+
+  <!-- 左侧：代码块 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="110" width="520" height="460" rx="12" fill="#1E293B"/>
+
+    <!-- 代码标题栏 -->
+    <rect x="60" y="110" width="520" height="36" rx="12" fill="#0F172A"/>
+    <rect x="60" y="134" width="520" height="12" fill="#0F172A"/>
+    <circle cx="82" cy="128" r="5" fill="#EF4444" opacity="0.7"/>
+    <circle cx="98" cy="128" r="5" fill="#F59E0B" opacity="0.7"/>
+    <circle cx="114" cy="128" r="5" fill="#22C55E" opacity="0.7"/>
+    <text x="140" y="133" fill="#64748B" font-family="Consolas, Menlo, monospace" font-size="12">目录结构</text>
+
+    <!-- 代码内容 -->
+    <text fill="#E2E8F0" font-family="Consolas, Menlo, monospace" font-size="15" y="175" x="85">
+      <tspan x="85" fill="#7DD3FC">plugin-name/</tspan>
+      <tspan x="85" dy="30" fill="#94A3B8">├── </tspan><tspan fill="#FBBF24">.claude-plugin/</tspan>
+      <tspan x="85" dy="28" fill="#94A3B8">│   └── </tspan><tspan fill="#A5F3FC">plugin.json</tspan><tspan fill="#64748B">      ← 必须</tspan>
+      <tspan x="85" dy="30" fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">.mcp.json</tspan><tspan fill="#64748B">            ← 可选</tspan>
+      <tspan x="85" dy="28" fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">commands/</tspan><tspan fill="#64748B">            ← 可选</tspan>
+      <tspan x="85" dy="28" fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">agents/</tspan><tspan fill="#64748B">              ← 可选</tspan>
+      <tspan x="85" dy="28" fill="#94A3B8">├── </tspan><tspan fill="#93C5FD">skills/</tspan><tspan fill="#64748B">              ← 可选</tspan>
+      <tspan x="85" dy="28" fill="#94A3B8">└── </tspan><tspan fill="#93C5FD">README.md</tspan><tspan fill="#64748B">            ← 可选</tspan>
+    </text>
+  </g>
+
+  <!-- 右侧：说明卡片 -->
+  <g filter="url(#cardShadow)">
+    <rect x="620" y="110" width="600" height="110" rx="12" fill="#FFFFFF"/>
+    <rect x="620" y="110" width="6" height="110" rx="3" fill="#F97316"/>
+    <text x="650" y="142" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">唯一必须项</text>
+    <text x="650" y="170" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">.claude-plugin/plugin.json</text>
+    <text x="650" y="195" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">定义 Plugin 元数据，Claude Code 通过它识别和注册插件</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="620" y="240" width="290" height="160" rx="12" fill="#FFFFFF"/>
+    <rect x="620" y="240" width="290" height="4" rx="2" fill="#2563EB"/>
+    <text x="650" y="275" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">agents/</text>
+    <text x="650" y="300" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">
+      <tspan x="650" dy="0">定义 AI 代理角色，每个</tspan>
+      <tspan x="650" dy="22">Agent 一个 .md 文件</tspan>
+    </text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="930" y="240" width="290" height="160" rx="12" fill="#FFFFFF"/>
+    <rect x="930" y="240" width="290" height="4" rx="2" fill="#2563EB"/>
+    <text x="960" y="275" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">skills/</text>
+    <text x="960" y="300" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">
+      <tspan x="960" dy="0">定义具体能力，每个 Skill</tspan>
+      <tspan x="960" dy="22">一个子目录 + SKILL.md</tspan>
+    </text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="620" y="420" width="190" height="150" rx="12" fill="#FFFFFF"/>
+    <rect x="620" y="420" width="190" height="4" rx="2" fill="#94A3B8"/>
+    <text x="650" y="455" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">.mcp.json</text>
+    <text x="650" y="480" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">MCP Server</text>
+    <text x="650" y="500" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">配置文件</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="830" y="420" width="190" height="150" rx="12" fill="#FFFFFF"/>
+    <rect x="830" y="420" width="190" height="4" rx="2" fill="#94A3B8"/>
+    <text x="860" y="455" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">commands/</text>
+    <text x="860" y="480" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">斜杠命令</text>
+    <text x="860" y="500" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">快捷触发</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="1040" y="420" width="180" height="150" rx="12" fill="#FFFFFF"/>
+    <rect x="1040" y="420" width="180" height="4" rx="2" fill="#94A3B8"/>
+    <text x="1070" y="455" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">README.md</text>
+    <text x="1070" y="480" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">文档说明</text>
+  </g>
+
+  <!-- 底部提示 -->
+  <rect x="60" y="590" width="1160" height="44" rx="8" fill="#2563EB" fill-opacity="0.06"/>
+  <text x="640" y="617" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">
+    除了 .claude-plugin/plugin.json 是必须的，其余目录和文件按需创建
+  </text>
+
+  <!-- 页脚 -->
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">03 / 10</text>
+</svg>

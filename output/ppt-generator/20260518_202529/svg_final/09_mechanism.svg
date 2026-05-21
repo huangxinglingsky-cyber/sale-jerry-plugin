@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" /><stop offset="100%" stop-color="#1E3A5F" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" /><feOffset dx="0" dy="3" result="off" />
+      <feComponentTransfer><feFuncA type="linear" slope="0.10" /></feComponentTransfer>
+      <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC" />
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)" />
+
+  <text x="60" y="60" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="bold">Plugin 运转机制</text>
+  <path fill="#2563EB" d="M61.50,73 H118.50 A1.50,1.50 0 0 1 120,74.50 V74.50 A1.50,1.50 0 0 1 118.50,76 H61.50 A1.50,1.50 0 0 1 60,74.50 V74.50 A1.50,1.50 0 0 1 61.50,73 Z" />
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,100 H1208 A12,12 0 0 1 1220,112 V268 A12,12 0 0 1 1208,280 H72 A12,12 0 0 1 60,268 V112 A12,12 0 0 1 72,100 Z" />
+    <text x="85" y="138" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">加载流程</text>
+
+    
+    <path fill="#1E3A5F" d="M105,158 H245 A20,20 0 0 1 265,178 V178 A20,20 0 0 1 245,198 H105 A20,20 0 0 1 85,178 V178 A20,20 0 0 1 105,158 Z" />
+    <text x="175" y="183" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13" font-weight="bold">Claude Code 启动</text>
+
+    <text x="280" y="183" fill="#94A3B8" font-size="20">→</text>
+
+    <path fill="#2563EB" d="M325,158 H465 A20,20 0 0 1 485,178 V178 A20,20 0 0 1 465,198 H325 A20,20 0 0 1 305,178 V178 A20,20 0 0 1 325,158 Z" />
+    <text x="395" y="183" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13" font-weight="bold">读取 plugin.json</text>
+
+    <text x="500" y="183" fill="#94A3B8" font-size="20">→</text>
+
+    <path fill="#2563EB" d="M545,158 H725 A20,20 0 0 1 745,178 V178 A20,20 0 0 1 725,198 H545 A20,20 0 0 1 525,178 V178 A20,20 0 0 1 545,158 Z" />
+    <text x="635" y="183" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13" font-weight="bold">注册 Agents &amp; Skills</text>
+
+    <text x="760" y="183" fill="#94A3B8" font-size="20">→</text>
+
+    <path fill="#22C55E" fill-opacity="0.9" d="M805,158 H965 A20,20 0 0 1 985,178 V178 A20,20 0 0 1 965,198 H805 A20,20 0 0 1 785,178 V178 A20,20 0 0 1 805,158 Z" />
+    <text x="885" y="183" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13" font-weight="bold">等待用户对话</text>
+
+    <text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="85" y="230">启动时自动扫描所有已安装 Plugin 的 plugin.json → 注册声明的 Agents 和 Skills → 用户对话时自动匹配合适的能力</text></g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,305 H788 A12,12 0 0 1 800,317 V513 A12,12 0 0 1 788,525 H72 A12,12 0 0 1 60,513 V317 A12,12 0 0 1 72,305 Z" />
+    <text x="85" y="340" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">Agent 调度流</text>
+
+    
+    <path fill="#1E3A5F" d="M105,360 H195 A20,20 0 0 1 215,380 V380 A20,20 0 0 1 195,400 H105 A20,20 0 0 1 85,380 V380 A20,20 0 0 1 105,360 Z" />
+    <text x="150" y="385" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">用户发消息</text>
+
+    <text x="230" y="385" fill="#94A3B8" font-size="20">→</text>
+
+    <path fill="#2563EB" d="M275,360 H365 A20,20 0 0 1 385,380 V380 A20,20 0 0 1 365,400 H275 A20,20 0 0 1 255,380 V380 A20,20 0 0 1 275,360 Z" />
+    <text x="320" y="385" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">Agent 识别意图</text>
+
+    <text x="400" y="385" fill="#94A3B8" font-size="20">→</text>
+
+    <path fill="#F97316" d="M445,360 H535 A20,20 0 0 1 555,380 V380 A20,20 0 0 1 535,400 H445 A20,20 0 0 1 425,380 V380 A20,20 0 0 1 445,360 Z" />
+    <text x="490" y="385" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">选择 Skill</text>
+
+    <text x="570" y="385" fill="#94A3B8" font-size="20">→</text>
+
+    <path fill="#22C55E" fill-opacity="0.9" d="M615,360 H735 A20,20 0 0 1 755,380 V380 A20,20 0 0 1 735,400 H615 A20,20 0 0 1 595,380 V380 A20,20 0 0 1 615,360 Z" />
+    <text x="675" y="385" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">执行并返回结果</text>
+
+    
+    <text x="85" y="430" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">示例：用户说"帮我调研招商银行" → Agent 识别为"企业调研" → 调用 company-research Skill → 输出调研报告</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M842,305 H1208 A12,12 0 0 1 1220,317 V513 A12,12 0 0 1 1208,525 H842 A12,12 0 0 1 830,513 V317 A12,12 0 0 1 842,305 Z" />
+    <text x="855" y="340" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">Skill 触发方式</text>
+
+    <path fill="#2563EB" d="M870,360 H870 A15,15 0 0 1 885,375 V375 A15,15 0 0 1 870,390 H870 A15,15 0 0 1 855,375 V375 A15,15 0 0 1 870,360 Z" />
+    <text x="870" y="380" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">1</text>
+    <text x="895" y="380" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">Agent 自动调度</text>
+    <text x="895" y="400" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">Agent 识别意图后自动选择</text>
+
+    <path fill="#F97316" d="M870,415 H870 A15,15 0 0 1 885,430 V430 A15,15 0 0 1 870,445 H870 A15,15 0 0 1 855,430 V430 A15,15 0 0 1 870,415 Z" />
+    <text x="870" y="435" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">2</text>
+    <text x="895" y="435" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">用户 /skill-name 调用</text>
+    <text x="895" y="455" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">手动输入斜杠命令触发</text>
+
+    <path fill="#22C55E" d="M870,470 H870 A15,15 0 0 1 885,485 V485 A15,15 0 0 1 870,500 H870 A15,15 0 0 1 855,485 V485 A15,15 0 0 1 870,470 Z" />
+    <text x="870" y="490" text-anchor="middle" fill="#FFFFFF" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">3</text>
+    <text x="895" y="490" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">其他 Skill 内部调用</text>
+    <text x="895" y="510" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">Skill 之间可相互协作</text>
+  </g>
+
+  
+  <path fill="#1E3A5F" fill-opacity="0.05" d="M68,555 H1212 A8,8 0 0 1 1220,563 V602 A8,8 0 0 1 1212,610 H68 A8,8 0 0 1 60,602 V563 A8,8 0 0 1 68,555 Z" />
+  <text x="640" y="588" text-anchor="middle" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">
+    数据流：用户输入 → Agent（理解意图） → Skill（执行任务） → 输出结果
+  </text>
+
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">09 / 10</text>
+</svg>

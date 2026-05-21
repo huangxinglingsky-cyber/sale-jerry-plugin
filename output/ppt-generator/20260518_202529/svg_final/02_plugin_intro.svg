@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#1E3A5F" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" />
+      <feOffset dx="0" dy="3" result="off" />
+      <feComponentTransfer><feFuncA type="linear" slope="0.10" /></feComponentTransfer>
+      <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+
+  
+  <rect width="1280" height="720" fill="#F8FAFC" />
+
+  
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)" />
+
+  
+  <text x="60" y="65" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="32" font-weight="bold">Plugin 是什么</text>
+  <path fill="#2563EB" d="M61.50,78 H118.50 A1.50,1.50 0 0 1 120,79.50 V79.50 A1.50,1.50 0 0 1 118.50,81 H61.50 A1.50,1.50 0 0 1 60,79.50 V79.50 A1.50,1.50 0 0 1 61.50,78 Z" />
+
+  
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,120 H418 A12,12 0 0 1 430,132 V348 A12,12 0 0 1 418,360 H72 A12,12 0 0 1 60,348 V132 A12,12 0 0 1 72,120 Z" />
+    <circle cx="130" cy="180" r="32" fill="#2563EB" fill-opacity="0.1" />
+    <text x="130" y="190" text-anchor="middle" font-size="28">📦</text>
+    <text x="175" y="185" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">可安装的扩展包</text>
+    <text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="15" x="85" y="230">Claude Code Plugin 是一个可安</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="15" x="85" y="254">装的扩展包，为 AI Agent 提供</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="15" x="85" y="278">额外的能力（Skills）和角色</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="15" x="85" y="302">（Agents）</text></g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M467,120 H813 A12,12 0 0 1 825,132 V348 A12,12 0 0 1 813,360 H467 A12,12 0 0 1 455,348 V132 A12,12 0 0 1 467,120 Z" />
+    <circle cx="525" cy="180" r="32" fill="#2563EB" fill-opacity="0.1" />
+    <text x="525" y="190" text-anchor="middle" font-size="28">🔍</text>
+    <text x="570" y="185" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">自动发现与加载</text>
+    <text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="15" x="480" y="230">Plugin 通过目录结构来组织，</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="15" x="480" y="254">Claude Code 会自动发现并加载</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="15" x="480" y="278">这些文件，无需手动配置</text></g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M862,120 H1208 A12,12 0 0 1 1220,132 V348 A12,12 0 0 1 1208,360 H862 A12,12 0 0 1 850,348 V132 A12,12 0 0 1 862,120 Z" />
+    <circle cx="920" cy="180" r="32" fill="#2563EB" fill-opacity="0.1" />
+    <text x="920" y="190" text-anchor="middle" font-size="28">🧩</text>
+    <text x="965" y="185" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">能力集合</text>
+    <text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="15" x="875" y="230">一个 Plugin = 一组相关能力的</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="15" x="875" y="254">集合，如"销售辅助"、"开发</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="15" x="875" y="278">工具"、"数据分析"等</text></g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,400 H1208 A12,12 0 0 1 1220,412 V548 A12,12 0 0 1 1208,560 H72 A12,12 0 0 1 60,548 V412 A12,12 0 0 1 72,400 Z" />
+    <path fill="#F97316" d="M63,400 H63 A3,3 0 0 1 66,403 V557 A3,3 0 0 1 63,560 H63 A3,3 0 0 1 60,557 V403 A3,3 0 0 1 63,400 Z" />
+
+    <text x="95" y="440" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="20" font-weight="bold">核心组成</text>
+
+    
+    <path fill="#2563EB" fill-opacity="0.1" d="M113,460 H217 A18,18 0 0 1 235,478 V478 A18,18 0 0 1 217,496 H113 A18,18 0 0 1 95,478 V478 A18,18 0 0 1 113,460 Z" />
+    <text x="165" y="483" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">Agent 代理</text>
+    <text x="95" y="530" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">有角色的智能调度器</text>
+
+    
+    <path fill="#2563EB" fill-opacity="0.1" d="M298,460 H402 A18,18 0 0 1 420,478 V478 A18,18 0 0 1 402,496 H298 A18,18 0 0 1 280,478 V478 A18,18 0 0 1 298,460 Z" />
+    <text x="350" y="483" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">Skill 技能</text>
+    <text x="280" y="530" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">单一职责的可执行指令集</text>
+
+    
+    <path fill="#2563EB" fill-opacity="0.1" d="M483,460 H607 A18,18 0 0 1 625,478 V478 A18,18 0 0 1 607,496 H483 A18,18 0 0 1 465,478 V478 A18,18 0 0 1 483,460 Z" />
+    <text x="545" y="483" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">MCP Server</text>
+    <text x="465" y="530" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">外部服务适配器</text>
+
+    
+    <text x="660" y="483" fill="#94A3B8" font-size="22">→</text>
+    <text x="710" y="440" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="20" font-weight="bold">组成完整的 Plugin 能力体系</text>
+    <text x="710" y="475" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Agent 编排调度 → Skill 执行任务 → MCP 连接外部服务</text>
+  </g>
+
+  
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">02 / 10</text>
+</svg>

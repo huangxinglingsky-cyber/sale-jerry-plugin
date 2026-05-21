@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#1E3A5F"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="3" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1280" height="720" fill="#F8FAFC"/>
+
+  <!-- 顶部装饰条 -->
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)"/>
+
+  <!-- 页面标题 -->
+  <text x="60" y="65" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="32" font-weight="bold">Plugin 是什么</text>
+  <rect x="60" y="78" width="60" height="3" rx="1.5" fill="#2563EB"/>
+
+  <!-- 三个卡片 -->
+  <!-- 卡片1 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="120" width="370" height="240" rx="12" fill="#FFFFFF"/>
+    <circle cx="130" cy="180" r="32" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="130" y="190" text-anchor="middle" font-size="28">&#x1F4E6;</text>
+    <text x="175" y="185" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">可安装的扩展包</text>
+    <text x="85" y="230" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15">
+      <tspan x="85" dy="0">Claude Code Plugin 是一个可安</tspan>
+      <tspan x="85" dy="24">装的扩展包，为 AI Agent 提供</tspan>
+      <tspan x="85" dy="24">额外的能力（Skills）和角色</tspan>
+      <tspan x="85" dy="24">（Agents）</tspan>
+    </text>
+  </g>
+
+  <!-- 卡片2 -->
+  <g filter="url(#cardShadow)">
+    <rect x="455" y="120" width="370" height="240" rx="12" fill="#FFFFFF"/>
+    <circle cx="525" cy="180" r="32" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="525" y="190" text-anchor="middle" font-size="28">&#x1F50D;</text>
+    <text x="570" y="185" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">自动发现与加载</text>
+    <text x="480" y="230" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15">
+      <tspan x="480" dy="0">Plugin 通过目录结构来组织，</tspan>
+      <tspan x="480" dy="24">Claude Code 会自动发现并加载</tspan>
+      <tspan x="480" dy="24">这些文件，无需手动配置</tspan>
+    </text>
+  </g>
+
+  <!-- 卡片3 -->
+  <g filter="url(#cardShadow)">
+    <rect x="850" y="120" width="370" height="240" rx="12" fill="#FFFFFF"/>
+    <circle cx="920" cy="180" r="32" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="920" y="190" text-anchor="middle" font-size="28">&#x1F9E9;</text>
+    <text x="965" y="185" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">能力集合</text>
+    <text x="875" y="230" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15">
+      <tspan x="875" dy="0">一个 Plugin = 一组相关能力的</tspan>
+      <tspan x="875" dy="24">集合，如"销售辅助"、"开发</tspan>
+      <tspan x="875" dy="24">工具"、"数据分析"等</tspan>
+    </text>
+  </g>
+
+  <!-- 底部核心概念区域 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="400" width="1160" height="160" rx="12" fill="#FFFFFF"/>
+    <rect x="60" y="400" width="6" height="160" rx="3" fill="#F97316"/>
+
+    <text x="95" y="440" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="20" font-weight="bold">核心组成</text>
+
+    <!-- Agent -->
+    <rect x="95" y="460" width="140" height="36" rx="18" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="165" y="483" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">Agent 代理</text>
+    <text x="95" y="530" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">有角色的智能调度器</text>
+
+    <!-- Skill -->
+    <rect x="280" y="460" width="140" height="36" rx="18" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="350" y="483" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">Skill 技能</text>
+    <text x="280" y="530" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">单一职责的可执行指令集</text>
+
+    <!-- MCP -->
+    <rect x="465" y="460" width="160" height="36" rx="18" fill="#2563EB" fill-opacity="0.1"/>
+    <text x="545" y="483" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">MCP Server</text>
+    <text x="465" y="530" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">外部服务适配器</text>
+
+    <!-- 箭头连接 -->
+    <text x="660" y="483" fill="#94A3B8" font-size="22">→</text>
+    <text x="710" y="440" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="20" font-weight="bold">组成完整的 Plugin 能力体系</text>
+    <text x="710" y="475" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Agent 编排调度 → Skill 执行任务 → MCP 连接外部服务</text>
+  </g>
+
+  <!-- 页脚 -->
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">02 / 10</text>
+</svg>

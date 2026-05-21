@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" /><stop offset="100%" stop-color="#1E3A5F" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" /><feOffset dx="0" dy="3" result="off" />
+      <feComponentTransfer><feFuncA type="linear" slope="0.10" /></feComponentTransfer>
+      <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC" />
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)" />
+
+  <text x="60" y="60" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="bold">commands/ — 斜杠命令目录</text>
+  <path fill="#2563EB" d="M61.50,73 H118.50 A1.50,1.50 0 0 1 120,74.50 V74.50 A1.50,1.50 0 0 1 118.50,76 H61.50 A1.50,1.50 0 0 1 60,74.50 V74.50 A1.50,1.50 0 0 1 61.50,73 Z" />
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,100 H1208 A12,12 0 0 1 1220,112 V168 A12,12 0 0 1 1208,180 H72 A12,12 0 0 1 60,168 V112 A12,12 0 0 1 72,100 Z" />
+    <path fill="#F97316" d="M63,100 H63 A3,3 0 0 1 66,103 V177 A3,3 0 0 1 63,180 H63 A3,3 0 0 1 60,177 V103 A3,3 0 0 1 63,100 Z" />
+    <text x="90" y="135" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">名词解释</text>
+    <text x="90" y="162" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">Command = 用户侧的快捷方式</text>
+    <text x="400" y="162" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15">输入 /xxx 即可触发对应流程，是用户与 Plugin 交互的快捷入口</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,210 H608 A12,12 0 0 1 620,222 V478 A12,12 0 0 1 608,490 H72 A12,12 0 0 1 60,478 V222 A12,12 0 0 1 72,210 Z" />
+    <path fill="#2563EB" d="M62,210 H618 A2,2 0 0 1 620,212 V212 A2,2 0 0 1 618,214 H62 A2,2 0 0 1 60,212 V212 A2,2 0 0 1 62,210 Z" />
+    <text x="85" y="248" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">定位</text>
+    <text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="85" y="278">定义用户可通过 /command 触发的快捷命令</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="85" y="302">每个命令一个 .md 文件</text><text x="85" y="340" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">触发示例</text>
+    <path fill="#1E293B" d="M91,355 H579 A6,6 0 0 1 585,361 V384 A6,6 0 0 1 579,390 H91 A6,6 0 0 1 85,384 V361 A6,6 0 0 1 91,355 Z" />
+    <text x="95" y="378" fill="#A5F3FC" font-family="Consolas, Menlo, monospace" font-size="14">/daily-report</text>
+    <text x="270" y="378" fill="#64748B" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">→ 触发日报生成 Skill</text>
+
+    <path fill="#1E293B" d="M91,400 H579 A6,6 0 0 1 585,406 V429 A6,6 0 0 1 579,435 H91 A6,6 0 0 1 85,429 V406 A6,6 0 0 1 91,400 Z" />
+    <text x="95" y="423" fill="#A5F3FC" font-family="Consolas, Menlo, monospace" font-size="14">/plugin-deploy</text>
+    <text x="270" y="423" fill="#64748B" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">→ 触发插件部署 Skill</text>
+
+    <path fill="#1E293B" d="M91,445 H579 A6,6 0 0 1 585,451 V474 A6,6 0 0 1 579,480 H91 A6,6 0 0 1 85,474 V451 A6,6 0 0 1 91,445 Z" />
+    <text x="95" y="468" fill="#A5F3FC" font-family="Consolas, Menlo, monospace" font-size="14">/company-research</text>
+    <text x="290" y="468" fill="#64748B" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">→ 触发企业调研 Skill</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M672,210 H1208 A12,12 0 0 1 1220,222 V478 A12,12 0 0 1 1208,490 H672 A12,12 0 0 1 660,478 V222 A12,12 0 0 1 672,210 Z" />
+    <path fill="#2563EB" d="M662,210 H1218 A2,2 0 0 1 1220,212 V212 A2,2 0 0 1 1218,214 H662 A2,2 0 0 1 660,212 V212 A2,2 0 0 1 662,210 Z" />
+    <text x="685" y="248" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">Command vs Skill 对比</text>
+
+    
+    <path fill="#2563EB" fill-opacity="0.08" d="M691,270 H919 A6,6 0 0 1 925,276 V296 A6,6 0 0 1 919,302 H691 A6,6 0 0 1 685,296 V276 A6,6 0 0 1 691,270 Z" />
+    <path fill="#2563EB" fill-opacity="0.08" d="M941,270 H1189 A6,6 0 0 1 1195,276 V296 A6,6 0 0 1 1189,302 H941 A6,6 0 0 1 935,296 V276 A6,6 0 0 1 941,270 Z" />
+    <text x="805" y="291" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">Command</text>
+    <text x="1065" y="291" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">Skill</text>
+
+    
+    <text x="685" y="330" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">用户主动输入 /xxx</text>
+    <text x="935" y="330" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Agent 调度或用户调用</text>
+
+    
+    <text x="685" y="365" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">快捷入口（前台）</text>
+    <text x="935" y="365" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">能力单元（后台）</text>
+
+    
+    <text x="685" y="400" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">指向并触发 Skill</text>
+    <text x="935" y="400" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">实际执行逻辑</text>
+
+    
+    <text x="685" y="435" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">可选，非必须</text>
+    <text x="935" y="435" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Plugin 核心能力</text>
+
+    <line x1="925" y1="310" x2="925" y2="450" stroke="#E2E8F0" stroke-width="1" />
+  </g>
+
+  
+  <path fill="#2563EB" fill-opacity="0.06" d="M68,520 H1212 A8,8 0 0 1 1220,528 V562 A8,8 0 0 1 1212,570 H68 A8,8 0 0 1 60,562 V528 A8,8 0 0 1 68,520 Z" />
+  <text x="640" y="550" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15">
+    Skill 可以独立存在（不依赖 Command），但 Command 必须指向一个 Skill 或流程
+  </text>
+
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">08 / 10</text>
+</svg>

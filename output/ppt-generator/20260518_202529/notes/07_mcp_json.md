@@ -1,0 +1,1 @@
+MCP Server 是外部服务的适配器，让 AI Agent 能调用外部工具和数据源。在 .mcp.json 中声明 Plugin 依赖的 MCP Server。

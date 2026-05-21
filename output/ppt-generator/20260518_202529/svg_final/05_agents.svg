@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="topBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" /><stop offset="100%" stop-color="#1E3A5F" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" /><feOffset dx="0" dy="3" result="off" />
+      <feComponentTransfer><feFuncA type="linear" slope="0.10" /></feComponentTransfer>
+      <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#F8FAFC" />
+  <rect x="0" y="0" width="1280" height="5" fill="url(#topBar)" />
+
+  <text x="60" y="60" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="bold">agents/ — Agent 定义目录</text>
+  <path fill="#2563EB" d="M61.50,73 H118.50 A1.50,1.50 0 0 1 120,74.50 V74.50 A1.50,1.50 0 0 1 118.50,76 H61.50 A1.50,1.50 0 0 1 60,74.50 V74.50 A1.50,1.50 0 0 1 61.50,73 Z" />
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,100 H1208 A12,12 0 0 1 1220,112 V178 A12,12 0 0 1 1208,190 H72 A12,12 0 0 1 60,178 V112 A12,12 0 0 1 72,100 Z" />
+    <path fill="#F97316" d="M63,100 H63 A3,3 0 0 1 66,103 V187 A3,3 0 0 1 63,190 H63 A3,3 0 0 1 60,187 V103 A3,3 0 0 1 63,100 Z" />
+    <text x="90" y="135" fill="#F97316" font-family="Microsoft YaHei, Arial, sans-serif" font-size="16" font-weight="bold">名词解释</text>
+    <text x="90" y="165" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">Agent = 有角色的智能调度器</text>
+    <text x="380" y="165" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15">能理解用户意图，编排多个 Skill 完成复杂任务</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M72,215 H418 A12,12 0 0 1 430,227 V483 A12,12 0 0 1 418,495 H72 A12,12 0 0 1 60,483 V227 A12,12 0 0 1 72,215 Z" />
+    <path fill="#2563EB" d="M62,215 H428 A2,2 0 0 1 430,217 V217 A2,2 0 0 1 428,219 H62 A2,2 0 0 1 60,217 V217 A2,2 0 0 1 62,215 Z" />
+    <text x="85" y="250" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">定位</text>
+    <text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="85" y="280">定义具有独立角色和判断能力</text><text font-family="Microsoft YaHei, Arial, sans-serif" fill="#475569" font-size="14" x="85" y="302">的 AI 代理</text><text x="85" y="330" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">放置文件</text>
+    <text x="85" y="358" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">每个 Agent 一个 .md 文件</text>
+    <path fill="#1E293B" d="M91,375 H379 A6,6 0 0 1 385,381 V401 A6,6 0 0 1 379,407 H91 A6,6 0 0 1 85,401 V381 A6,6 0 0 1 91,375 Z" />
+    <text x="95" y="396" fill="#A5F3FC" font-family="Consolas, Menlo, monospace" font-size="13">agents/sales-master.md</text>
+
+    <text x="85" y="435" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">运转方式</text>
+    <text x="85" y="462" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">自动匹配用户意图，调度 Skills</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#FFFFFF" d="M467,215 H813 A12,12 0 0 1 825,227 V483 A12,12 0 0 1 813,495 H467 A12,12 0 0 1 455,483 V227 A12,12 0 0 1 467,215 Z" />
+    <path fill="#2563EB" d="M457,215 H823 A2,2 0 0 1 825,217 V217 A2,2 0 0 1 823,219 H457 A2,2 0 0 1 455,217 V217 A2,2 0 0 1 457,215 Z" />
+    <text x="480" y="250" fill="#1E3A5F" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="bold">Agent 核心要素</text>
+
+    <path fill="#2563EB" fill-opacity="0.1" d="M494,268 H586 A14,14 0 0 1 600,282 V282 A14,14 0 0 1 586,296 H494 A14,14 0 0 1 480,282 V282 A14,14 0 0 1 494,268 Z" />
+    <text x="540" y="287" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">Identity 身份</text>
+    <text x="480" y="312" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">角色定位、公司信息、专业背景</text>
+
+    <path fill="#2563EB" fill-opacity="0.1" d="M494,330 H586 A14,14 0 0 1 600,344 V344 A14,14 0 0 1 586,358 H494 A14,14 0 0 1 480,344 V344 A14,14 0 0 1 494,330 Z" />
+    <text x="540" y="349" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">Capabilities</text>
+    <text x="480" y="374" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">核心能力列表（阶段识别、调度等）</text>
+
+    <path fill="#2563EB" fill-opacity="0.1" d="M494,392 H586 A14,14 0 0 1 600,406 V406 A14,14 0 0 1 586,420 H494 A14,14 0 0 1 480,406 V406 A14,14 0 0 1 494,392 Z" />
+    <text x="540" y="411" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">Workflow</text>
+    <text x="480" y="436" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13">工作流程编排（A 阶段 → B 阶段）</text>
+
+    <path fill="#2563EB" fill-opacity="0.1" d="M494,454 H586 A14,14 0 0 1 600,468 V468 A14,14 0 0 1 586,482 H494 A14,14 0 0 1 480,468 V468 A14,14 0 0 1 494,454 Z" />
+    <text x="540" y="473" text-anchor="middle" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold">Instructions</text>
+  </g>
+
+  
+  <g filter="url(#cardShadow)">
+    <path fill="#1E293B" d="M862,215 H1208 A12,12 0 0 1 1220,227 V483 A12,12 0 0 1 1208,495 H862 A12,12 0 0 1 850,483 V227 A12,12 0 0 1 862,215 Z" />
+    <path fill="#0F172A" d="M862,215 H1208 A12,12 0 0 1 1220,227 V239 A12,12 0 0 1 1208,251 H862 A12,12 0 0 1 850,239 V227 A12,12 0 0 1 862,215 Z" />
+    <rect x="850" y="239" width="370" height="12" fill="#0F172A" />
+    <circle cx="872" cy="233" r="5" fill="#EF4444" opacity="0.7" />
+    <circle cx="888" cy="233" r="5" fill="#F59E0B" opacity="0.7" />
+    <circle cx="904" cy="233" r="5" fill="#22C55E" opacity="0.7" />
+    <text x="925" y="237" fill="#64748B" font-family="Consolas, Menlo, monospace" font-size="12">sales-master.md</text>
+
+    <text font-family="Consolas, Menlo, monospace" fill="#7DD3FC" font-size="13" x="870" y="275">---</text><text font-family="Consolas, Menlo, monospace" fill="#7DD3FC" font-size="13" x="870" y="295">name: sales-master</text><text font-family="Consolas, Menlo, monospace" fill="#7DD3FC" font-size="13" x="870" y="315">description: 销售主控代理</text><text font-family="Consolas, Menlo, monospace" fill="#7DD3FC" font-size="13" x="870" y="335">---</text><text font-family="Consolas, Menlo, monospace" fill="#64748B" font-size="13" x="870" y="363"># sales-master</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="870" y="411">## 身份 (Identity)</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="870" y="431">  你是专业的销售流程</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="870" y="451">  管理专家...</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="870" y="479">## 能力 (Capabilities)</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="870" y="499">  1. 销售阶段识别</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="870" y="519">  2. 智能 Skill 调度</text><text font-family="Consolas, Menlo, monospace" fill="#E2E8F0" font-size="13" x="870" y="539">  3. 完整流程管理</text></g>
+
+  
+  <path fill="#2563EB" fill-opacity="0.06" d="M68,525 H1212 A8,8 0 0 1 1220,533 V572 A8,8 0 0 1 1212,580 H68 A8,8 0 0 1 60,572 V533 A8,8 0 0 1 68,525 Z" />
+  <text x="100" y="558" fill="#2563EB" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" font-weight="bold">Agent vs Skill:</text>
+  <text x="280" y="558" fill="#475569" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14">Agent 是"大脑"（理解意图、编排流程） → Skill 是"手脚"（执行具体任务）</text>
+
+  <text x="1180" y="700" text-anchor="end" fill="#94A3B8" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12">05 / 10</text>
+</svg>

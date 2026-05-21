@@ -1,0 +1,1 @@
+Command 是用户侧的快捷方式，通过 /xxx 触发。注意 Command 和 Skill 的区别：Command 是入口，Skill 是实际执行逻辑。
