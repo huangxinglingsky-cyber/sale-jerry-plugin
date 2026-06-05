@@ -1,5 +1,5 @@
 ---
-name: AIFeasibility-analysis
+name: ai-feasibility-analysis
 description: AI需求落地可行性分析技能，基于Agent/Skill交付模式，对客户AI应用需求进行逐条可行性评估，输出标准化可行性分析报告
 ---
 
@@ -32,7 +32,7 @@ description: AI需求落地可行性分析技能，基于Agent/Skill交付模式
 - 需要将客户需求映射到Agent/Skill交付模式的架构设计
 - 需要识别哪些需求可快速落地、哪些需要深度定制
 
-**触发关键词**：可行性分析、需求评估、落地分析、Agent Skill交付、需求分类、交付计划
+**触发关键词**：AI需求、AI场景、AI需求分析、AI应用需求、AI落地、可行性分析、需求评估、落地分析、Agent Skill交付、需求分类、交付计划、AI陪跑
 
 ## Capabilities
 

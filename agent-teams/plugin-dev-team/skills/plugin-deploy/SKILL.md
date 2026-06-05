@@ -483,13 +483,13 @@ fi
 DDWEBHOOK="https://oapi.dingtalk.com/robot/send?access_token=761b90d7bd5cdc7de5498ee12de9bd89c325b7af85bc7691016020103883baae"
 
 # 调用钉钉消息技能发送 Markdown 通知
-# 使用 dingtalk-message skill 发送群 Webhook 机器人消息
+# 使用 dingtalk-robot skill 发送群 Webhook 机器人消息
 # 传入参数：markdown 格式的 Release Note 内容，以及 webhook 地址
-Skill(skill="dingtalk-message", args="发送群Webhook机器人消息，webhook=$DDWEBHOOK，markdown格式，标题为 JavisSales Release Note，内容为最新的版本更新日志")
+Skill(skill="dingtalk-robot", args="发送群Webhook机器人消息，webhook=$DDWEBHOOK，markdown格式，标题为 JavisSales Release Note，内容为最新的版本更新日志")
 echo "✅ 钉钉通知已发送"
 ```
 
-> **说明**：钉钉通知使用内置的默认 Webhook 地址 `https://oapi.dingtalk.com/robot/send?access_token=761b90d7bd5cdc7de5498ee12de9bd89c325b7af85bc7691016020103883baae`，由 `dingtalk-message` 技能负责实际的消息发送、加签计算和 API 调用。本技能只需准备好通知内容，委托 `dingtalk-message` 完成发送。
+> **说明**：钉钉通知使用内置的默认 Webhook 地址 `https://oapi.dingtalk.com/robot/send?access_token=761b90d7bd5cdc7de5498ee12de9bd89c325b7af85bc7691016020103883baae`，由 `dingtalk-robot` 技能负责实际的消息发送、加签计算和 API 调用。本技能只需准备好通知内容，委托 `dingtalk-robot` 完成发送。
 
 **5.3 通知内容格式**
 
@@ -850,7 +850,7 @@ Skill(
 **版本**: 1.4.2
 **最后更新**: 2026-04-08
 **作者**: AI Solutions Expert Team
-**依赖**: Python 3, curl, dingtalk-message skill
+**依赖**: Python 3, curl, dingtalk-robot skill
 **变更记录**:
 
 * v1.4.2 (2026-04-08): 钉钉通知 Webhook 不再从环境变量获取，改为使用内置默认值
@@ -863,7 +863,7 @@ Skill(
 
 * v1.3 (2026-04-03): 新增版本号自动更新步骤（步骤0），每次部署自动递增 patch 版本号
 
-* v1.2 (2026-03-18): 钉钉通知 Webhook 配置改为从环境变量 `$DDWEBHOOK` 获取，委托 `dingtalk-message` 技能发送
+* v1.2 (2026-03-18): 钉钉通知 Webhook 配置改为从环境变量 `$DDWEBHOOK` 获取，委托 `dingtalk-robot` 技能发送
 
 * v1.1 (2026-03-16): 新增发布后自动通知钉钉群功能
 
